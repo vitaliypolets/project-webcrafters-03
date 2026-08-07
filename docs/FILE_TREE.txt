@@ -1,0 +1,418 @@
+project-webcrafters-03
+├── .github
+│   ├── workflows
+│   │   └── ci.yml
+│   └── PULL_REQUEST_TEMPLATE.md
+├── backend
+│   ├── src
+│   │   ├── config
+│   │   │   └── env.ts
+│   │   ├── db
+│   │   │   └── connectMongoDB.ts
+│   │   ├── middlewares
+│   │   │   ├── controllerWrapper.ts
+│   │   │   ├── errorHandler.ts
+│   │   │   └── notFound.ts
+│   │   ├── models
+│   │   │   ├── Article.ts
+│   │   │   ├── Session.ts
+│   │   │   └── User.ts
+│   │   ├── modules
+│   │   │   ├── articles
+│   │   │   │   ├── create
+│   │   │   │   │   ├── article-create.controller.ts
+│   │   │   │   │   ├── article-create.route.ts
+│   │   │   │   │   ├── article-create.service.ts
+│   │   │   │   │   ├── article-create.types.ts
+│   │   │   │   │   ├── article-create.validation.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── details
+│   │   │   │   │   ├── article-details.controller.ts
+│   │   │   │   │   ├── article-details.route.ts
+│   │   │   │   │   ├── article-details.service.ts
+│   │   │   │   │   ├── article-details.types.ts
+│   │   │   │   │   ├── article-details.validation.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── list
+│   │   │   │   │   ├── articles-list.controller.ts
+│   │   │   │   │   ├── articles-list.route.ts
+│   │   │   │   │   ├── articles-list.service.ts
+│   │   │   │   │   ├── articles-list.types.ts
+│   │   │   │   │   ├── articles-list.validation.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   └── manage
+│   │   │   │       ├── article-manage.controller.ts
+│   │   │   │       ├── article-manage.route.ts
+│   │   │   │       ├── article-manage.service.ts
+│   │   │   │       ├── article-manage.types.ts
+│   │   │   │       ├── article-manage.validation.ts
+│   │   │   │       ├── index.ts
+│   │   │   │       └── README.md
+│   │   │   ├── auth
+│   │   │   │   ├── login
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── login.controller.ts
+│   │   │   │   │   ├── login.route.ts
+│   │   │   │   │   ├── login.service.ts
+│   │   │   │   │   ├── login.types.ts
+│   │   │   │   │   ├── login.validation.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── register
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── README.md
+│   │   │   │   │   ├── register.controller.ts
+│   │   │   │   │   ├── register.route.ts
+│   │   │   │   │   ├── register.service.ts
+│   │   │   │   │   ├── register.types.ts
+│   │   │   │   │   └── register.validation.ts
+│   │   │   │   └── session
+│   │   │   │       ├── index.ts
+│   │   │   │       ├── README.md
+│   │   │   │       ├── session.controller.ts
+│   │   │   │       ├── session.route.ts
+│   │   │   │       ├── session.service.ts
+│   │   │   │       ├── session.types.ts
+│   │   │   │       └── session.validation.ts
+│   │   │   ├── health
+│   │   │   │   └── health.route.ts
+│   │   │   └── users
+│   │   │       ├── articles
+│   │   │       │   ├── index.ts
+│   │   │       │   ├── README.md
+│   │   │       │   ├── user-articles.controller.ts
+│   │   │       │   ├── user-articles.route.ts
+│   │   │       │   ├── user-articles.service.ts
+│   │   │       │   ├── user-articles.types.ts
+│   │   │       │   └── user-articles.validation.ts
+│   │   │       ├── bookmarks
+│   │   │       │   ├── bookmarks.controller.ts
+│   │   │       │   ├── bookmarks.route.ts
+│   │   │       │   ├── bookmarks.service.ts
+│   │   │       │   ├── bookmarks.types.ts
+│   │   │       │   ├── bookmarks.validation.ts
+│   │   │       │   ├── index.ts
+│   │   │       │   └── README.md
+│   │   │       ├── details
+│   │   │       │   ├── index.ts
+│   │   │       │   ├── README.md
+│   │   │       │   ├── user-details.controller.ts
+│   │   │       │   ├── user-details.route.ts
+│   │   │       │   ├── user-details.service.ts
+│   │   │       │   ├── user-details.types.ts
+│   │   │       │   └── user-details.validation.ts
+│   │   │       ├── list
+│   │   │       │   ├── index.ts
+│   │   │       │   ├── README.md
+│   │   │       │   ├── users-list.controller.ts
+│   │   │       │   ├── users-list.route.ts
+│   │   │       │   ├── users-list.service.ts
+│   │   │       │   ├── users-list.types.ts
+│   │   │       │   └── users-list.validation.ts
+│   │   │       └── me
+│   │   │           ├── index.ts
+│   │   │           ├── me.controller.ts
+│   │   │           ├── me.route.ts
+│   │   │           ├── me.service.ts
+│   │   │           ├── me.types.ts
+│   │   │           ├── me.validation.ts
+│   │   │           └── README.md
+│   │   ├── routes
+│   │   │   └── index.ts
+│   │   ├── seed
+│   │   │   └── seed.ts
+│   │   ├── utils
+│   │   │   └── HttpError.ts
+│   │   ├── app.ts
+│   │   └── server.ts
+│   ├── .env.example
+│   ├── eslint.config.js
+│   ├── package.json
+│   └── tsconfig.json
+├── docs
+│   ├── API_CONTRACT.md
+│   ├── DEFINITION_OF_DONE.md
+│   ├── FILE_TREE.txt
+│   ├── OWNERSHIP_MAP.md
+│   ├── ROUTES.md
+│   └── TEAM_LEAD_PLAN.md
+├── frontend
+│   ├── src
+│   │   ├── app
+│   │   │   ├── (auth)
+│   │   │   │   ├── login
+│   │   │   │   │   ├── LoginPage.module.css
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── photo
+│   │   │   │   │   ├── page.tsx
+│   │   │   │   │   └── PhotoPage.module.css
+│   │   │   │   ├── register
+│   │   │   │   │   ├── page.tsx
+│   │   │   │   │   └── RegisterPage.module.css
+│   │   │   │   └── layout.tsx
+│   │   │   ├── (main)
+│   │   │   │   ├── articles
+│   │   │   │   │   ├── [articleId]
+│   │   │   │   │   │   ├── ArticlePage.module.css
+│   │   │   │   │   │   ├── loading.tsx
+│   │   │   │   │   │   ├── not-found.tsx
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── create
+│   │   │   │   │   │   ├── CreateArticlePage.module.css
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── ArticlesPage.module.css
+│   │   │   │   │   ├── loading.tsx
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── authors
+│   │   │   │   │   ├── [userId]
+│   │   │   │   │   │   ├── AuthorPage.module.css
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── AuthorsPage.module.css
+│   │   │   │   │   └── page.tsx
+│   │   │   │   ├── profile
+│   │   │   │   │   ├── @myArticles
+│   │   │   │   │   │   ├── default.tsx
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── @savedArticles
+│   │   │   │   │   │   ├── default.tsx
+│   │   │   │   │   │   └── page.tsx
+│   │   │   │   │   ├── layout.tsx
+│   │   │   │   │   ├── page.tsx
+│   │   │   │   │   └── ProfilePage.module.css
+│   │   │   │   ├── HomePage.module.css
+│   │   │   │   ├── layout.tsx
+│   │   │   │   └── page.tsx
+│   │   │   ├── api
+│   │   │   │   ├── articles
+│   │   │   │   │   ├── [articleId]
+│   │   │   │   │   │   └── route.ts
+│   │   │   │   │   └── route.ts
+│   │   │   │   ├── auth
+│   │   │   │   │   ├── login
+│   │   │   │   │   │   └── route.ts
+│   │   │   │   │   ├── register
+│   │   │   │   │   │   └── route.ts
+│   │   │   │   │   └── session
+│   │   │   │   │       └── route.ts
+│   │   │   │   └── users
+│   │   │   │       ├── [userId]
+│   │   │   │       │   ├── articles
+│   │   │   │       │   │   └── route.ts
+│   │   │   │       │   └── route.ts
+│   │   │   │       ├── me
+│   │   │   │       │   ├── bookmarks
+│   │   │   │       │   │   ├── [articleId]
+│   │   │   │       │   │   │   └── route.ts
+│   │   │   │       │   │   └── route.ts
+│   │   │   │       │   └── route.ts
+│   │   │   │       └── route.ts
+│   │   │   ├── error.tsx
+│   │   │   ├── globals.css
+│   │   │   ├── layout.tsx
+│   │   │   ├── loading.tsx
+│   │   │   └── not-found.tsx
+│   │   ├── components
+│   │   │   ├── Footer
+│   │   │   │   └── README.md
+│   │   │   ├── Header
+│   │   │   │   ├── BurgerMenu
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── Navigation
+│   │   │   │   │   └── README.md
+│   │   │   │   └── README.md
+│   │   │   ├── layout
+│   │   │   │   ├── MainLayout
+│   │   │   │   │   └── README.md
+│   │   │   │   └── README.md
+│   │   │   ├── providers
+│   │   │   │   ├── AppProviders.tsx
+│   │   │   │   └── README.md
+│   │   │   ├── ui
+│   │   │   │   ├── Loader
+│   │   │   │   │   ├── Loader.module.css
+│   │   │   │   │   └── Loader.tsx
+│   │   │   │   └── README.md
+│   │   │   └── PageStub.tsx
+│   │   ├── features
+│   │   │   ├── articles
+│   │   │   │   ├── catalog
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── ArticlesCatalog
+│   │   │   │   │   │   │   └── README.md
+│   │   │   │   │   │   ├── ArticlesCounter
+│   │   │   │   │   │   │   └── README.md
+│   │   │   │   │   │   └── ArticlesFilters
+│   │   │   │   │   │       └── README.md
+│   │   │   │   │   ├── hooks
+│   │   │   │   │   │   ├── README.md
+│   │   │   │   │   │   └── useArticlesQuery.ts
+│   │   │   │   │   ├── articles-catalog.service.ts
+│   │   │   │   │   ├── articles-catalog.types.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── create
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── AddArticleForm
+│   │   │   │   │   │   │   └── README.md
+│   │   │   │   │   │   └── ArticleImagePreview
+│   │   │   │   │   │       └── README.md
+│   │   │   │   │   ├── create-article.schema.ts
+│   │   │   │   │   ├── create-article.service.ts
+│   │   │   │   │   ├── create-article.types.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── details
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   ├── ArticleAuthor
+│   │   │   │   │   │   │   └── README.md
+│   │   │   │   │   │   ├── ArticleDetails
+│   │   │   │   │   │   │   └── README.md
+│   │   │   │   │   │   └── ArticleRecommendations
+│   │   │   │   │   │       └── README.md
+│   │   │   │   │   ├── article-details.service.ts
+│   │   │   │   │   ├── article-details.types.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   └── shared
+│   │   │   │       ├── components
+│   │   │   │       │   ├── ArticlesItem
+│   │   │   │       │   │   └── README.md
+│   │   │   │       │   ├── ArticlesList
+│   │   │   │       │   │   └── README.md
+│   │   │   │       │   ├── BookmarkButton
+│   │   │   │       │   │   └── README.md
+│   │   │   │       │   └── ModalErrorSave
+│   │   │   │       │       └── README.md
+│   │   │   │       ├── article-shared.types.ts
+│   │   │   │       ├── index.ts
+│   │   │   │       └── README.md
+│   │   │   ├── auth
+│   │   │   │   ├── login
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── LoginForm
+│   │   │   │   │   │       └── README.md
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── login.schema.ts
+│   │   │   │   │   ├── login.service.ts
+│   │   │   │   │   ├── login.types.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── photo
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── UploadPhotoForm
+│   │   │   │   │   │       └── README.md
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── photo.schema.ts
+│   │   │   │   │   ├── photo.service.ts
+│   │   │   │   │   ├── photo.types.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── register
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── RegisterForm
+│   │   │   │   │   │       └── README.md
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── README.md
+│   │   │   │   │   ├── register.schema.ts
+│   │   │   │   │   ├── register.service.ts
+│   │   │   │   │   └── register.types.ts
+│   │   │   │   └── session
+│   │   │   │       ├── components
+│   │   │   │       │   └── AuthGuard
+│   │   │   │       │       └── README.md
+│   │   │   │       ├── index.ts
+│   │   │   │       ├── README.md
+│   │   │   │       ├── session.service.ts
+│   │   │   │       └── session.types.ts
+│   │   │   ├── authors
+│   │   │   │   ├── author-articles
+│   │   │   │   │   ├── components
+│   │   │   │   │   │   └── AuthorArticles
+│   │   │   │   │   │       └── README.md
+│   │   │   │   │   ├── author-articles.service.ts
+│   │   │   │   │   ├── author-articles.types.ts
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── components
+│   │   │   │   │   ├── AuthorInfo
+│   │   │   │   │   │   └── README.md
+│   │   │   │   │   ├── AuthorsItem
+│   │   │   │   │   │   └── README.md
+│   │   │   │   │   └── AuthorsList
+│   │   │   │   │       └── README.md
+│   │   │   │   ├── authors.service.ts
+│   │   │   │   ├── authors.types.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── home
+│   │   │   │   ├── components
+│   │   │   │   │   ├── About
+│   │   │   │   │   │   └── README.md
+│   │   │   │   │   ├── Hero
+│   │   │   │   │   │   └── README.md
+│   │   │   │   │   ├── PopularArticles
+│   │   │   │   │   │   └── README.md
+│   │   │   │   │   └── TopCreators
+│   │   │   │   │       └── README.md
+│   │   │   │   ├── home.service.ts
+│   │   │   │   ├── home.types.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   └── README.md
+│   │   │   ├── profile
+│   │   │   │   ├── components
+│   │   │   │   │   ├── ProfileInfo
+│   │   │   │   │   │   └── README.md
+│   │   │   │   │   └── ProfileTabs
+│   │   │   │   │       └── README.md
+│   │   │   │   ├── my-articles
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── my-articles.service.ts
+│   │   │   │   │   ├── my-articles.types.ts
+│   │   │   │   │   └── README.md
+│   │   │   │   ├── saved-articles
+│   │   │   │   │   ├── index.ts
+│   │   │   │   │   ├── README.md
+│   │   │   │   │   ├── saved-articles.service.ts
+│   │   │   │   │   └── saved-articles.types.ts
+│   │   │   │   ├── index.ts
+│   │   │   │   ├── profile.service.ts
+│   │   │   │   └── profile.types.ts
+│   │   │   └── user
+│   │   │       ├── profile-edit
+│   │   │       │   ├── components
+│   │   │       │   │   └── UserModal
+│   │   │       │   │       └── README.md
+│   │   │       │   ├── index.ts
+│   │   │       │   ├── profile-edit.schema.ts
+│   │   │       │   ├── profile-edit.service.ts
+│   │   │       │   └── README.md
+│   │   │       └── user-bar
+│   │   │           ├── components
+│   │   │           │   ├── LogoutModal
+│   │   │           │   │   └── README.md
+│   │   │           │   └── UserBar
+│   │   │           │       └── README.md
+│   │   │           ├── index.ts
+│   │   │           ├── README.md
+│   │   │           └── user-bar.types.ts
+│   │   ├── lib
+│   │   │   └── api
+│   │   │       ├── client.ts
+│   │   │       └── proxy.ts
+│   │   ├── store
+│   │   │   └── auth.store.ts
+│   │   └── types
+│   │       ├── api.ts
+│   │       ├── article.ts
+│   │       └── user.ts
+│   ├── .env.example
+│   ├── eslint.config.mjs
+│   ├── next-env.d.ts
+│   ├── next.config.ts
+│   ├── package.json
+│   └── tsconfig.json
+├── .editorconfig
+├── .gitignore
+├── .prettierignore
+├── .prettierrc.json
+├── package.json
+└── README.md
