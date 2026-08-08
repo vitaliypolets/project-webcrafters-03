@@ -1,27 +1,11 @@
-import { Types } from 'mongoose';
 import { Article } from '../../../models/Article.js';
 import { User } from '../../../models/User.js';
 import { HttpError } from '../../../utils/HttpError.js';
-import type { PaginatedUserArticles, UserArticlesQuery } from './user-articles.types.js';
-
-interface LeanArticle {
-  _id: Types.ObjectId;
-  title: string;
-  description: string;
-  imageUrl: string;
-  publicationDate: Date;
-  authorId: Types.ObjectId;
-  authorName: string;
-  viewsCount: number;
-  category: 'popular' | 'general';
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
 export const getUserArticles = async (
-  authorId: string,
-  { page, perPage }: UserArticlesQuery,
-): Promise<PaginatedUserArticles> => {
+  authorId,
+  { page, perPage },
+) => {
   const authorExists = await User.exists({ _id: authorId });
 
   if (!authorExists) {
@@ -35,7 +19,7 @@ export const getUserArticles = async (
       .sort({ publicationDate: -1 })
       .skip(skip)
       .limit(perPage)
-      .lean<LeanArticle[]>(),
+      .lean(),
     Article.countDocuments({ authorId }),
   ]);
 

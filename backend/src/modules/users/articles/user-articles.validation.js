@@ -1,4 +1,3 @@
-import type { RequestHandler } from 'express';
 import { isValidObjectId } from 'mongoose';
 import { z } from 'zod';
 import { HttpError } from '../../../utils/HttpError.js';
@@ -8,7 +7,7 @@ const paginationQuerySchema = z.object({
   perPage: z.coerce.number().int().positive().max(100).default(8),
 });
 
-export const validateUserArticlesRequest: RequestHandler = (req, res, next) => {
+export const validateUserArticlesRequest = (req, res, next) => {
   const { userId } = req.params;
 
   if (!userId || !isValidObjectId(userId)) {
