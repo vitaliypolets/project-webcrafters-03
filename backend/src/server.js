@@ -2,7 +2,7 @@ import { app } from './app.js';
 import { env } from './config/env.js';
 import { connectMongoDB } from './db/connectMongoDB.js';
 
-async function bootstrap(): Promise<void> {
+async function bootstrap() {
   try {
     await connectMongoDB();
     app.listen(env.port, () => console.log(`API listening on port ${env.port}`));
@@ -12,4 +12,4 @@ async function bootstrap(): Promise<void> {
   }
 }
 
-void bootstrap();
+bootstrap();
