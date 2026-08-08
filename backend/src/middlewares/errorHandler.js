@@ -1,8 +1,8 @@
-import type { ErrorRequestHandler } from 'express';
 import { env } from '../config/env.js';
 
-export const errorHandler: ErrorRequestHandler = (error, _req, res, _next) => {
+export const errorHandler = (error, _req, res, _next) => {
   const status = Number(error.status ?? 500);
+
   res.status(status).json({
     status,
     message: error.message ?? 'Internal server error',

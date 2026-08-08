@@ -1,5 +1,13 @@
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
+import axios from 'axios';
+
+export const api = axios.create({
+  baseURL: '/api',
+  withCredentials: true,
+});
+
+
 export class ApiError extends Error {
   constructor(public status: number, message: string, public details?: unknown) {
     super(message);
