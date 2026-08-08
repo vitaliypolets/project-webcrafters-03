@@ -1,6 +1,5 @@
 import { z as zod } from 'zod';
 import { isValidObjectId } from 'mongoose';
-import { Request, Response, NextFunction } from 'express';
 import createHttpError from 'http-errors';
 
 const getArticleByIdSchema = zod.object({
@@ -9,7 +8,7 @@ const getArticleByIdSchema = zod.object({
   }),
 });
 
-const validateArticleParams = (req: Request, res: Response, next: NextFunction): void => {
+const validateArticleParams = (req, res, next) => {
   const result = getArticleByIdSchema.safeParse(req.params);
 
   if (!result.success) {

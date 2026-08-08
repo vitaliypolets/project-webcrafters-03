@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
 import { getArticleDetails } from './article-details.service.js';
 import createHttpError from 'http-errors';
 
-const getArticleById = async (req: Request<{ articleId: string }>, res: Response):Promise<void> => {
+const getArticleById = async (req, res) => {
   const { articleId } = req.params;
-  const userId = (req as Request & { user?: { _id: string } }).user?._id;
+  const userId = req.user?._id;
 
   const article = await getArticleDetails(articleId, userId);
 

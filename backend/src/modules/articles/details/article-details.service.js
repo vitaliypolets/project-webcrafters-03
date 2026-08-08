@@ -1,6 +1,6 @@
 import { Article } from '../../../models/Article.js';
 
-const getArticleDetails = async (articleId: string, userId?: string) => {
+const getArticleDetails = async (articleId, userId = null) => {
   const article = await Article.findById(articleId).lean();
   if (!article) return null;
 
