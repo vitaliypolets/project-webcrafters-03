@@ -9,6 +9,7 @@ import { createArticle } from '../../create-article.service';
 import type { CreateArticleFormValues } from '../../create-article.types';
 import css from './AddArticleForm.module.css';
 import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
+import toast from 'react-hot-toast';
 
 
 
@@ -31,24 +32,25 @@ const initialValues: CreateArticleFormValues = {
 
 
 const AddArticleForm = () => {
- const router = useRouter();
- const [previewUrl, setPreviewUrl] = useState('');
- const { mutateAsync, isPending } = useMutation({
-   mutationFn: createArticle,
+  const router = useRouter();
+  const [previewUrl, setPreviewUrl] = useState('');
 
-   onSuccess: article => {
-     alert('Article created successfully!');
-     router.push(`/articles/${article._id}`);
-   },
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: createArticle,
 
-   onError: error => {
-     alert(
-       error instanceof Error
-         ? error.message
-         : 'Failed to create article',
-     );
-   },
- });
+    onSuccess: article => {
+      toast.success('Article created successfully!');
+      router.push(`/articles/${article._id}`);
+    },
+
+    onError: error => {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'Failed to create article',
+      );
+    },
+  });
 
 
  const handleImageChange = (

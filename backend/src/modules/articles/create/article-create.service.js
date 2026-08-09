@@ -1,23 +1,14 @@
 // TODO (учасник №13): business logic and database access
 import { Article } from '../../../models/Article.js';
-import { User } from '../../../models/User.js';
 import { HttpError } from '../../../utils/HttpError.js';
 import { saveFileToCloudinary } from '../../../utils/saveFileToCloudinary.js';
 
-export const createArticle = async (
-  authorId,
-  { title, description, publicationDate },
-  file,
-) => {
+export const createArticle = async ({ data, file, user }) => {
   if (!file) {
-    throw new HttpError(400, 'Photo is required');
+    throw new HttpError(400, 'Article image is required');
   }
 
-  const author = await User.findById(authorId).select('name');
-
-  if (!author) {
-    throw new HttpError(404, 'User not found');
-  }
+  const authorId = user._id;
 
   const image = await saveFileToCloudinary(
     file.buffer,
@@ -25,13 +16,13 @@ export const createArticle = async (
   );
 
   const article = await Article.create({
-    title,
-    description,
-    publicationDate,
+    title: data.title,
+    description: data.description,
+    publicationDate: data.publicationDate,
     imageUrl: image.secure_url,
     imagePublicId: image.public_id,
     authorId,
-    authorName: author.name,
+    authorName: user.name,
   });
 
   return {
