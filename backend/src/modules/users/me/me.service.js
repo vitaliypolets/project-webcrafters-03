@@ -1,45 +1,67 @@
 // TODO (учасник №5): business logic and database access
-import createHttpError from 'http-errors';
 import { User } from '../../../models/User.js';
 
-export const toPublicUser = (user) => {
-  const plain = typeof user.toObject === 'function'
-    ? user.toObject()
-    : user;
+
+export const getUserMe = async (userId) => {
+
+  const user = await User.findById(userId)
+    .select('_id name email avatarUrl articlesAmount');
+
+
+  if (!user) {
+    throw new Error('User not found');
+  }
+
 
   return {
-    _id: plain._id,
-    name: plain.name,
-    email: plain.email,
-    avatarUrl: plain.avatarUrl,
-    createdAt: plain.createdAt,
-    updatedAt: plain.updatedAt,
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    avatarUrl: user.avatarUrl,
+    createdArticlesCount: user.articlesAmount
   };
 };
 
-export const getMe = async (userId) => {
-  const user = await User.findById(userId).select('-password');
 
-  if (!user) {
-    throw createHttpError(404, 'User not found');
-  }
 
-  return toPublicUser(user);
-};
+export const updateUserMe = async (userId, data) => {
 
-export const updateMe = async (userId, data) => {
+  const allowedFields = [
+    'name',
+    'avatarUrl'
+  ];
+
+
+  const updateData = {};
+
+
+  allowedFields.forEach((field) => {
+    if (data[field] !== undefined) {
+      updateData[field] = data[field];
+    }
+  });
+
+
   const user = await User.findByIdAndUpdate(
     userId,
-    data,
+    updateData,
     {
       new: true,
-      runValidators: true,
-    },
-  ).select('-password');
+      runValidators: true
+    }
+  )
+  .select('_id name email avatarUrl');
+
 
   if (!user) {
-    throw createHttpError(404, 'User not found');
+    throw new Error('User not found');
   }
 
-  return toPublicUser(user);
+
+  return {
+    id: user._id,
+    name: user.name,
+    email: user.email,
+    avatarUrl: user.avatarUrl
+  };
 };

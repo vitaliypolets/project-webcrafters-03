@@ -1,23 +1,32 @@
 import { Router } from 'express';
-import { controllerWrapper } from '../../../middlewares/controllerWrapper.js';
-import { authenticate } from '../../../middlewares/authenticate.js';
 import {
-  getMeController,
-  updateMeController,
+  getMe,
+  updateMe
 } from './me.controller.js';
-import { validateBody, updateMeSchema } from './me.validation.js';
 
-export const meRouter = Router();
+import { authenticate } from '../../../middlewares/authenticate.js';
 
-meRouter.get(
+
+const router = Router();
+
+
+
+router.get(
   '/',
   authenticate,
-  controllerWrapper(getMeController),
+  getMe
 );
 
-meRouter.patch(
+
+
+router.patch(
   '/',
   authenticate,
-  validateBody(updateMeSchema),
-  controllerWrapper(updateMeController),
+  updateMe
 );
+
+
+
+export {
+  router as meRouter
+};
