@@ -3,7 +3,6 @@
   align-items: center;
   justify-content: center;
 
-  /* Universal shape from globals.css */
   border-radius: var(--border-radius-btn);
 
   /* Transitions only for color/hover state changes */
