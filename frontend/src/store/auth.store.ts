@@ -6,9 +6,12 @@ type AuthState = {
   accessToken: string | null;
   isAuthenticated: boolean;
   isRefreshing: boolean;
+  isInitialized: boolean;
+
   setSession: (user: User, accessToken: string) => void;
   clearSession: () => void;
   setRefreshing: (value: boolean) => void;
+  setInitialized: (value: boolean) => void;
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -16,7 +19,23 @@ export const useAuthStore = create<AuthState>((set) => ({
   accessToken: null,
   isAuthenticated: false,
   isRefreshing: false,
-  setSession: (user, accessToken) => set({ user, accessToken, isAuthenticated: true }),
-  clearSession: () => set({ user: null, accessToken: null, isAuthenticated: false }),
+  isInitialized: false,
+
+  setSession: (user, accessToken) =>
+    set({
+      user,
+      accessToken,
+      isAuthenticated: true,
+    }),
+
+  clearSession: () =>
+    set({
+      user: null,
+      accessToken: null,
+      isAuthenticated: false,
+    }),
+
   setRefreshing: (isRefreshing) => set({ isRefreshing }),
+
+  setInitialized: (isInitialized) => set({ isInitialized }),
 }));

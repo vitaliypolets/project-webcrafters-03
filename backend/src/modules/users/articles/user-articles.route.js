@@ -1,8 +1,8 @@
 import { Router } from 'express';
+import { controllerWrapper } from '../../../middlewares/controllerWrapper.js';
+import { getUserArticlesController } from './user-articles.controller.js';
+import { validateUserArticlesRequest } from './user-articles.validation.js';
 
 export const userArticlesRouter = Router();
 
-// TODO (учасник №8): додайте методи, middleware та controller відповідно до API-контракту.
-userArticlesRouter.use((_req, res) => {
-  res.status(501).json({ status: 501, message: 'Module is not implemented yet' });
-});
+userArticlesRouter.get('/:userId/articles', validateUserArticlesRequest, controllerWrapper(getUserArticlesController));
