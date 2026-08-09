@@ -1,6 +1,6 @@
 export { meRouter } from './me.route.js';
 export {
-  getMeController,
+  usersRouter,
   updateMeController,
 } from './me.controller.js';
 export {

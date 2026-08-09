@@ -4,7 +4,7 @@ import {
   updateMeService,
 } from './me.service.js';
 
-export const getMeController = async (req, res, next) => {
+export const usersRouter = async (req, res, next) => {
   try {
     const user = await getMeService(req.user._id);
 

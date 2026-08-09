@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import {
-  getMeController,
+  usersRouter,
   updateMeController,
 } from './me.controller.js';
 
 export const meRouter = Router();
 
-meRouter.get('/', getMeController);
+meRouter.get('/', usersRouter);
 meRouter.patch('/', updateMeController);
