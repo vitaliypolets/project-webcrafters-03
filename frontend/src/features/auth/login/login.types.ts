@@ -1,2 +1,6 @@
-// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
-export {};
+// frontend\src\features\auth\login\login.types.ts
+
+export type LoginFormValues = {
+  email: string;
+  password: string;
+};
