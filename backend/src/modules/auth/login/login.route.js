@@ -1,8 +1,9 @@
+// backend/src/modules/auth/login/login.route.js
+
 import { Router } from 'express';
+import { controllerWrapper } from '../../../middlewares/controllerWrapper.js';
+import { loginController } from './login.controller.js';
 
 export const loginRouter = Router();
 
-// TODO (учасник №3): додайте методи, middleware та controller відповідно до API-контракту.
-loginRouter.use((_req, res) => {
-  res.status(501).json({ status: 501, message: 'Module is not implemented yet' });
-});
+loginRouter.post('/', controllerWrapper(loginController));
