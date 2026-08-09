@@ -1,28 +1,34 @@
 // TODO (учасник №5): request validation
-import createHttpError from 'http-errors';
+import { z } from 'zod';
+import { HttpError } from '../../../utils/HttpError.js';
 
-const allowedFields = ['name', 'avatar'];
+export const updateMeSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2, 'Name must be at least 2 characters')
+    .max(32, 'Name must be at most 32 characters')
+    .optional(),
 
-export const validateUpdateUser = data => {
-  if (!data || typeof data !== 'object') {
-    throw createHttpError(400, 'Request body must be an object');
+  avatarUrl: z
+    .string()
+    .url('Invalid avatar URL')
+    .optional(),
+});
+
+export const validateBody = (schema) => (req, _res, next) => {
+  const result = schema.safeParse(req.body ?? {});
+
+  if (!result.success) {
+    return next(
+      new HttpError(
+        400,
+        'Validation error',
+        result.error.flatten().fieldErrors,
+      ),
+    );
   }
 
-  const fields = Object.keys(data);
-
-  const hasInvalidField = fields.some(
-    field => !allowedFields.includes(field)
-  );
-
-  if (hasInvalidField) {
-    throw createHttpError(400, 'Invalid field in request body');
-  }
-
-  if (data.name !== undefined && typeof data.name !== 'string') {
-    throw createHttpError(400, 'Name must be a string');
-  }
-
-  if (data.avatar !== undefined && typeof data.avatar !== 'string') {
-    throw createHttpError(400, 'Avatar must be a string');
-  }
+  req.body = result.data;
+  next();
 };
