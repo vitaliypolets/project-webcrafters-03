@@ -1,9 +1,8 @@
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import { env } from '../../../config/env.js';
 import { Session } from '../../../models/Session.js';
 import { User } from '../../../models/User.js';
 import { HttpError } from '../../../utils/HttpError.js';
+import { createAccessToken, createRefreshToken } from '../shared/authTokens.js';
 
 export const refreshAuthSession = async (refreshToken, sessionId) => {
   if (!refreshToken) {
@@ -21,25 +20,22 @@ export const refreshAuthSession = async (refreshToken, sessionId) => {
   }
 
   const isTokenValid = await bcrypt.compare(refreshToken, session.refreshTokenHash);
+
   if (!isTokenValid) {
     await Session.deleteOne({ _id: session._id });
     throw new HttpError(401, 'Invalid refresh token');
   }
 
   const user = await User.findById(session.userId);
+
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
 
   await Session.deleteOne({ _id: session._id });
 
-  const newAccessToken = jwt.sign({ userId: user._id, email: user.email }, env.accessTokenSecret, {
-    expiresIn: '15m',
-  });
-
-  const newRefreshToken = jwt.sign({ userId: user._id }, env.refreshTokenSecret, {
-    expiresIn: '30d',
-  });
+  const newAccessToken = createAccessToken(user);
+  const newRefreshToken = createRefreshToken(user);
 
   const refreshTokenHash = await bcrypt.hash(newRefreshToken, 10);
   const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
