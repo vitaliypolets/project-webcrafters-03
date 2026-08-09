@@ -11,13 +11,6 @@
     color var(--transition-time) var(--cubic-bezier),
     border-color var(--transition-time) var(--cubic-bezier);
 }
-/* ==========================================
-   FOCUS & ACCESSIBILITY STATES
-   ========================================== */
-.button:focus-visible {
-  outline: none;
-  box-shadow: var(--focus-ring-shadow);
-}
 
 /* ==========================================
    PRIMARY VARIANT
@@ -96,7 +89,7 @@
 
 .button:focus-visible {
   outline: none;
-  box-shadow: var(--focus-ring-shadow); /* Snaps instantly for clear A11y indicator */
+  box-shadow: var(--focus-ring-shadow);
 }
 
 .button:disabled,
