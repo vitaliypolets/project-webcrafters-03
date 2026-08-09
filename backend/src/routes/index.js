@@ -6,7 +6,7 @@ import { usersListRouter } from '../modules/users/list/index.js';
 import { loginRouter } from '../modules/auth/login/index.js';
 import { articleDetailsRouter } from '../modules/articles/details/index.js';
 import { articleCreateRouter } from '../modules/articles/create/index.js';
-
+import { articlesListRouter } from '../modules/articles/list/index.js';
 export const apiRouter = Router();
 
 apiRouter.use('/health', healthRouter);
@@ -16,6 +16,7 @@ apiRouter.use('/users', userArticlesRouter);
 apiRouter.use('/auth/login', loginRouter);
 apiRouter.use('/articles', articleDetailsRouter);
 apiRouter.use('/articles', articleCreateRouter);
+apiRouter.use('/articles', articlesListRouter);
 
 // Mount only after corresponding feature PRs are accepted:
 // apiRouter.use('/auth/register', registerRouter);
@@ -23,5 +24,4 @@ apiRouter.use('/articles', articleCreateRouter);
 // apiRouter.use('/auth/session', sessionRouter);
 // apiRouter.use('/users', meRouter);
 // apiRouter.use('/users', bookmarksRouter);
-// apiRouter.use('/articles', articlesListRouter);
 // apiRouter.use('/articles', articleManageRouter);
