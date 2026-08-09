@@ -1,12 +1,13 @@
 import type { ArticlesListProps } from '../../article-shared.types';
 
 import { ArticlesItem } from '../ArticlesItem/ArticlesItem';
+import styles from './ArticlesList.module.css';
 
 export const ArticlesList = ({ articles }: ArticlesListProps) => {
   return (
-    <ul>
+    <ul className={styles.list}>
       {articles.map((article) => (
-        <li key={article.id}>
+        <li className={styles.listItem} key={article.id}>
           <ArticlesItem article={article} />
         </li>
       ))}

@@ -1,18 +1,26 @@
 import Link from 'next/link';
 import type { ArticlesItemProps } from '../../article-shared.types';
+import { BookmarkButton } from '../BookmarkButton/BookmarkButton';
+import styles from './ArticlesItem.module.css';
 
 export const ArticlesItem = ({ article }: ArticlesItemProps) => {
   return (
-    <article>
-      <img src={article.imageUrl} alt={article.title} />
+    <article className={styles.article}>
+      <img className={styles.image} src={article.imageUrl} alt={article.title} />
 
-      <p>{article.author.name}</p>
+      <p className={styles.author}>{article.author.name}</p>
 
-      <h2>{article.title}</h2>
+      <h2 className={styles.title}>{article.title}</h2>
 
-      <p>{article.description}</p>
+      <p className={styles.description}>{article.description}</p>
 
-      <Link href={`/articles/${article.id}`}>Learn more</Link>
+      <div className={styles.actions}>
+        <Link className={styles.learnMore} href={`/articles/${article.id}`}>
+          Learn more
+        </Link>
+
+        <BookmarkButton isBookmarked={article.isBookmarked ?? false} onToggle={() => {}} />
+      </div>
     </article>
   );
 };
