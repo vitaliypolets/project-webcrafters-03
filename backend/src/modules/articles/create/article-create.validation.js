@@ -27,9 +27,17 @@ export const validateCreateArticle = (req, res, next) => {
   const result = createArticleSchema.safeParse(req.body);
 
   if (!result.success) {
+    const tree = z.treeifyError(result.error);
+
+    const errors = {
+      title: tree.properties?.title?.errors ?? [],
+      description: tree.properties?.description?.errors ?? [],
+      publicationDate: tree.properties?.publicationDate?.errors ?? [],
+    };
+
     return res.status(400).json({
       message: 'Validation error',
-      errors: result.error.flatten().fieldErrors,
+      errors,
     });
   }
 
