@@ -3,7 +3,7 @@ import createHttpError from 'http-errors';
 
 const getArticleById = async (req, res) => {
   const { articleId } = req.params;
-  const userId = req.user?._id;
+  const userId = req.user?.userId || null;
 
   const article = await getArticleDetails(articleId, userId);
 

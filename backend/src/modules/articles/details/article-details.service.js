@@ -1,22 +1,26 @@
+import mongoose from 'mongoose';
 import { Article } from '../../../models/Article.js';
+import { User } from '../../../models/User.js';
 
 const getArticleDetails = async (articleId, userId = null) => {
   const article = await Article.findById(articleId).lean();
+
   if (!article) return null;
 
-  if (!userId) {
-    return { ...article, isBookmarked: false };
-  }
-
-  const isBookmarked = false;
+  let isBookmarked = false;
   if (userId) {
-    // TODO:
-    // isBookmarked = await Bookmark.exists({ articleId, userId });
-  }
+    const userHasBookmark = await User.exists({
+      _id: userId,
+      savedArticles: articleId,
+    });
 
-  const recommendations = await Article.find({ _id: { $ne: articleId } })
-    .limit(3)
-    .lean();
+    isBookmarked = Boolean(userHasBookmark);
+  };
+
+  const recommendations = await Article.aggregate([
+    { $match: { _id: { $ne: new mongoose.Types.ObjectId(articleId) } } },
+    { $sample: { size: 3 } }
+  ]);
   
   return {
     article,
@@ -24,7 +28,7 @@ const getArticleDetails = async (articleId, userId = null) => {
       _id: article.authorId,
       name: article.authorName,
     },
-    isBookmarked: Boolean(isBookmarked),
+    isBookmarked,
     recommendations,
   };
 }
