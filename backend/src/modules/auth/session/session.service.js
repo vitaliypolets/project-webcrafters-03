@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import { Session } from '../../../models/Session.js';
 import { User } from '../../../models/User.js';
 import { HttpError } from '../../../utils/HttpError.js';
+import { createAuthSession } from '../shared/authSession.js';
 import { createAccessToken, createRefreshToken } from '../shared/authTokens.js';
 
 export const refreshAuthSession = async (refreshToken, sessionId) => {
@@ -37,14 +38,7 @@ export const refreshAuthSession = async (refreshToken, sessionId) => {
   const newAccessToken = createAccessToken(user);
   const newRefreshToken = createRefreshToken(user);
 
-  const refreshTokenHash = await bcrypt.hash(newRefreshToken, 10);
-  const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
-
-  const newSession = await Session.create({
-    userId: user._id,
-    refreshTokenHash,
-    expiresAt,
-  });
+  const newSession = await createAuthSession(user._id, newRefreshToken);
 
   return {
     accessToken: newAccessToken,
