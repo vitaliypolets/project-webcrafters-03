@@ -1,8 +1,8 @@
 import { Router } from 'express';
+import { logoutSessionController, refreshSessionController } from './session.controller.js';
+import { validateSessionCookies } from './session.validation.js';
 
 export const sessionRouter = Router();
 
-// TODO (учасник №4): додайте методи, middleware та controller відповідно до API-контракту.
-sessionRouter.use((_req, res) => {
-  res.status(501).json({ status: 501, message: 'Module is not implemented yet' });
-});
+sessionRouter.post('/', validateSessionCookies, refreshSessionController);
+sessionRouter.delete('/', logoutSessionController);
