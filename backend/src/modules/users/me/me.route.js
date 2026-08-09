@@ -1,8 +1,10 @@
 import { Router } from 'express';
+import {
+  getMeController,
+  updateMeController,
+} from './me.controller.js';
 
 export const meRouter = Router();
 
-// TODO (учасник №5): додайте методи, middleware та controller відповідно до API-контракту.
-meRouter.use((_req, res) => {
-  res.status(501).json({ status: 501, message: 'Module is not implemented yet' });
-});
+meRouter.get('/', getMeController);
+meRouter.patch('/', updateMeController);
