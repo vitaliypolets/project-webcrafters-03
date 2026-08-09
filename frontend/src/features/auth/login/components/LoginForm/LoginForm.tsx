@@ -7,6 +7,8 @@ import { loginSchema } from '../../login.schema';
 import type { LoginFormValues } from '../../login.types';
 import styles from './LoginForm.module.css';
 import { useState } from 'react';
+import { login } from '../../login.service';
+import { useAuthStore } from '@/store/auth.store';
 
 const initialValues: LoginFormValues = {
   email: '',
@@ -14,8 +16,16 @@ const initialValues: LoginFormValues = {
 };
 
 export default function LoginForm() {
+  const setSession = useAuthStore((state) => state.setSession);
+
   const handleSubmit = async (values: LoginFormValues) => {
-    console.log(values);
+    try {
+      const result = await login(values);
+
+      setSession(result.user, result.accessToken);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const [showPassword, setShowPassword] = useState(false);
