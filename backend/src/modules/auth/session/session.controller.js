@@ -1,5 +1,5 @@
-import { env } from '../../../config/env.js';
 import { controllerWrapper } from '../../../middlewares/controllerWrapper.js';
+import { clearAuthCookies, setAuthCookies } from '../shared/authCookies.js';
 import { logoutAuthSession, refreshAuthSession } from './session.service.js';
 
 export const refreshSessionController = controllerWrapper(async (req, res) => {
@@ -8,15 +8,7 @@ export const refreshSessionController = controllerWrapper(async (req, res) => {
 
   const session = await refreshAuthSession(refreshToken, sessionId);
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: env.nodeEnv === 'production',
-    sameSite: 'strict',
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  };
-
-  res.cookie('refreshToken', session.refreshToken, cookieOptions);
-  res.cookie('sessionId', session.sessionId, cookieOptions);
+  setAuthCookies(res, session.refreshToken, session.sessionId);
 
   res.status(200).json({
     data: {
@@ -31,9 +23,7 @@ export const logoutSessionController = controllerWrapper(async (req, res) => {
 
   await logoutAuthSession(sessionId);
 
-  res.clearCookie('refreshToken');
-  res.clearCookie('sessionId');
-  res.clearCookie('accessToken');
+  clearAuthCookies(res);
 
   res.status(204).send();
 });
