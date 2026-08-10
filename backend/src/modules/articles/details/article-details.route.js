@@ -1,8 +1,8 @@
 import { Router } from 'express';
 
+import { getArticleById } from './article-details.controller.js';
+import { validateArticleParams } from './article-details.validation.js';
+
 export const articleDetailsRouter = Router();
 
-// TODO (учасник №10): додайте методи, middleware та controller відповідно до API-контракту.
-articleDetailsRouter.use((_req, res) => {
-  res.status(501).json({ status: 501, message: 'Module is not implemented yet' });
-});
+articleDetailsRouter.get('/:articleId', validateArticleParams, getArticleById);
