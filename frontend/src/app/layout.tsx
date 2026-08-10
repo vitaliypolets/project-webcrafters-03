@@ -28,6 +28,14 @@ export const metadata: Metadata = {
     template: '%s | Harmoniq',
   },
   description: 'Find your harmony in community.',
+  openGraph: {
+    title: 'Harmoniq',
+    description: 'Find your harmony in community.',
+    url: 'https://harmoniq.com',
+    siteName: 'Harmoniq',
+    locale: 'uk_UA',
+    type: 'website',
+  },
 };
 
 export default function RootLayout({
@@ -36,10 +44,7 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html
-      lang="uk"
-      className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}
-    >
+    <html lang="uk" className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}>
       <body>
         <AppProviders>{children}</AppProviders>
       </body>

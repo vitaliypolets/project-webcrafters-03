@@ -1,25 +1,13 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, type ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { restoreSession } from '@/features/auth/session/session.service';
 import { useAuthStore } from '@/store/auth.store';
+import { QueryProvider } from './QueryProvider';
 
 export function AppProviders({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: 30_000,
-            retry: 1,
-          },
-        },
-      }),
-  );
-
   const setSession = useAuthStore((state) => state.setSession);
   const clearSession = useAuthStore((state) => state.clearSession);
   const setRefreshing = useAuthStore((state) => state.setRefreshing);
@@ -57,7 +45,7 @@ export function AppProviders({ children }: { children: ReactNode }) {
   }, [setSession, clearSession, setRefreshing, setInitialized]);
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <QueryProvider>
       {children}
 
       <Toaster
@@ -66,6 +54,6 @@ export function AppProviders({ children }: { children: ReactNode }) {
           duration: 4000,
         }}
       />
-    </QueryClientProvider>
+    </QueryProvider>
   );
 }
