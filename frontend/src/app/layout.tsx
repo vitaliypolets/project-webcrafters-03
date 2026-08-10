@@ -1,16 +1,45 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import { DM_Sans, Manrope, Noto_Sans } from 'next/font/google';
 import { AppProviders } from '@/components/providers/AppProviders';
 import './globals.css';
 
+const manrope = Manrope({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--next-font-manrope',
+  display: 'swap',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--next-font-dm-sans',
+  display: 'swap',
+});
+
+const notoSans = Noto_Sans({
+  subsets: ['latin', 'cyrillic'],
+  variable: '--next-font-noto-sans',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  title: { default: 'Harmoniq', template: '%s | Harmoniq' },
+  title: {
+    default: 'Harmoniq',
+    template: '%s | Harmoniq',
+  },
   description: 'Find your harmony in community.',
 };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: ReactNode;
+}>) {
   return (
-    <html lang="uk">
+    <html
+      lang="uk"
+      className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}
+    >
       <body>
         <AppProviders>{children}</AppProviders>
       </body>
