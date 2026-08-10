@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { DM_Sans, Manrope, Noto_Sans } from 'next/font/google';
 import { AppProviders } from '@/components/providers/AppProviders';
 import './globals.css';
+import Header from '@/components/Header/Header';
 
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
@@ -41,7 +42,7 @@ export default function RootLayout({
       className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}
     >
       <body>
-        <AppProviders>{children}</AppProviders>
+        <AppProviders><Header/>{children}</AppProviders>
       </body>
     </html>
   );
