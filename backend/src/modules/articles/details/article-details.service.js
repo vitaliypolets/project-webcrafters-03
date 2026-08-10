@@ -3,9 +3,15 @@ import { Article } from '../../../models/Article.js';
 import { User } from '../../../models/User.js';
 
 const getArticleDetails = async (articleId, userId = null) => {
-  const article = await Article.findById(articleId).lean();
+  const article = await Article.findByIdAndUpdate(
+    articleId,
+    { $inc: { viewsCount: 1 } },
+    { new: true }
+  ).lean();
 
   if (!article) return null;
+
+  const author = await User.findById(article.authorId, 'name').lean();
 
   let isBookmarked = false;
   if (userId) {
@@ -24,12 +30,13 @@ const getArticleDetails = async (articleId, userId = null) => {
   
   return {
     article,
-    author: {
-      _id: article.authorId,
-      name: article.authorName,
-    },
+    author: author? {
+        _id: author._id,
+        name: author.name,
+      }: null,
     isBookmarked,
     recommendations,
   };
 }
+
 export { getArticleDetails };
