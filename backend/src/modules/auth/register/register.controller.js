@@ -1,7 +1,7 @@
-import { env } from '../../../config/env.js';
 import { HttpError } from '../../../utils/HttpError.js';
 import { createAuthSession } from '../shared/authSession.js';
 import { createAccessToken, createRefreshToken } from '../shared/authTokens.js';
+import { setAuthCookies } from '../shared/authCookies.js';
 import {
   createUser,
   findUserByEmail,
@@ -14,33 +14,34 @@ export const registerController = async (req, res) => {
   const { name, email, password } = req.body;
 
   const existingUser = await findUserByEmail(email);
+
   if (existingUser) {
     throw new HttpError(409, 'Email in use');
   }
 
   const passwordHash = await hashPassword(password);
-  const user = await createUser({ name, email, passwordHash });
+
+  const user = await createUser({
+    name,
+    email,
+    passwordHash,
+  });
 
   if (req.file) {
     const uploadResult = await uploadAvatarToCloudinary(req.file.buffer, user._id);
+
     user.avatarUrl = uploadResult.secure_url;
     user.avatarPublicId = uploadResult.public_id;
+
     await user.save();
   }
 
   const accessToken = createAccessToken(user);
   const refreshToken = createRefreshToken(user);
+
   const session = await createAuthSession(user._id, refreshToken);
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: env.nodeEnv === 'production',
-    sameSite: 'strict',
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  };
-
-  res.cookie('refreshToken', refreshToken, cookieOptions);
-  res.cookie('sessionId', session._id.toString(), cookieOptions);
+  setAuthCookies(res, refreshToken, session._id.toString());
 
   res.status(201).json({
     data: {
