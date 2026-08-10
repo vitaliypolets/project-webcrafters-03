@@ -2,7 +2,7 @@
 
 import { loginSchema } from './login.validation.js';
 import { loginUser } from './login.service.js';
-import { env } from '../../../config/env.js';
+import { setAuthCookies } from '../shared/authCookies.js';
 
 export async function loginController(req, res) {
   const result = loginSchema.safeParse(req.body);
@@ -17,16 +17,7 @@ export async function loginController(req, res) {
 
   const resultData = await loginUser(result.data);
 
-  const cookieOptions = {
-    httpOnly: true,
-    secure: env.nodeEnv === 'production',
-    sameSite: 'strict',
-    expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  };
-
-  res.cookie('refreshToken', resultData.refreshToken, cookieOptions);
-
-  res.cookie('sessionId', resultData.sessionId, cookieOptions);
+  setAuthCookies(res, resultData.refreshToken, resultData.sessionId);
 
   return res.status(200).json({
     data: {

@@ -51,7 +51,15 @@
   /* ==========================================================================
      4. Typography
      ========================================================================== */
-  --font-family-main: "Manrope", sans-serif;
+  /* Fonts are loaded centrally in app/layout.tsx via next/font/google. */
+  --font-family-main: var(--next-font-manrope), sans-serif;
+  --font-family-secondary: var(--next-font-dm-sans), sans-serif;
+  --font-family-third: var(--next-font-noto-sans), sans-serif;
+
+  /* Design aliases kept for compatibility with Figma/design tokens. */
+  --font-family: var(--font-family-main);
+  --second-family: var(--font-family-secondary);
+  --third-family: var(--font-family-third);
 
   --font-weight-regular: 400;
   --font-weight-bold: 700;
