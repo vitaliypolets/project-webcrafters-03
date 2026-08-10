@@ -28,8 +28,38 @@ const getArticleDetails = async (articleId, userId = null) => {
     { $match: { 
         _id: { $ne: currentObjectId },
         title: { $ne: article.title }
-      } },
-    { $sample: { size: 3 } }
+      }
+    },
+    { $sample: { size: 3 } },
+    {
+      $lookup: {
+        from: 'users',
+        localField: 'authorId',
+        foreignField: '_id',
+        as: 'author'
+      }
+    },
+    {
+      $unwind: {
+        path: '$author',
+        preserveNullAndEmptyArrays: true
+      }
+    },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        description: 1,
+        imageUrl: 1,
+        publicationDate: 1,
+        category: 1,
+        viewsCount: 1,
+        author: {
+          _id: '$author._id',
+          name: '$author.name'
+        }
+      }
+    },
   ]);
   
   return {
