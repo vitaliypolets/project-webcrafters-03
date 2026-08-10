@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import styles from './AuthorPage.module.css';
 import { getAuthorById } from '@/features/authors/authors.service';
 import type { PublicUser } from '@/types/user';
+import Image from "next/image";
 
 type AuthorPageProps = {
   params: Promise<{ userId: string }>;
@@ -35,16 +36,28 @@ export default function AuthorPage({ params }: AuthorPageProps) {
   if (!author) {
     return <main className={styles.page}>Loading...</main>;
   }
-
+const firstName = author.name.split(' ')[0];
   return (
-    <main className={styles.page}>
-      <h1>{author.name}</h1>
-
-      {author.avatarUrl && (
-        <img src={author.avatarUrl} alt={author.name} width={200} />
-      )}
-
-      <p>Кількість статей: {author.articlesCount}</p>
+    <main className="container">
+      <div className={styles.wrapper}>
+        {/* <Image
+          src={author.avatarUrl as string} 
+          alt={author.name}
+          width={124}
+          height={124}
+          className={styles.avatar}
+      />
+       */}
+         {author.avatarUrl && (
+        <img className={styles.avatar} src={author.avatarUrl} alt={author.name} width={124}
+          height={124} />
+        )}
+        <div className={styles.user_info}>
+      <h1 className={styles.name}>{firstName}</h1>
+          <p className={styles.articles}>{author.articlesCount} articles</p>
+          </div>
+        </div>
     </main>
   );
 }
+    
