@@ -32,7 +32,7 @@ export default function Header() {
             aria-label="Home"
           >
             <svg className={css.logoIcon}>
-              <use href="/sprite.svg#iconlogo" />
+              <use href="/icons/sprite.svg#icon-logo" />
             </svg>
           </Link>
           <div className={css.navigationDescFild}>
@@ -96,7 +96,7 @@ export default function Header() {
                       </div>
                      <Link href={`/logoutUser/`}>
                         <svg className={css.icon} width="24" height="24">
-                          <use href="/sprite.svg#icongenericlogout" />
+                          <use href="/icons/sprite.svg#icon-log-out" />
                         </svg>
                       </Link>
                     </li>
@@ -133,13 +133,13 @@ export default function Header() {
                 {isOpen ? (
                   <>
                     <svg className={css.icon} width="32" height="32">
-                      <use href="/sprite.svg#iconcontrolsclose" />
+                      <use href="/icons/sprite.svg#icon-close" />
                     </svg>
                   </>
                 ) : (
                   <>
                     <svg className={css.icon} width="32" height="32">
-                      <use href="/sprite.svg#icongenericburgerregular" />
+                      <use href="/icons/sprite.svg#icon-burger" />
                     </svg>
                   </>
                 )}
@@ -209,7 +209,7 @@ export default function Header() {
 
                  <Link href={`/logoutUser/`}>
                         <svg className={css.icon} width="24" height="24">
-                          <use href="/sprite.svg#icongenericlogout" />
+                          <use href="/icons/sprite.svg#icon-log-out" />
                         </svg>
                       </Link>
                 </li>
