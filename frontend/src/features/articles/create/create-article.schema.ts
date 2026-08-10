@@ -1,2 +1,60 @@
 // TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
-export {};
+import * as Yup from 'yup';
+
+const MAX_IMAGE_SIZE = 1024 * 1024;
+
+const ALLOWED_IMAGE_TYPES = [
+ 'image/jpeg',
+ 'image/jpg',
+ 'image/png',
+ 'image/gif',
+ 'image/webp',
+];
+
+export const createArticleSchema = Yup.object({
+ title: Yup.string()
+   .trim()
+   .min(3, 'Title must contain at least 3 characters')
+   .max(48, 'Title must contain at most 48 characters')
+   .required('Title is required'),
+
+
+ description: Yup.string()
+   .trim()
+   .min(100, 'Description must contain at least 100 characters')
+   .max(4000, 'Description must contain at most 4000 characters')
+   .required('Description is required'),
+
+
+ image: Yup.mixed<File>()
+   .required('Article image is required')
+   .test(
+     'fileSize',
+     'Image size must not exceed 1 MB',
+     value => {
+       if (!value) return false;
+
+
+       return value.size <= MAX_IMAGE_SIZE;
+     },
+   )
+   .test(
+     'fileType',
+     'Only JPG, JPEG, PNG, GIF and WEBP images are allowed',
+     value => {
+       if (!value) return false;
+
+
+       return ALLOWED_IMAGE_TYPES.includes(value.type);
+     },
+   ),
+
+
+ publicationDate: Yup.string()
+   .matches(
+     /^\d{4}-\d{2}-\d{2}$/,
+     'Date must have format YYYY-MM-DD',
+   )
+   .required('Publication date is required'),
+});
+
