@@ -8,13 +8,13 @@ const toArticleDto = (article) => ({
   description: article.description,
   imageUrl: article.imageUrl,
   publicationDate: article.publicationDate,
-  authorId: article.authorId.toString(),
-  authorName: article.authorName,
-  viewsCount: article.viewsCount,
-  category: article.category,
+  author: {
+    id: article.authorId._id.toString(),
+    name: article.authorId.name,
+    avatarUrl: article.authorId.avatarUrl ?? null,
+    articlesCount: article.authorId.articlesAmount,
+  },
   isBookmarked: true,
-  createdAt: article.createdAt,
-  updatedAt: article.updatedAt,
 });
 
 export const getBookmarks = async (userId, { page, perPage }) => {
@@ -25,26 +25,25 @@ export const getBookmarks = async (userId, { page, perPage }) => {
   }
 
   const savedIds = [...user.savedArticles].reverse();
-  const totalItems = savedIds.length;
-  const totalPages = Math.ceil(totalItems / perPage);
-  const skip = (page - 1) * perPage;
-  const pageIds = savedIds.slice(skip, skip + perPage);
-
-  const articles = pageIds.length
-    ? await Article.find({ _id: { $in: pageIds } }).lean()
+  const savedArticles = savedIds.length
+    ? await Article.find({ _id: { $in: savedIds } })
+        .populate('authorId', 'name avatarUrl articlesAmount')
+        .lean()
     : [];
 
   const articleById = new Map(
-    articles.map((article) => [article._id.toString(), article]),
+    savedArticles
+      .filter((article) => article.authorId)
+      .map((article) => [article._id.toString(), article]),
   );
-
-  const orderedArticles = pageIds
-    .map((id) => articleById.get(id.toString()))
-    .filter(Boolean)
-    .map(toArticleDto);
+  const orderedArticles = savedIds.map((id) => articleById.get(id.toString())).filter(Boolean);
+  const totalItems = orderedArticles.length;
+  const totalPages = Math.ceil(totalItems / perPage);
+  const skip = (page - 1) * perPage;
+  const articles = orderedArticles.slice(skip, skip + perPage).map(toArticleDto);
 
   return {
-    data: orderedArticles,
+    data: articles,
     page,
     perPage,
     totalItems,
@@ -54,49 +53,41 @@ export const getBookmarks = async (userId, { page, perPage }) => {
 };
 
 export const addBookmark = async (userId, articleId) => {
-  const article = await Article.findById(articleId).lean();
+  const article = await Article.findById(articleId)
+    .populate('authorId', 'name avatarUrl articlesAmount')
+    .lean();
 
-  if (!article) {
+  if (!article || !article.authorId) {
     throw new HttpError(404, 'Article not found');
   }
 
-  const user = await User.findById(userId).select('savedArticles');
+  const user = await User.findOneAndUpdate(
+    { _id: userId, savedArticles: { $ne: articleId } },
+    { $push: { savedArticles: articleId } },
+    { new: true },
+  ).select('_id');
 
   if (!user) {
-    throw new HttpError(404, 'User not found');
-  }
-
-  const alreadySaved = user.savedArticles.some(
-    (savedId) => savedId.toString() === articleId,
-  );
-
-  if (alreadySaved) {
+    const userExists = await User.exists({ _id: userId });
+    if (!userExists) throw new HttpError(404, 'User not found');
     throw new HttpError(409, 'Article is already bookmarked');
   }
-
-  user.savedArticles.push(article._id);
-  await user.save();
 
   return toArticleDto(article);
 };
 
 export const removeBookmark = async (userId, articleId) => {
-  const user = await User.findById(userId).select('savedArticles');
+  const user = await User.findOneAndUpdate(
+    { _id: userId, savedArticles: articleId },
+    { $pull: { savedArticles: articleId } },
+    { new: true },
+  ).select('_id');
 
   if (!user) {
-    throw new HttpError(404, 'User not found');
-  }
-
-  const bookmarkExists = user.savedArticles.some(
-    (savedId) => savedId.toString() === articleId,
-  );
-
-  if (!bookmarkExists) {
+    const userExists = await User.exists({ _id: userId });
+    if (!userExists) throw new HttpError(404, 'User not found');
     throw new HttpError(404, 'Bookmark not found');
   }
-
-  user.savedArticles.pull(articleId);
-  await user.save();
 
   return { articleId };
 };
