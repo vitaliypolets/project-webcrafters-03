@@ -1,4 +1,5 @@
 import Link from 'next/link';
+
 import type { ArticlesItemProps } from '../../article-shared.types';
 import { BookmarkButton } from '../BookmarkButton/BookmarkButton';
 import styles from './ArticlesItem.module.css';
@@ -19,7 +20,7 @@ export const ArticlesItem = ({ article }: ArticlesItemProps) => {
           Learn more
         </Link>
 
-        <BookmarkButton isBookmarked={article.isBookmarked ?? false} onToggle={() => {}} />
+        <BookmarkButton articleId={article.id} isBookmarked={article.isBookmarked ?? false} />
       </div>
     </article>
   );
