@@ -12,6 +12,7 @@ import { registerRouter } from '../modules/auth/register/index.js';
 
 export const apiRouter = Router();
 
+apiRouter.use('/users/me', meRouter);
 apiRouter.use('/health', healthRouter);
 apiRouter.use('/users', usersListRouter);
 apiRouter.use('/users', userDetailsRouter);
@@ -20,7 +21,6 @@ apiRouter.use('/auth/login', loginRouter);
 apiRouter.use('/articles', articleDetailsRouter);
 apiRouter.use('/articles', articleCreateRouter);
 apiRouter.use('/articles', articlesListRouter);
-apiRouter.use('/users/me', meRouter);
 apiRouter.use('/auth/register', registerRouter);
 
 // Mount only after corresponding feature PRs are accepted:

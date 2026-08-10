@@ -1,8 +1,32 @@
 import { Router } from 'express';
+import {
+  getMe,
+  updateMe
+} from './me.controller.js';
 
-export const meRouter = Router();
+import { authenticate } from '../../../middlewares/authenticate.js';
 
-// TODO (учасник №5): додайте методи, middleware та controller відповідно до API-контракту.
-meRouter.use((_req, res) => {
-  res.status(501).json({ status: 501, message: 'Module is not implemented yet' });
-});
+
+const router = Router();
+
+
+
+router.get(
+  '/',
+  authenticate,
+  getMe
+);
+
+
+
+router.patch(
+  '/',
+  authenticate,
+  updateMe
+);
+
+
+
+export {
+  router as meRouter
+};
