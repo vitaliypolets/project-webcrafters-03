@@ -9,6 +9,7 @@ import { articleCreateRouter } from '../modules/articles/create/index.js';
 import { articlesListRouter } from '../modules/articles/list/index.js';
 import { meRouter } from '../modules/users/me/index.js';
 import { registerRouter } from '../modules/auth/register/index.js';
+import { bookmarksRouter } from '../modules/users/bookmarks/index.js';
 
 export const apiRouter = Router();
 
@@ -22,9 +23,8 @@ apiRouter.use('/articles', articleDetailsRouter);
 apiRouter.use('/articles', articleCreateRouter);
 apiRouter.use('/articles', articlesListRouter);
 apiRouter.use('/auth/register', registerRouter);
+apiRouter.use('/users', bookmarksRouter);
 
 // Mount only after corresponding feature PRs are accepted:
-//
-// apiRouter.use('/auth/session', sessionRouter);
-// apiRouter.use('/users', bookmarksRouter);
+//// apiRouter.use('/auth/session', sessionRouter);
 // apiRouter.use('/articles', articleManageRouter);
