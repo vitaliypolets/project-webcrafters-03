@@ -23,8 +23,12 @@ const getArticleDetails = async (articleId, userId = null) => {
     isBookmarked = Boolean(userHasBookmark);
   };
 
+  const currentObjectId = new mongoose.Types.ObjectId(article._id);
   const recommendations = await Article.aggregate([
-    { $match: { _id: { $ne: new mongoose.Types.ObjectId(articleId) } } },
+    { $match: { 
+        _id: { $ne: currentObjectId },
+        title: { $ne: article.title }
+      } },
     { $sample: { size: 3 } }
   ]);
   
