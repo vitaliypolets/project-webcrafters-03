@@ -12,7 +12,7 @@ export const articleCreateRouter = Router();
 articleCreateRouter.post(
   '/',
   authenticate,
-  upload.single('photo'),
+  upload.single('image'),
   validateCreateArticle,
   controllerWrapper(createArticleController),
 );

@@ -8,34 +8,32 @@ export const createArticle = async ({ data, file, user }) => {
     throw new HttpError(400, 'Article image is required');
   }
 
-  const authorId = user._id;
-
-  const image = await saveFileToCloudinary(
-    file.buffer,
-    authorId,
-  );
+  const image = await saveFileToCloudinary(file);
 
   const article = await Article.create({
     title: data.title,
     description: data.description,
+    article: data.article,
     publicationDate: data.publicationDate,
     imageUrl: image.secure_url,
     imagePublicId: image.public_id,
-    authorId,
+    authorId: user._id,
     authorName: user.name,
+    viewsCount: 0,
+    category: data.category,
   });
 
   return {
     id: article._id.toString(),
     title: article.title,
     description: article.description,
+    article: article.article,
     imageUrl: article.imageUrl,
+    imagePublicId: article.imagePublicId,
     publicationDate: article.publicationDate,
     authorId: article.authorId.toString(),
     authorName: article.authorName,
     viewsCount: article.viewsCount,
     category: article.category,
-    createdAt: article.createdAt,
-    updatedAt: article.updatedAt,
   };
 };
