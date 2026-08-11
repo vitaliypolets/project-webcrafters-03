@@ -1,7 +1,6 @@
-// frontend/src/app/(main)/articles/create/page.tsx
-
 import type { Metadata } from 'next';
 
+import { Container } from '@/components/ui/Container/Container';
 import AddArticleForm from '@/features/articles/create/components/AddArticleForm/AddArticleForm';
 import { AuthGuard } from '@/features/auth/session';
 
@@ -29,10 +28,11 @@ export const metadata: Metadata = {
 export default function CreateArticlePage() {
   return (
     <AuthGuard>
-      <main className={`container ${styles.page}`}>
-        <h1 className={styles.title}>Create an article</h1>
-
-        <AddArticleForm />
+      <main>
+        <Container className={styles.page}>
+          <h1 className={styles.title}>Create an article</h1>
+          <AddArticleForm />
+        </Container>
       </main>
     </AuthGuard>
   );
