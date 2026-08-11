@@ -1,8 +1,37 @@
 import { Router } from 'express';
 
+import { authenticate } from '../../../middlewares/authenticate.js';
+import { controllerWrapper } from '../../../middlewares/controllerWrapper.js';
+import {
+  addBookmarkController,
+  getBookmarksController,
+  removeBookmarkController,
+} from './bookmarks.controller.js';
+import {
+  validateBookmarkBody,
+  validateBookmarkParams,
+  validateBookmarksQuery,
+} from './bookmarks.validation.js';
+
 export const bookmarksRouter = Router();
 
-// TODO (учасник №9): додайте методи, middleware та controller відповідно до API-контракту.
-bookmarksRouter.use((_req, res) => {
-  res.status(501).json({ status: 501, message: 'Module is not implemented yet' });
-});
+bookmarksRouter.get(
+  '/me/bookmarks',
+  authenticate,
+  validateBookmarksQuery,
+  controllerWrapper(getBookmarksController),
+);
+
+bookmarksRouter.post(
+  '/me/bookmarks',
+  authenticate,
+  validateBookmarkBody,
+  controllerWrapper(addBookmarkController),
+);
+
+bookmarksRouter.delete(
+  '/me/bookmarks/:articleId',
+  authenticate,
+  validateBookmarkParams,
+  controllerWrapper(removeBookmarkController),
+);

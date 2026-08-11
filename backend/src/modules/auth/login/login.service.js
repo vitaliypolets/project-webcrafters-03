@@ -1,11 +1,12 @@
 // backend/src/modules/auth/login/login.service.js
 
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 
-import { env } from '../../../config/env.js';
-import { Session } from '../../../models/Session.js';
 import { User } from '../../../models/User.js';
+
+import { createAccessToken, createRefreshToken } from '../shared/authTokens.js';
+
+import { createAuthSession } from '../shared/authSession.js';
 
 export async function loginUser({ email, password }) {
   const user = await User.findOne({ email }).select('+passwordHash');
@@ -24,28 +25,23 @@ export async function loginUser({ email, password }) {
     throw error;
   }
 
-  const userId = user._id.toString();
+  const accessToken = createAccessToken(user);
 
-  const accessToken = jwt.sign({ userId }, env.accessTokenSecret, { expiresIn: '15m' });
+  const refreshToken = createRefreshToken(user);
 
-  const refreshToken = jwt.sign({ userId }, env.refreshTokenSecret, { expiresIn: '30d' });
-
-  const refreshTokenHash = await bcrypt.hash(refreshToken, 10);
-
-  await Session.create({
-    userId: user._id,
-    refreshTokenHash,
-    expiresAt: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-  });
+  const session = await createAuthSession(user._id, refreshToken);
 
   return {
     user: {
-      id: userId,
+      _id: user._id,
       name: user.name,
       email: user.email,
-      avatarUrl: user.avatarUrl,
+      avatarUrl: user.avatarUrl ?? null,
+      articlesAmount: user.articlesAmount,
     },
+
     accessToken,
     refreshToken,
+    sessionId: session._id.toString(),
   };
 }

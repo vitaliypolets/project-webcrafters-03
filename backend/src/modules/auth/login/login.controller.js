@@ -2,6 +2,7 @@
 
 import { loginSchema } from './login.validation.js';
 import { loginUser } from './login.service.js';
+import { setAuthCookies } from '../shared/authCookies.js';
 
 export async function loginController(req, res) {
   const result = loginSchema.safeParse(req.body);
@@ -14,10 +15,15 @@ export async function loginController(req, res) {
     });
   }
 
-  const data = await loginUser(result.data);
+  const resultData = await loginUser(result.data);
+
+  setAuthCookies(res, resultData.refreshToken, resultData.sessionId);
 
   return res.status(200).json({
-    data,
-    message: 'Login successful',
+    data: {
+      user: resultData.user,
+      accessToken: resultData.accessToken,
+    },
+    message: 'Successfully logged in!',
   });
 }
