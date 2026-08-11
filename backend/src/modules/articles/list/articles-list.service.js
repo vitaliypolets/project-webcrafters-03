@@ -2,8 +2,8 @@
 import { Article } from '../../../models/Article.js';
 
 export const getArticlesListService = async (query) => {
-  const page = query.page;
-  const perPage = query.limit || query.perPage;
+  const page = Number(query.page) || 1;
+  const perPage = Number(query.limit || query.perPage) || 10;
   const skip = (page - 1) * perPage;
 
   const filter = {};
