@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 import type { ArticlesItemProps } from '../../article-shared.types';
@@ -7,7 +8,7 @@ import styles from './ArticlesItem.module.css';
 export const ArticlesItem = ({ article }: ArticlesItemProps) => {
   return (
     <article className={styles.article}>
-      <img className={styles.image} src={article.imageUrl} alt={article.title} />
+      <Image className={styles.image} src={article.imageUrl} alt={article.title} />
 
       <p className={styles.author}>{article.author.name}</p>
 
