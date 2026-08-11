@@ -26,3 +26,5 @@ export type AuthorsResponse = {
   perPage: number;
   hasNextPage: boolean;
 };
+
+

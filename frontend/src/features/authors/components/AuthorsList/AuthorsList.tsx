@@ -15,7 +15,7 @@ export default function AuthorsList({ authors }: AuthorsListProps) {
   return (
     <ul className={styles.list}>
       {authors.map(author => (
-        <li className={styles.item} key={author.id}>
+        <li className={styles.item} key={author.id} data-author-id={author.id}>
           <AuthorsItem author={author} />
         </li>
       ))}

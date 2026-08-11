@@ -7,9 +7,25 @@
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-title-lg);
   color: var(--color-dark);
-  margin-bottom: 16px;
+  margin-bottom: var(--spacing-md);
 }
+.button {
+  /* display: block;
 
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-main);
+  margin-top: 24px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+  padding: 16px;
+  width: 100%; */
+  width: min(100%, 289px);
+  padding-inline: var(--spacing-lg);
+  font-size: var(--font-size-main);
+  font-weight: var(--font-weight-bold);
+}
 /* Tablet Layout (від 768px) */
 @media screen and (min-width: 768px) {
 }
@@ -17,7 +33,7 @@
 /* Desktop Layout (від 1440px) */
 @media screen and (min-width: 1440px) {
   .page {
-    padding-top: 48px;
-    padding-bottom: 48px;
+    padding-top: var(--spacing-2xl);
+    padding-bottom: var(--spacing-2xl);
   }
 }

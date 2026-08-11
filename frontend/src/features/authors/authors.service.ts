@@ -29,3 +29,7 @@ export const getAuthorById = async (userId: string): Promise<PublicUser> => {
     articlesCount: data.data.articlesAmount,
   };
 };
+
+
+
+
