@@ -1,10 +1,11 @@
 // TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
-import axios from 'axios';
 
+import { api } from '@/lib/api/client';
 import type {
   CreateArticleFormValues,
   CreateArticleResponse,
 } from './create-article.types';
+
 
 export const createArticle = async (
   values: CreateArticleFormValues,
@@ -19,8 +20,8 @@ export const createArticle = async (
     formData.append('image', values.image);
   }
 
-  const response = await axios.post<CreateArticleResponse>(
-    '/api/articles',
+  const response = await api.post<CreateArticleResponse>(
+    '/articles',
     formData,
   );
 

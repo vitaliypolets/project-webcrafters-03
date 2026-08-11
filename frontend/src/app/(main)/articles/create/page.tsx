@@ -1,35 +1,28 @@
 
-import AddArticleForm from '@/features/articles/create/components/AddArticleForm/AddArticleForm';
-import styles from './CreateArticlePage.module.css';
-import type { Metadata } from "next";
+import type { Metadata } from 'next';
 
-const siteUrl = "";
-const pageTitle = "Create an article | Harmoniq";
-const pageDescription = "Create a new personal article in Harmoniq.";
+import AddArticleForm from '@/features/articles/create/components/AddArticleForm/AddArticleForm';
+
+import styles from './CreateArticlePage.module.css';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
+
+const pageTitle = 'Create an article';
+const pageDescription = 'Create a new personal article in Harmoniq.';
 const pageUrl = `${siteUrl}/articles/create`;
-const ogImage = "";
 
 export const metadata: Metadata = {
- title: pageTitle,
- description: pageDescription,
- alternates: {
-   canonical: pageUrl,
- },
- openGraph: {
-   title: pageTitle,
-   description: pageDescription,
-   url: pageUrl,
-   images: [
-     {
-       url: ogImage,
-       width: 1200,
-       height: 630,
-       alt: "Create an article",
-     },
-   ],
- },
+  title: pageTitle,
+  description: pageDescription,
+  alternates: {
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+  },
 };
-
 
 export default function CreateArticlePage() {
  return (
