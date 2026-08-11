@@ -1,6 +1,6 @@
 import { User } from '../../../models/User.js';
 
-export const getUsersList = async (query) => {
+export const getUsersListService = async (query) => {
   const page = Number(query.page) || 1;
   const limit = Number(query.limit) || Number(query.perPage) || 6;
   const skip = (page - 1) * limit;
