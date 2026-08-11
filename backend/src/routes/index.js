@@ -15,6 +15,7 @@ import { sessionRouter } from '../modules/auth/session/index.js';
 import { articlesListRouter } from '../modules/articles/list/index.js';
 import { articleDetailsRouter } from '../modules/articles/details/index.js';
 import { articleCreateRouter } from '../modules/articles/create/index.js';
+// import { articleManageRouter } from '../modules/articles/manage/index.js';
 
 export const apiRouter = Router();
 
@@ -37,6 +38,7 @@ apiRouter.use('/users', bookmarksRouter);
 apiRouter.use('/articles', articlesListRouter);
 apiRouter.use('/articles', articleDetailsRouter);
 apiRouter.use('/articles', articleCreateRouter);
+// apiRouter.use('/articles', articleManageRouter);
 
 // Mount only after corresponding feature PRs are accepted:
 //
