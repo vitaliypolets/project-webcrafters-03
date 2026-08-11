@@ -23,7 +23,7 @@ type LinkButtonProps = BaseProps &
 
 type Props = ButtonProps | LinkButtonProps;
 
-export default function Button({
+export function Button({
   children,
   variant = 'primary',
   size = 'md',
