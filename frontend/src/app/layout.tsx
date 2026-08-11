@@ -3,7 +3,6 @@ import type { ReactNode } from 'react';
 import { DM_Sans, Manrope, Noto_Sans } from 'next/font/google';
 import { AppProviders } from '@/components/providers/AppProviders';
 import './globals.css';
-import Header from '@/components/Header/Header';
 
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
