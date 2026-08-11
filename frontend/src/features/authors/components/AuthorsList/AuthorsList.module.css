@@ -1,0 +1,28 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+}
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px;
+}
+/* Tablet Layout (від 768px) */
+@media screen and (min-width: 768px) {
+  .list {
+    gap: 24px;
+    padding-left: 54px;
+    padding-right: 54px;
+  }
+}
+
+/* Desktop Layout (від 1440px) */
+@media screen and (min-width: 1440px) {
+  .list {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}

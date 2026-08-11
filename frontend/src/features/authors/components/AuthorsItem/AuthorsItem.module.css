@@ -1,23 +1,26 @@
-.page {
-  padding-top: 46px;
-  padding-bottom: 46px;
+.avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 16px;
+  width: 148px;
+  height: 148px;
 }
-.title {
+.name {
   font-family: var(--font-family-main);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-title-lg);
+  font-size: var(--font-size-title-sm);
+  text-align: center;
   color: var(--color-dark);
-  margin-bottom: 16px;
 }
-
 /* Tablet Layout (від 768px) */
 @media screen and (min-width: 768px) {
+  .avatar {
+    width: 262px;
+    height: 262px;
+  }
 }
 
 /* Desktop Layout (від 1440px) */
 @media screen and (min-width: 1440px) {
-  .page {
-    padding-top: 48px;
-    padding-bottom: 48px;
-  }
 }

@@ -38,25 +38,25 @@ export default function AuthorPage({ params }: AuthorPageProps) {
   }
 const firstName = author.name.split(' ')[0];
   return (
-    <main className="container">
+    <main className={styles.page}>
+      <div className="container">
       <div className={styles.wrapper}>
-        {/* <Image
+        <Image
           src={author.avatarUrl as string} 
           alt={author.name}
           width={124}
           height={124}
           className={styles.avatar}
       />
-       */}
-         {author.avatarUrl && (
-        <img className={styles.avatar} src={author.avatarUrl} alt={author.name} width={124}
-          height={124} />
-        )}
         <div className={styles.user_info}>
       <h1 className={styles.name}>{firstName}</h1>
           <p className={styles.articles}>{author.articlesCount} articles</p>
           </div>
         </div>
+        <p>СПИСОК КАРТОК ВІД УЧАСНИКА 8</p>
+      <p>КНОПКА LOAD MORE</p>
+      </div>
+
     </main>
   );
 }
