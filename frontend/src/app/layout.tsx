@@ -4,6 +4,7 @@ import { DM_Sans, Manrope, Noto_Sans } from 'next/font/google';
 import { AppProviders } from '@/components/providers/AppProviders';
 import './globals.css';
 import Header from '@/components/Header/Header';
+import LogoutModal from '@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client';
 
 const manrope = Manrope({
   subsets: ['latin', 'cyrillic'],
@@ -47,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="uk" className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}>
       <body>
-        <AppProviders><Header/>{children}</AppProviders>
+        <AppProviders><Header/><LogoutModal/>{children}</AppProviders>
       </body>
     </html>
   );
