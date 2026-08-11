@@ -1,4 +1,6 @@
 // TODO (учасник №5): request validation
+// me.validation.js
+
 import { z } from 'zod';
 
 export const updateMeSchema = z.object({
@@ -13,3 +15,22 @@ export const updateMeSchema = z.object({
     )
     .optional(),
 });
+
+export const validateUpdateMe = (req, res, next) => {
+  const result = updateMeSchema.safeParse(req.body);
+
+  if (!result.success) {
+    return res.status(400).json({
+      success: false,
+      errors: result.error.issues.map((issue) => ({
+        field: issue.path.join('.'),
+        message: issue.message,
+      })),
+    });
+  }
+
+  // Передаём уже очищенные/проверенные данные дальше
+  req.body = result.data;
+
+  next();
+};
