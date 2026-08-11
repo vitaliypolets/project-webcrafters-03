@@ -1,5 +1,6 @@
 // TODO (учасник №13): business logic and database access
 import { Article } from '../../../models/Article.js';
+import { User } from '../../../models/User.js';
 import { HttpError } from '../../../utils/HttpError.js';
 import { saveFileToCloudinary } from '../../../utils/saveFileToCloudinary.js';
 
@@ -21,6 +22,10 @@ export const createArticle = async ({ data, file, user }) => {
     authorName: user.name,
     viewsCount: 0,
     category: data.category,
+  });
+
+  await User.findByIdAndUpdate(user._id, {
+    $inc: { articlesAmount: 1 },
   });
 
   return {
