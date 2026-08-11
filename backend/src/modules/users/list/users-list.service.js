@@ -1,33 +1,43 @@
 import { User } from '../../../models/User.js';
 
-export const getUsersListService = async (queryParams) => {
-  const { page, perPage, sort, limit } = queryParams;
+export const getUsersListService = async (query) => {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || Number(query.perPage) || 6;
+  const skip = (page - 1) * limit;
+  const sort = query.sort || 'createdAt';
 
-  const effectiveLimit = limit || perPage;
-  const skip = (page - 1) * effectiveLimit;
+  let sortOption = {
+    createdAt: -1,
+    _id: -1,
+  };
 
-  let sortOption = { createdAt: -1 };
   if (sort === 'popular') {
-    sortOption = { articlesCount: -1 };
+    sortOption = {
+      articlesCount: -1,
+      _id: -1,
+    };
   }
 
   const [users, total] = await Promise.all([
-    User.find({}, 'name avatarUrl').sort(sortOption).skip(skip).limit(effectiveLimit).lean(),
-    User.countDocuments({}),
+    User.find({}, 'name avatarUrl articlesCount').sort(sortOption).skip(skip).limit(limit).lean(),
+    User.countDocuments(),
   ]);
 
-  const hasNextPage = page * effectiveLimit < total;
+  const hasNextPage = skip + users.length < total;
+
+  const formattedUsers = users.map((user) => ({
+    id: user._id.toString(),
+    _id: user._id.toString(),
+    name: user.name,
+    avatarUrl: user.avatarUrl,
+    articlesCount: user.articlesCount ?? 0,
+  }));
 
   return {
-    data: users.map((user) => ({
-      _id: user._id.toString(),
-      name: user.name,
-      avatarUrl: user.avatarUrl ?? undefined,
-      articlesCount: 0,
-    })),
+    data: formattedUsers,
     total,
     page,
-    perPage: effectiveLimit,
+    perPage: limit,
     hasNextPage,
   };
 };
