@@ -1,25 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-
 import Modal from "@/components/ui/Modal/Modal";
-//import { logout } from "@/lib/api/clientApi";
 import { useAuthStore } from "@/store/auth.store";
 
 import css from "./LogoutUserModal.module.css";
 
-export default function LogoutUserModalClient() {
-  const router = useRouter();
+interface LogoutUserModalClientProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function LogoutUserModalClient({
+  isOpen,
+  onClose,
+}: LogoutUserModalClientProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const clearIsAuthenticated = useAuthStore(
     (state) => state.clearSession
   );
-
-  const handleClose = () => {
-    router.back();
-  };
 
   const handleLogoutUser = async () => {
     if (isLoading) return;
@@ -27,25 +27,22 @@ export default function LogoutUserModalClient() {
     setIsLoading(true);
 
     try {
-    //await logout();
-  } catch (error) {
-    console.error("Logout error:", error);
-  }
-
-  clearIsAuthenticated();
-  router.replace("/register");
+      // await logout();
+      clearIsAuthenticated();
+      onClose();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
-    <Modal isOpen={true} onClose={handleClose}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <div className={css.container}>
-        <h3 className={css.title}>
-          Are you sure?
-        </h3>
+        <h3 className={css.title}>Are you sure?</h3>
 
-        <p className={css.message}>
-          We will miss you!
-        </p>
+        <p className={css.message}>We will miss you!</p>
 
         <div className={css.containerButtons}>
           <button
@@ -60,7 +57,7 @@ export default function LogoutUserModalClient() {
           <button
             type="button"
             className={css.buttonCancel}
-            onClick={handleClose}
+            onClick={onClose}
             disabled={isLoading}
           >
             Cancel

@@ -6,9 +6,11 @@ import { useAuthStore } from "@/store/auth.store";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
+import LogoutUserModalClient from "@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client";
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const pathname = usePathname();
   const getLinkClass = (path: string) => {
     return pathname === path ? `${css.navigationLink} ${css.active}` : css.navigationLink;
@@ -63,6 +65,16 @@ export default function Header() {
                     Creators
                   </Link>
                 </li>
+                <li><button
+  type="button"
+  onClick={() => setIsLogoutOpen(true)}
+  className={css.logoutButton}
+  aria-label="Log out"
+>
+  <svg className={css.icon} width="24" height="24">
+    <use href="/icons/sprite.svg#icon-log-out" />
+  </svg>
+</button></li>
 
                 {isAuthenticated ? (
                   <>
@@ -94,11 +106,16 @@ export default function Header() {
 
                         <p className={css.userName}>{user?.email}</p>
                       </div>
-                     <Link href={`/logoutUser/`}>
-                        <svg className={css.icon} width="24" height="24">
-                          <use href="/icons/sprite.svg#icon-log-out" />
-                        </svg>
-                      </Link>
+                     <button
+  type="button"
+  onClick={() => setIsLogoutOpen(true)}
+  className={css.logoutButton}
+  aria-label="Log out"
+>
+  <svg className={css.icon} width="24" height="24">
+    <use href="/icons/sprite.svg#icon-log-out" />
+  </svg>
+</button>
                     </li>
                   </>
                 ) : (
@@ -132,13 +149,13 @@ export default function Header() {
               <button className={css.navBarMobButton} type="button" onClick={handleBurger}>
                 {isOpen ? (
                   <>
-                    <svg className={css.icon} width="32" height="32">
+                    <svg className={css.icon}>
                       <use href="/icons/sprite.svg#icon-close" />
                     </svg>
                   </>
                 ) : (
                   <>
-                    <svg className={css.icon} width="32" height="32">
+                    <svg className={css.icon}>
                       <use href="/icons/sprite.svg#icon-burger" />
                     </svg>
                   </>
@@ -207,11 +224,16 @@ export default function Header() {
                     <p className={css.userName}>{user?.email}</p>
                   </div>
 
-                 <Link href={`/logoutUser/`}>
-                        <svg className={css.icon} width="24" height="24">
-                          <use href="/icons/sprite.svg#icon-log-out" />
-                        </svg>
-                      </Link>
+                 <button
+  type="button"
+  onClick={() => setIsLogoutOpen(true)}
+  className={css.logoutButton}
+  aria-label="Log out"
+>
+  <svg className={css.icon} width="24" height="24">
+    <use href="/icons/sprite.svg#icon-log-out" />
+  </svg>
+</button>
                 </li>
               </>
             ) : (
@@ -242,6 +264,10 @@ export default function Header() {
           </ul>
         </nav>
       </div>
+      <LogoutUserModalClient
+  isOpen={isLogoutOpen}
+  onClose={() => setIsLogoutOpen(false)}
+/>
     </>
   );
 }
