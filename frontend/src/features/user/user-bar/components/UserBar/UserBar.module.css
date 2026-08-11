@@ -1,0 +1,149 @@
+.logout-content {
+          position: relative;
+          width: 100%;
+          max-width: 660px;
+          min-height: 385px;
+
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+
+          box-sizing: border-box;
+          padding: 60px 50px 45px;
+
+          border-radius: 58px;
+          background: #dcebe5;
+          color: #111238;
+          text-align: center;
+        }
+
+        h2 {
+          margin: 0;
+
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: clamp(42px, 5vw, 51px);
+          font-weight: 700;
+          line-height: 1.08;
+          letter-spacing: -1.8px;
+        }
+
+        p {
+          margin: 34px 0 38px;
+
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 25px;
+          font-weight: 400;
+          line-height: 1.25;
+        }
+
+        .actions {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 42px;
+        }
+
+        .button {
+          width: 260px;
+          height: 74px;
+
+          border-radius: 40px;
+
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 23px;
+          font-weight: 600;
+
+          cursor: pointer;
+          transition:
+            transform 0.15s ease,
+            background-color 0.15s ease;
+        }
+
+        .button:hover {
+          transform: translateY(-1px);
+        }
+
+        .button-primary {
+          border: 1px solid #6d9d89;
+          background: #70a48f;
+          color: #ffffff;
+        }
+
+        .button-primary:hover {
+          background: #679982;
+        }
+
+        .button-secondary {
+          border: 2px solid #111238;
+          background: transparent;
+          color: #111238;
+        }
+
+        .button-secondary:hover {
+          background: rgba(17, 18, 56, 0.05);
+        }
+
+        .close-button {
+          position: absolute;
+          top: 27px;
+          right: 35px;
+
+          width: 42px;
+          height: 42px;
+
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          padding: 0;
+          border: 0;
+          background: transparent;
+
+          color: #111238;
+          font-family: Arial, Helvetica, sans-serif;
+          font-size: 43px;
+          font-weight: 300;
+          line-height: 1;
+
+          cursor: pointer;
+        }
+
+        .close-button:hover {
+          opacity: 0.65;
+        }
+
+        @media (max-width: 700px) {
+          .logout-content {
+            min-height: auto;
+            padding: 70px 24px 32px;
+            border-radius: 36px;
+          }
+
+          h2 {
+            font-size: 38px;
+            letter-spacing: -1px;
+          }
+
+          p {
+            margin: 24px 0 30px;
+            font-size: 21px;
+          }
+
+          .actions {
+            flex-direction: column;
+            gap: 16px;
+            width: 100%;
+          }
+
+          .button {
+            width: min(100%, 340px);
+            height: 64px;
+            font-size: 21px;
+          }
+
+          .close-button {
+            top: 20px;
+            right: 23px;
+          }
+        }
