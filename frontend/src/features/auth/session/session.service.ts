@@ -1,10 +1,18 @@
 // frontend\src\features\auth\session\session.service.ts
 
 import { api } from '@/lib/api/client';
-import type { SessionResponse } from './session.types';
+import type { CurrentUserResponse, SessionResponse } from './session.types';
 
-export async function restoreSession(): Promise<SessionResponse> {
-  const response = await api.post<SessionResponse>('/auth/session');
+export async function restoreSession(): Promise<{
+  user: CurrentUserResponse['data'];
+  accessToken: string;
+}> {
+  const sessionResponse = await api.post<SessionResponse>('/auth/session');
 
-  return response.data;
+  const userResponse = await api.get<CurrentUserResponse>('/users/me');
+
+  return {
+    user: userResponse.data.data,
+    accessToken: sessionResponse.data.data.accessToken,
+  };
 }
