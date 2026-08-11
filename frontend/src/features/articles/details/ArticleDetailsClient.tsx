@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 
 import { fetchArticleById } from './article-details.service';
 import styles from './ArticleDetailsClient.module.css';
+import { Container } from '@/components/ui/Container/Container';
 
 import ArticleDetails from './components/ArticleDetails/ArticleDetails';
 import ArticleAuthor from './components/ArticleAuthor/ArticleAuthor';
@@ -44,22 +45,25 @@ const ArticleDetailsClient = ({ articleId }: Props) => {
   const publicationDate = article.publicationDate;
 
   return (
-    <div className={styles.container}>
+    <Container>
       <div className={styles.article}>
-        <ArticleDetails article={article} />
+        <ArticleDetails article={article}>
+          <div className={styles.subContent}>
+            <div className={styles.recomendation}>
+              <ArticleAuthor author={author} publicationDate={publicationDate} />
 
-        <div className={styles.recomendation}>
-          <ArticleAuthor author={author} publicationDate={publicationDate} />
+              <p className={styles.intrastedText}>You can also interested</p>
 
-          <p className={styles.intrastedText}>You can also interested</p>
+              <ArticleRecommendations recommendations={recommendations} />
+            </div>
 
-          <ArticleRecommendations recommendations={recommendations} />
-        </div>
-        <div className={styles.articleBookmarkWrapper}>
-          <BookmarkButton articleId={article._id} isBookmarked={isBookmarked} />
-        </div>
+            <div className={styles.articleBookmarkWrapper}>
+              <BookmarkButton articleId={article._id} isBookmarked={isBookmarked} />
+            </div>
+          </div>
+        </ArticleDetails>
       </div>
-    </div>
+    </Container>
   );
 };
 
