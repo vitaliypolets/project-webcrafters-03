@@ -71,7 +71,15 @@ export default function LoginForm() {
               onClick={() => setShowPassword((prev) => !prev)}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
-              {showPassword ? '👁' : '🙈'}
+              <svg
+                className={styles.passwordIcon}
+                aria-hidden="true"
+                focusable="false"
+                width="24"
+                height="24"
+              >
+                <use href={`/icons/sprite.svg#${showPassword ? 'icon-eye' : 'icon-eye-crossed'}`} />
+              </svg>
             </button>
           </div>
 

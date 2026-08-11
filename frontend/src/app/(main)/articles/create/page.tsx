@@ -1,10 +1,37 @@
+
+import type { Metadata } from 'next';
+
+import AddArticleForm from '@/features/articles/create/components/AddArticleForm/AddArticleForm';
+
 import styles from './CreateArticlePage.module.css';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? '';
+
+const pageTitle = 'Create an article';
+const pageDescription = 'Create a new personal article in Harmoniq.';
+const pageUrl = `${siteUrl}/articles/create`;
+
+export const metadata: Metadata = {
+  title: pageTitle,
+  description: pageDescription,
+  alternates: {
+    canonical: pageUrl,
+  },
+  openGraph: {
+    title: pageTitle,
+    description: pageDescription,
+    url: pageUrl,
+  },
+};
+
 export default function CreateArticlePage() {
-  return (
-    <main className={styles.page}>
-      <h1>CreateArticlePage</h1>
-      <p>Заготовка сторінки відповідно до OWNERSHIP_MAP.md.</p>
-    </main>
-  );
+ return (
+   <main className={`container ${styles.page}`}>
+     <h1 className={styles.title}>Create an article</h1>
+
+
+     <AddArticleForm />
+   </main>
+ );
 }
+

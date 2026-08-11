@@ -9,11 +9,12 @@ export type ArticlesListProps = {
 };
 
 export type BookmarkButtonProps = {
+  articleId: string;
   isBookmarked: boolean;
-  onToggle: () => void;
 };
 
 export type ModalErrorSaveProps = {
-  message: string;
+  title?: string;
+  description: string;
   onClose: () => void;
 };

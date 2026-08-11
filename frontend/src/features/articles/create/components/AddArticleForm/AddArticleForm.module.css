@@ -1,0 +1,291 @@
+.form {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "image"
+    "titleField"
+    "description"
+    "submit";
+  row-gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.imageField {
+  grid-area: image;
+  width: 100%;
+}
+
+.titleField {
+  grid-area: titleField;
+  width: 100%;
+  margin: 0;
+}
+
+.descriptionField {
+  grid-area: description;
+  width: 100%;
+  margin: 0;
+}
+
+.label {
+  display: block;
+  margin: 0 0 var(--spacing-xs);
+  font-size: var(--font-size-main);
+}
+
+/* =========================
+   INPUT / TEXTAREA WRAPPERS
+   ========================= */
+
+.inputWrapper,
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+  color: var(--color-text-secondary);
+}
+
+/* =========================
+   INPUT / TEXTAREA
+   ========================= */
+
+.input,
+.textarea {
+  display: block;
+  width: 100%;
+  margin: 0;
+
+  border: var(--border-width-sm) solid var(--color-gray-muted);
+  border-radius: var(--border-radius-md);
+
+  background-color: var(--color-bg-input);
+  color: var(--color-text-primary);
+
+  outline: none;
+
+  transition:
+    border-color var(--transition-main),
+    box-shadow var(--transition-main),
+    color var(--transition-main);
+}
+
+.input {
+  height: var(--input-height-lg);
+  padding: 0 44px;
+}
+
+.textarea {
+  min-height: 393px;
+  padding: var(--spacing-sm) 44px;
+  resize: vertical;
+}
+
+.input::placeholder,
+.textarea::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 1;
+}
+
+/* =========================
+   ICONS
+   ========================= */
+
+.inputIcon {
+  position: absolute;
+  top: 50%;
+
+  width: 20px;
+  height: 20px;
+
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.inputIcon:first-child {
+  left: var(--spacing-sm);
+  fill: currentColor;
+}
+
+.inputIcon:last-child {
+  right: var(--spacing-sm);
+  fill: currentColor;
+}
+
+.textareaIcon {
+  position: absolute;
+  top: var(--spacing-sm);
+
+  width: 20px;
+  height: 20px;
+
+  pointer-events: none;
+}
+
+.textareaIcon:first-child {
+  left: var(--spacing-sm);
+  fill: currentColor;
+}
+
+.textareaIcon:last-child {
+  right: var(--spacing-sm);
+  fill: currentColor;
+}
+
+/* =========================
+   HOVER
+   ========================= */
+
+.inputWrapper:hover,
+.textareaWrapper:hover {
+  color: var(--color-text-primary);
+}
+
+.inputWrapper:hover .input,
+.textareaWrapper:hover .textarea {
+  border-color: var(--color-primary);
+}
+
+/* =========================
+   FILLED
+   ========================= */
+
+.filledState {
+  color: var(--color-text-primary);
+}
+
+.filledState .input,
+.filledState .textarea {
+  border-color: var(--color-gray-muted);
+}
+
+.filledState .input::placeholder,
+.filledState .textarea::placeholder {
+  color: var(--color-text-primary);
+}
+
+/* =========================
+   ACTIVE / FOCUS
+   ========================= */
+
+.inputWrapper:focus-within,
+.textareaWrapper:focus-within {
+  color: var(--color-text-primary);
+}
+
+.inputWrapper:focus-within .input,
+.textareaWrapper:focus-within .textarea {
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+/* =========================
+   ERROR
+   ========================= */
+
+.errorState {
+  color: var(--color-error);
+}
+
+.errorState .input,
+.errorState .textarea {
+  border-color: var(--color-error);
+  box-shadow: none;
+}
+
+.errorState .input::placeholder,
+.errorState .textarea::placeholder {
+  color: var(--color-error);
+}
+
+/* =========================
+   ERROR + ACTIVE
+   ========================= */
+
+.errorState:focus-within .input,
+.errorState:focus-within .textarea {
+  border-color: var(--color-error);
+  box-shadow: var(--focus-ring-shadow);
+}
+
+/* =========================
+   ERROR MESSAGE
+   ========================= */
+
+.error {
+  margin: var(--spacing-2xs) 0 0;
+
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-secondary);
+
+  color: var(--color-error);
+}
+
+/* =========================
+   SUBMIT BUTTON
+   ========================= */
+
+.submitButton {
+  grid-area: submit;
+  width: 100%;
+  margin: 0;
+  padding: 12px 16px;
+  margin: 0;
+  border-radius: var(--border-radius-btn);
+  border: none;
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+  transition:
+      background-color var(--transition-main),
+      opacity var(--transition-main),
+      box-shadow var(--transition-main);
+}
+
+
+/* =========================
+   TABLET
+   ========================= */
+
+@media screen and (min-width: 768px) {
+  .form {
+    grid-template-columns:
+      minmax(0, 1fr) minmax(0, 1fr);
+
+    grid-template-areas:
+      "image titleField"
+      "description description"
+      "submit submit";
+
+    column-gap: var(--spacing-lg);
+    row-gap: var(--spacing-lg);
+  }
+
+  .imageField,
+  .titleField {
+    align-self: start;
+  }
+}
+
+/* =========================
+   DESKTOP
+   ========================= */
+
+@media screen and (min-width: 1440px) {
+  .form {
+    grid-template-columns:
+      minmax(0, 2fr) minmax(360px, 1fr);
+
+    grid-template-areas:
+      "titleField image"
+      "description image"
+      "submit image";
+
+    column-gap: var(--spacing-lg);
+    row-gap: var(--spacing-xl);
+  }
+
+  .imageField {
+    align-self: start;
+    margin-top: 28px;
+  }
+}
+
