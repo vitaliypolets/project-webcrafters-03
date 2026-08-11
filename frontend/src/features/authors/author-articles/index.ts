@@ -1,2 +1,7 @@
-// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
-export {};
+export { AuthorArticles } from './components/AuthorArticles';
+export { getAuthorArticles } from './author-articles.service';
+export type {
+  AuthorArticleApiItem,
+  AuthorArticlesProps,
+  UserArticlesPage,
+} from './author-articles.types';
