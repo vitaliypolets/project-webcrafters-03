@@ -1,0 +1,103 @@
+.container {
+  width: 393px;
+  margin-inline: auto;
+  padding: 48px 16px;
+}
+.article {}
+.articleContent {}
+.titleMainTitle {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  color: #070721;
+  margin-bottom: 32px;
+  line-height: 1.3;
+}
+.imageWrapper {
+  display: none;
+}
+.articleContentText {
+  font-family: "Manrope", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 155%;
+  color: #070721;
+  margin-bottom: 24px;
+}
+.subContent {
+  
+}
+.recomendation {
+  border-radius: 32px;
+  padding: 32px 16px 40px;
+  background: #d1e0d8;
+  margin-bottom: 24px;
+}
+.authorWrapper {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: #070721;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.authorSubText {
+  
+}
+.authorText {
+  font-weight: 400;
+}
+.authorTextName {
+  font-weight: 400;
+  text-decoration: underline;
+  text-decoration-skip-ink: none;
+}
+.intrastedText {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: #070721;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.recommendList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.recommendItem {
+  border-radius: 32px;
+  padding: 16px;
+  width: 329px;
+  height: 109px;
+  background: #f7fffb;
+}
+.recommendArticleLinkItem {
+  margin-bottom: 8px;
+}
+.recommendArticleText {
+  font-family: "Manrope", sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 0.8;
+  color: #070721;
+  
+}
+.recommendAuthorLink {
+  font-family: "Manrope", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.55;
+  color: #070721;
+}
+.articleBookmarkWrapper {
+  border-radius: 64px;
+  padding: 16px;
+  width: 361px;
+  height: 57px;
+  background: #649179;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
