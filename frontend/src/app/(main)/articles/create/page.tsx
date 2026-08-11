@@ -1,8 +1,8 @@
-
 import type { Metadata } from 'next';
 
-import AddArticleForm from '@/features/articles/create/components/AddArticleForm/AddArticleForm';
 import { Container } from '@/components/ui/Container/Container';
+import AddArticleForm from '@/features/articles/create/components/AddArticleForm/AddArticleForm';
+import { AuthGuard } from '@/features/auth/session';
 
 import styles from './CreateArticlePage.module.css';
 
@@ -27,12 +27,13 @@ export const metadata: Metadata = {
 
 export default function CreateArticlePage() {
   return (
-    <main>
-      <Container className={styles.page}>
-        <h1 className={styles.title}>Create an article</h1>
-        <AddArticleForm />
-      </Container>
-    </main>
+    <AuthGuard>
+      <main>
+        <Container className={styles.page}>
+          <h1 className={styles.title}>Create an article</h1>
+          <AddArticleForm />
+        </Container>
+      </main>
+    </AuthGuard>
   );
 }
-
