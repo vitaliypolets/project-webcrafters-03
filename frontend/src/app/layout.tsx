@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="uk" className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}>
       <body>
-        <AppProviders><Header/>{children}</AppProviders>
+        <AppProviders>{children}</AppProviders>
       </body>
     </html>
   );
