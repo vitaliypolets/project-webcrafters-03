@@ -44,7 +44,10 @@ export default function RootLayout({
   children: ReactNode;
 }>) {
   return (
-    <html lang="uk" className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}>
+    <html
+      lang="uk"
+      className={`${manrope.variable} ${dmSans.variable} ${notoSans.variable}`}
+    >
       <body>
         <AppProviders>{children}</AppProviders>
       </body>

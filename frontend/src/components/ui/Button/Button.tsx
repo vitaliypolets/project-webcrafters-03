@@ -23,6 +23,7 @@ type LinkButtonProps = BaseProps &
 
 type Props = ButtonProps | LinkButtonProps;
 
+// 1. Named Export (для index.ts та нових компонентів)
 export function Button({
   children,
   variant = 'primary',
@@ -36,7 +37,10 @@ export function Button({
 
   if ('href' in props && props.href) {
     return (
-      <Link {...(props as LinkButtonProps)} className={classNames}>
+      <Link
+        {...(props as LinkButtonProps)}
+        className={classNames}
+      >
         {children}
       </Link>
     );
@@ -45,8 +49,15 @@ export function Button({
   const { type = 'button', ...buttonProps } = props as ButtonProps;
 
   return (
-    <button type={type} {...buttonProps} className={classNames}>
+    <button
+      type={type}
+      {...buttonProps}
+      className={classNames}
+    >
       {children}
     </button>
   );
 }
+
+// 2. Default Export (для сумісності зі старими імпортами у develop)
+export default Button;
