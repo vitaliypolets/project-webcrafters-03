@@ -1,33 +1,28 @@
 import { Router } from 'express';
+
 import {
   getMe,
-  updateMe
+  updateMe,
 } from './me.controller.js';
-import { upload } from '../../../middlewares/upload.js';
 
+import { validateUpdateMe } from './me.validation.js';
+
+import { upload } from '../../../middlewares/upload.js';
 import { authenticate } from '../../../middlewares/authenticate.js';
 
-
 const router = Router();
-
-
-
 router.get(
   '/',
   authenticate,
-  getMe
+  getMe,
 );
-
-
-
 router.patch(
   '/',
   authenticate,
   upload.single('avatar'),
-  updateMe
+  validateUpdateMe,
+  updateMe,
 );
-
-
 export {
-  router as meRouter
+  router as meRouter,
 };

@@ -17,16 +17,19 @@ const ArticleDetails = ({ article, children }: Props) => {
           <Image
             src={article.imageUrl}
             alt={article.title}
-            fill
-            className={styles.image}
+            width={361}
+            height={183}
+            className={styles.imageArticle}
             priority
           />
         </div>
       )}
 
-      <div className={styles.articleContentText}>{article.article}</div>
+      <div className={styles.subContentArticle}>
+        <div className={styles.articleContentText}>{article.article.replaceAll('/n', '\n\n')}</div>
 
-      <div className={styles.subContent}>{children}</div>
+        {children}
+      </div>
     </article>
   );
 };
