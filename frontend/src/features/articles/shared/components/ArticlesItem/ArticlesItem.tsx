@@ -8,7 +8,13 @@ import styles from './ArticlesItem.module.css';
 export const ArticlesItem = ({ article }: ArticlesItemProps) => {
   return (
     <article className={styles.article}>
-      <Image className={styles.image} src={article.imageUrl} alt={article.title} />
+      <Image
+        className={styles.image}
+        src={article.imageUrl}
+        alt={article.title}
+        width={337}
+        height={223}
+      />
 
       <p className={styles.author}>{article.author.name}</p>
 
