@@ -28,10 +28,17 @@
   color: var(--color-text-link);
   font-weight: var(--font-weight-bold);
   text-decoration: underline;
+  cursor: pointer;
+  transition: opacity var(--transition-main);
+}
+
+.error button:hover,
+.error button:focus-visible {
+  opacity: var(--opacity-hover-link);
 }
 
 .loadMore {
-  width: min(100%, 289px);
+  width: 100%;
   min-height: var(--btn-height-xl);
   padding: var(--spacing-md);
   border-radius: var(--border-radius-btn);
@@ -39,6 +46,7 @@
   background-color: var(--color-primary);
   font-size: var(--font-size-main);
   font-weight: var(--font-weight-bold);
+  cursor: pointer;
   transition:
     background-color var(--transition-main),
     opacity var(--transition-main);
@@ -98,6 +106,7 @@
   border-radius: var(--border-radius-btn);
   color: var(--color-text-link);
   font-weight: var(--font-weight-bold);
+  cursor: pointer;
   transition:
     color var(--transition-main),
     background-color var(--transition-main);
@@ -109,8 +118,18 @@
   background-color: var(--color-primary-hover);
 }
 
-@media screen and (max-width: 767px) {
-  .emptyState {
-    min-height: 260px;
+@media screen and (min-width: 768px) {
+  .loadMore {
+    width: 348px;
+    min-height: var(--btn-height-md);
+    padding-block: var(--spacing-xs);
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .loadMore {
+    width: 289px;
+    min-height: var(--btn-height-xl);
+    padding-block: var(--spacing-md);
   }
 }
