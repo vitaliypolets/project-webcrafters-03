@@ -13,13 +13,13 @@ export const getUsersListService = async (query) => {
 
   if (sort === 'popular') {
     sortOption = {
-      articlesCount: -1,
+      articlesAmount: -1,
       _id: -1,
     };
   }
 
   const [users, total] = await Promise.all([
-    User.find({}, 'name avatarUrl articlesCount').sort(sortOption).skip(skip).limit(limit).lean(),
+    User.find({}, 'name avatarUrl articlesAmount').sort(sortOption).skip(skip).limit(limit).lean(),
     User.countDocuments(),
   ]);
 
@@ -30,7 +30,7 @@ export const getUsersListService = async (query) => {
     _id: user._id.toString(),
     name: user.name,
     avatarUrl: user.avatarUrl,
-    articlesCount: user.articlesCount ?? 0,
+    articlesAmount: user.articlesAmount ?? 0,
   }));
 
   return {
