@@ -18,6 +18,12 @@ export type CreatedArticle = {
  authorName: string;
 };
 
+export type ArticleDraft = {
+  title: string;
+  description: string;
+  publicationDate: string;
+};
+
 
 export type CreateArticleResponse = CreatedArticle;
 
