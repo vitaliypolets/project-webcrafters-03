@@ -6,8 +6,5 @@ export const getUsersListController = controllerWrapper(async (req, res) => {
   const parsedQuery = parseGetUsersQuery(req.query);
   const result = await getUsersListService(parsedQuery);
 
-  res.status(200).json({
-    data: result,
-    message: 'Success',
-  });
+  res.status(200).json(result);
 });
