@@ -11,7 +11,7 @@ export const getAuthors = async (page = 1): Promise<AuthorsResponse> => {
       id: author._id,
       name: author.name,
       avatarUrl: author.avatarUrl ?? null,
-      articlesCount: author.articlesCount,
+     articlesAmount: author.articlesAmount,
     })),
     total: data.total,
     page: data.page,
@@ -26,7 +26,7 @@ export const getAuthorById = async (userId: string): Promise<PublicUser> => {
     id: data.data.id,
     name: data.data.name,
     avatarUrl: data.data.avatar,
-    articlesCount: data.data.articlesAmount,
+    articlesAmount: data.data.articlesAmount,
   };
 };
 

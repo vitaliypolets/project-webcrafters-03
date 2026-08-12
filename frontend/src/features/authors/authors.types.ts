@@ -11,7 +11,7 @@ export type AuthorsApiResponse = {
     _id: string;
     name: string;
     avatarUrl?: string;
-    articlesCount: number;
+    articlesAmount: number;
   }[];
   total: number;
   page: number;

@@ -55,7 +55,7 @@ export default function AuthorPage({ params }: AuthorPageProps) {
           />
           <div className={styles.user_info}>
             <h1 className={styles.name}>{firstName}</h1>
-            <p className={styles.articles}>{author.articlesCount} articles</p>
+            <p className={styles.articles}>{author.articlesAmount} articles</p>
           </div>
         </div>
         <AuthorArticles userId={userId} author={author} />
