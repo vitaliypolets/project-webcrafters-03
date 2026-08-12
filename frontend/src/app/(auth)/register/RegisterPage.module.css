@@ -1,5 +1,43 @@
 .page {
-  width: min(100% - 32px, 1200px);
-  margin-inline: auto;
-  padding-block: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+}
+
+.pageWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 20px;
+  border-radius: var(--border-radius-card);
+  margin: auto;
+  padding: 48px 32px;
+  max-width: 360px;
+  width: 100%;
+  flex-grow: 0;
+  background-color: var(--color-bg-card-soft-green);
+  color: var(--color-dark);
+}
+
+.title {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-title-md);
+}
+
+.subtitle {
+  text-align: center;
+}
+
+@media screen and (min-width: 768px) {
+  .pageWrapper {
+    max-width: 522px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .pageWrapper {
+    max-width: 392px;
+  }
 }

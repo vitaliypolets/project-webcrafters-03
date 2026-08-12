@@ -5,5 +5,6 @@ import { getUsersListService } from './users-list.service.js';
 export const getUsersListController = controllerWrapper(async (req, res) => {
   const parsedQuery = parseGetUsersQuery(req.query);
   const result = await getUsersListService(parsedQuery);
+
   res.status(200).json(result);
 });

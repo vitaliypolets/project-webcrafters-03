@@ -1,17 +1,8 @@
+import type { ApiResponse, PaginationMeta } from '@/types/api';
 import type { Article } from '@/types/article';
 
-export type ArticlesPage = {
-  data: Article[];
-  page: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  message?: string;
+type ProfileArticlesResponse<T> = Omit<ApiResponse<T>, 'message'> & {
+  message?: ApiResponse<T>['message'];
 };
 
-export type ArticleApiItem = Omit<Article, 'author'> & {
-  author?: Article['author'];
-  authorId?: string;
-  authorName?: string;
-};
+export type ArticlesPage = ProfileArticlesResponse<Article[]> & PaginationMeta;
