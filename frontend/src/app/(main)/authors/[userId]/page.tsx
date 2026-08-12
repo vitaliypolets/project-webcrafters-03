@@ -4,7 +4,7 @@ import { AuthorArticles } from '@/features/authors/author-articles';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import toast from 'react-hot-toast';
-
+import { Container } from '@/components/ui/Container';
 import styles from './AuthorPage.module.css';
 
 import { getAuthorById } from '@/features/authors/authors.service';
@@ -44,7 +44,7 @@ export default function AuthorPage({ params }: AuthorPageProps) {
 
   return (
     <main className={styles.page}>
-      <div className="container">
+      <Container>
         <div className={styles.wrapper}>
           <Image
             src={author.avatarUrl as string}
@@ -60,7 +60,7 @@ export default function AuthorPage({ params }: AuthorPageProps) {
         </div>
         <AuthorArticles userId={userId} author={author} />
 
-      </div>
+      </Container>
     </main>
   );
 }
