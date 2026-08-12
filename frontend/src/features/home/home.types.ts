@@ -4,7 +4,7 @@ export interface Creator {
   _id: string;
   name: string;
   avatarUrl: string | null;
-  articlesCount: number;
+  articlesAmount: number;
 }
 
 export interface CreatorsResponse {
@@ -18,3 +18,4 @@ export interface CreatorsResponse {
   };
   message: string;
 }
+//articlesCount
