@@ -1,0 +1,25 @@
+.avatar {
+  border-radius: var(--border-radius-full);
+  object-fit: cover;
+  display: block;
+  margin-bottom: var(--spacing-md);
+  width: 148px;
+  height: auto;
+}
+.name {
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-title-sm);
+  text-align: center;
+  color: var(--color-dark);
+}
+/* Tablet Layout (від 768px) */
+@media screen and (min-width: 768px) {
+  .avatar {
+    width: 262px;
+  }
+}
+
+/* Desktop Layout (від 1440px) */
+@media screen and (min-width: 1440px) {
+}
