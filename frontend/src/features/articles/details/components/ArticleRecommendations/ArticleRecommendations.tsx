@@ -32,6 +32,11 @@ const ArticleRecommendations = ({ recommendations }: Props) => {
               <Link href={parsed.articleLink} className={styles.recommendArticleText}>
                 {parsed.articleTitle}
               </Link>
+              <div className={styles.recommendArticleiconWrapper}>
+                <svg className={styles.recommendArticleicon} width="40" height="40">
+                  <use href="/icons/sprite.svg#icon-arrow-right"></use>
+                </svg>
+              </div>
             </div>
             <Link href={parsed.authorLink} className={styles.recommendAuthorLink}>
               {parsed.authorName}
