@@ -9,6 +9,7 @@ import styles from './AuthorPage.module.css';
 
 import { getAuthorById } from '@/features/authors/authors.service';
 import type { PublicUser } from '@/types/user';
+import { getAvatarSrc } from '@/utils/getAvatarSrc';
 
 type AuthorPageProps = {
   params: Promise<{ userId: string }>;
@@ -27,9 +28,9 @@ export default function AuthorPage({ params }: AuthorPageProps) {
 
         const data = await getAuthorById(userId);
         setAuthor(data);
-      } catch (error) {
+      } catch {
         toast.error('Не вдалося завантажити автора');
-        console.error(error);
+   
       }
     };
 
@@ -47,10 +48,11 @@ export default function AuthorPage({ params }: AuthorPageProps) {
       <Container>
         <div className={styles.wrapper}>
           <Image
-            src={author.avatarUrl as string}
+            src={getAvatarSrc(author.avatarUrl)}
             alt={author.name}
             width={124}
             height={124}
+            loading="eager"
             className={styles.avatar}
           />
           <div className={styles.user_info}>

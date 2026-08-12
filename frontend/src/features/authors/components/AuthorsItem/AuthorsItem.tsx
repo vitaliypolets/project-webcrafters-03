@@ -18,6 +18,7 @@ export default function AuthorsItem({ author }: AuthorsItemProps) {
         alt={author.name}
         width={148}
         height={148}
+        loading="eager"
         className={styles.avatar}
       />
 

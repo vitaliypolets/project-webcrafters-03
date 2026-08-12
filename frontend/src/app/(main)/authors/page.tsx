@@ -34,12 +34,7 @@ export default function AuthorsPage() {
       },
     });
 
-  // const authors: PublicUser[] = data?.pages.flatMap((page) => page.authors) ?? [];
-  const authors: PublicUser[] = Array.from(
-    new Map(
-      (data?.pages.flatMap((page) => page.authors) ?? []).map((author) => [author.id, author]),
-    ).values(),
-  );
+  const authors: PublicUser[] = data?.pages.flatMap((page) => page.authors) ?? [];
 
   useEffect(() => {
     const lastPage = data?.pages.at(-1);
