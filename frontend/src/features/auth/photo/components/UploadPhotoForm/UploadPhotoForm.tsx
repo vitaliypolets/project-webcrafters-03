@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { isAxiosError } from 'axios';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 import { Button } from '@/components/ui/Button';
 import Modal from '@/components/ui/Modal/Modal';
@@ -116,12 +117,13 @@ export default function UploadPhotoForm() {
           onClick={() => inputRef.current?.click()}
           aria-label="Choose avatar"
         >
-          {/* Дефолтний аватар — той самий shared getAvatarSrc(), що й в Header/Profile/Authors. */}
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={previewUrl ?? getAvatarSrc(null)}
             alt={previewUrl ? 'Avatar preview' : 'Default avatar'}
             className={styles.avatarPreview}
+            width={136}
+            height={136}
+            priority
           />
         </button>
 

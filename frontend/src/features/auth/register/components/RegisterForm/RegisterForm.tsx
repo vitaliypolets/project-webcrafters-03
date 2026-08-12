@@ -235,8 +235,6 @@ export default function RegisterForm() {
   };
 
   return (
-    // initialValues завжди порожні — щоб перший рендер збігався і на
-    // сервері, і на клієнті. Реальні дані з чернетки підʼїдуть в useEffect.
     <Formik initialValues={emptyValues} validationSchema={registerSchema} onSubmit={handleSubmit}>
       <RegisterFormFields />
     </Formik>

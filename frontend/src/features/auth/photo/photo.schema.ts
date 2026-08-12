@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 
-export const MAX_AVATAR_SIZE = 1 * 1024 * 1024; // 1 MB — синхронізовано з backend register.validation.js
+export const MAX_AVATAR_SIZE = 1 * 1024 * 1024;
 export const ALLOWED_AVATAR_MIME_TYPES = [
   'image/jpeg',
   'image/jpg',
