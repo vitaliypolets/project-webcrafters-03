@@ -10,10 +10,11 @@ import { createArticleSchema } from '../../create-article.schema';
 import { createArticle } from '../../create-article.service';
 import type { CreateArticleFormValues } from '../../create-article.types';
 
-import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
-import css from './AddArticleForm.module.css';
 import Button from '@/components/ui/Button/Button';
+import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
 
+import css from './AddArticleForm.module.css';
+import { useArticleDraftStore } from '@/store/articleDraftStore';
 
 const getCurrentDate = (): string => {
   const date = new Date();
@@ -25,22 +26,22 @@ const getCurrentDate = (): string => {
   return `${year}-${month}-${day}`;
 };
 
-const initialValues: CreateArticleFormValues = {
-  title: '',
-  description: '',
-  image: null,
-  publicationDate: getCurrentDate(),
-};
-
 const AddArticleForm = () => {
   const router = useRouter();
+
+  const { draft, setDraft, clearDraft } = useArticleDraftStore();
+
   const [previewUrl, setPreviewUrl] = useState('');
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createArticle,
 
     onSuccess: article => {
+      clearDraft();
+      setPreviewUrl('');
+
       toast.success('Article created successfully!');
+
       router.push(`/articles/${article._id}`);
     },
 
@@ -52,6 +53,13 @@ const AddArticleForm = () => {
       );
     },
   });
+
+  const initialValues: CreateArticleFormValues = {
+    title: draft.title,
+    description: draft.description,
+    image: null,
+    publicationDate: draft.publicationDate || getCurrentDate(),
+  };
 
   const handleImageChange = (
     file: File | null,
@@ -81,6 +89,7 @@ const AddArticleForm = () => {
       initialValues={initialValues}
       validationSchema={createArticleSchema}
       onSubmit={handleSubmit}
+      enableReinitialize
     >
       {({
         isSubmitting,
@@ -138,6 +147,18 @@ const AddArticleForm = () => {
                 type="text"
                 placeholder="Enter the title"
                 className={css.input}
+                onChange={(
+                  event: React.ChangeEvent<HTMLInputElement>,
+                ) => {
+                  const value = event.target.value;
+
+                  setFieldValue('title', value);
+
+                  setDraft({
+                    ...draft,
+                    title: value,
+                  });
+                }}
               />
 
               <svg
@@ -180,6 +201,18 @@ const AddArticleForm = () => {
                 name="description"
                 placeholder="Enter a text"
                 className={css.textarea}
+                onChange={(
+                  event: React.ChangeEvent<HTMLTextAreaElement>,
+                ) => {
+                  const value = event.target.value;
+
+                  setFieldValue('description', value);
+
+                  setDraft({
+                    ...draft,
+                    description: value,
+                  });
+                }}
               />
 
               <svg
@@ -197,6 +230,42 @@ const AddArticleForm = () => {
             />
           </div>
 
+          {/* PUBLICATION DATE */}
+
+          <div className={css.formGroup}>
+            <label
+              htmlFor="publicationDate"
+              className={css.label}
+            >
+              Publication date
+            </label>
+
+            <Field
+              id="publicationDate"
+              name="publicationDate"
+              type="date"
+              className={css.input}
+              onChange={(
+                event: React.ChangeEvent<HTMLInputElement>,
+              ) => {
+                const value = event.target.value;
+
+                setFieldValue('publicationDate', value);
+
+                setDraft({
+                  ...draft,
+                  publicationDate: value,
+                });
+              }}
+            />
+
+            <ErrorMessage
+              name="publicationDate"
+              component="p"
+              className={css.error}
+            />
+          </div>
+
           {/* SUBMIT */}
 
           <Button
@@ -205,10 +274,10 @@ const AddArticleForm = () => {
             size="md"
             className={css.submitButton}
             disabled={isSubmitting || isPending}
-           >
-           {isSubmitting || isPending
-             ? 'Publishing...'
-             : 'Publish Article'}
+          >
+            {isSubmitting || isPending
+              ? 'Publishing...'
+              : 'Publish Article'}
           </Button>
         </Form>
       )}
