@@ -16,3 +16,7 @@ export async function restoreSession(): Promise<{
     accessToken: sessionResponse.data.data.accessToken,
   };
 }
+
+export async function logout(): Promise<void> {
+  await api.delete('/auth/session');
+}
