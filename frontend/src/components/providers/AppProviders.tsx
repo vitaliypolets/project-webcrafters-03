@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast';
 
 import { restoreSession } from '@/features/auth/session/session.service';
 import { useAuthStore } from '@/store/auth.store';
+
 import { QueryProvider } from './QueryProvider';
 
 export function AppProviders({ children }: { children: ReactNode }) {

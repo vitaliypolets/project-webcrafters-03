@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import Button from '@/components/ui/Button/Button';
 import { Loader } from '@/components/ui/Loader/Loader';
@@ -12,6 +13,9 @@ import styles from './AuthorArticles.module.css';
 const ARTICLES_PER_PAGE = 8;
 
 export function AuthorArticles({ userId, author }: AuthorArticlesProps) {
+  const listWrapperRef = useRef<HTMLDivElement>(null);
+  const pendingScrollIndexRef = useRef<number | null>(null);
+
   const query = useInfiniteQuery({
     queryKey: ['authors', 'articles', userId],
     initialPageParam: 1,
@@ -32,17 +36,34 @@ export function AuthorArticles({ userId, author }: AuthorArticlesProps) {
 
   const articles = Array.from(articlesById.values());
 
+  useEffect(() => {
+    const firstNewArticleIndex = pendingScrollIndexRef.current;
+
+    if (firstNewArticleIndex === null || query.isFetchingNextPage) return;
+
+    if (query.isFetchNextPageError || articles.length <= firstNewArticleIndex) {
+      pendingScrollIndexRef.current = null;
+      return;
+    }
+
+    const items = listWrapperRef.current?.querySelectorAll('li');
+    const firstNewItem = items?.item(firstNewArticleIndex);
+
+    firstNewItem?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+
+    pendingScrollIndexRef.current = null;
+  }, [articles.length, query.isFetchNextPageError, query.isFetchingNextPage]);
+
   const handleLoadMore = async () => {
     if (!query.hasNextPage || query.isFetchingNextPage) return;
 
+    pendingScrollIndexRef.current = articles.length;
     const result = await query.fetchNextPage();
 
-    if (!result.isError) {
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    }
+    if (result.isError) pendingScrollIndexRef.current = null;
   };
 
   if (query.isPending) {
@@ -78,7 +99,9 @@ export function AuthorArticles({ userId, author }: AuthorArticlesProps) {
           <p>Nothing found.</p>
         </div>
       ) : (
-        <ArticlesList articles={articles} />
+        <div ref={listWrapperRef}>
+          <ArticlesList articles={articles} />
+        </div>
       )}
 
       {query.isFetchNextPageError ? (

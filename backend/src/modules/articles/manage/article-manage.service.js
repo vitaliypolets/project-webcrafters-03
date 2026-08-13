@@ -1,16 +1,16 @@
-// TODO (учасник №12): business logic and database access
-
 import mongoose from 'mongoose';
 
+import cloudinary from '../../../config/cloudinary.js';
 import { Article } from '../../../models/Article.js';
 import { HttpError } from '../../../utils/HttpError.js';
+import { saveFileToCloudinary } from '../../../utils/saveFileToCloudinary.js';
 
 const getArticleById = async (articleId) => {
   if (!mongoose.isValidObjectId(articleId)) {
     throw new HttpError(400, 'Invalid article id');
   }
 
-  const article = await Article.findById(articleId);
+  const article = await Article.findById(articleId).select('+imagePublicId');
 
   if (!article) {
     throw new HttpError(404, 'Article not found');
@@ -25,7 +25,7 @@ const checkArticleOwner = (article, userId) => {
   }
 };
 
-const updateArticle = async ({ articleId, data, userId }) => {
+const updateArticle = async ({ articleId, data, file, userId }) => {
   const article = await getArticleById(articleId);
 
   checkArticleOwner(article, userId);
@@ -35,6 +35,18 @@ const updateArticle = async ({ articleId, data, userId }) => {
   for (const field of allowedFields) {
     if (data[field] !== undefined) {
       article[field] = data[field];
+    }
+  }
+
+  if (file) {
+    const oldImagePublicId = article.imagePublicId;
+    const image = await saveFileToCloudinary(file);
+
+    article.imageUrl = image.secure_url;
+    article.imagePublicId = image.public_id;
+
+    if (oldImagePublicId) {
+      await cloudinary.uploader.destroy(oldImagePublicId);
     }
   }
 
