@@ -1,10 +1,81 @@
-import styles from './ArticlePage.module.css';
+import { QueryClient, HydrationBoundary, dehydrate } from '@tanstack/react-query';
+import { fetchArticleById } from '@/features/articles/details/article-details.service';
+import ArticleDetailsClient from '@/features/articles/details/ArticleDetailsClient';
 
-export default function ArticlePage() {
-  return (
-    <main className={styles.page}>
-      <h1>ArticlePage</h1>
-      <p>Заготовка сторінки відповідно до OWNERSHIP_MAP.md.</p>
-    </main>
-  );
+import { notFound } from 'next/navigation';
+import { Metadata } from 'next';
+
+type Props = {
+  params: Promise<{ articleId: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { articleId } = await params;
+
+  try {
+    const data = await fetchArticleById(articleId);
+
+    const ogImages = data.article.imageUrl
+      ? [
+          {
+            url: data.article.imageUrl,
+            width: 1200,
+            height: 630,
+            alt: data.article.title ?? '',
+          },
+        ]
+      : [];
+
+    const twitterImages = data.article.imageUrl ? [data.article.imageUrl] : [];
+
+    return {
+      title: `${data.article.title} | Harmoniq`,
+      description: data.article.description,
+      openGraph: {
+        title: `${data.article.title} | Harmoniq`,
+        description: data.article.description,
+        url: ``,
+        images: ogImages,
+        type: 'article',
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${data.article.title} | Harmoniq`,
+        description: data.article.description,
+        images: twitterImages,
+      },
+    };
+  } catch {
+    return {
+      title: 'Стаття не знайдена | Harmoniq ',
+      description: 'Стаття не знайдена або видалена.',
+    };
+  }
 }
+
+const ArticlePage = async ({ params }: Props) => {
+  const { articleId } = await params;
+
+  if (!articleId) {
+    notFound();
+  }
+
+  const queryClient = new QueryClient();
+
+  try {
+    await queryClient.prefetchQuery({
+      queryKey: ['article', articleId],
+      queryFn: () => fetchArticleById(articleId),
+    });
+  } catch {
+    notFound();
+  }
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <ArticleDetailsClient articleId={articleId} />
+    </HydrationBoundary>
+  );
+};
+
+export default ArticlePage;
