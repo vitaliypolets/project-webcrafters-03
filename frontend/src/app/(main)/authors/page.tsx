@@ -50,7 +50,6 @@ export default function AuthorsPage() {
       queryFn: () => getAuthors(nextPage),
     });
   }, [data, queryClient]);
-
   useEffect(() => {
     if (isError && !data) {
       toast.error('Не вдалося завантажити авторів');

@@ -1,20 +1,32 @@
+import type { ReactNode } from 'react';
+
+import { Container } from '@/components/ui/Container';
+import { AuthGuard } from '@/features/auth/session';
+import { ProfileTabs } from '@/features/profile';
+
+import styles from './ProfilePage.module.css';
 
 type ProfileLayoutProps = {
-  children: React.ReactNode;
-  myArticles: React.ReactNode;
-  savedArticles: React.ReactNode;
+  children: ReactNode;
+  myArticles: ReactNode;
+  savedArticles: ReactNode;
 };
 
-export default function ProfileLayout({
-  children,
-  myArticles,
-  savedArticles,
-}: ProfileLayoutProps) {
+export default function ProfileLayout({ children, myArticles, savedArticles }: ProfileLayoutProps) {
   return (
-    <section>
-      {children}
-      <div data-profile-slot="my-articles">{myArticles}</div>
-      <div data-profile-slot="saved-articles">{savedArticles}</div>
-    </section>
+    <AuthGuard>
+      <section
+        className={styles.page}
+        aria-labelledby="profile-title"
+      >
+        <Container>
+          {children}
+          <ProfileTabs
+            myArticles={myArticles}
+            savedArticles={savedArticles}
+          />
+        </Container>
+      </section>
+    </AuthGuard>
   );
 }
