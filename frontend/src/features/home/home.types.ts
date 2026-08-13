@@ -13,3 +13,4 @@ export interface CreatorsResponse {
   perPage: number;
   hasNextPage: boolean;
 }
+//articlesCount
