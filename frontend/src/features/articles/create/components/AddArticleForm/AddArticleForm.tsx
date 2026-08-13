@@ -10,10 +10,12 @@ import { createArticleSchema } from '../../create-article.schema';
 import { createArticle } from '../../create-article.service';
 import type { CreateArticleFormValues } from '../../create-article.types';
 
-import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
-import css from './AddArticleForm.module.css';
 import Button from '@/components/ui/Button/Button';
+import { useArticleDraftStore } from '@/store/articleDraftStore';
 
+import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
+
+import css from './AddArticleForm.module.css';
 
 const getCurrentDate = (): string => {
   const date = new Date();
@@ -25,23 +27,23 @@ const getCurrentDate = (): string => {
   return `${year}-${month}-${day}`;
 };
 
-const initialValues: CreateArticleFormValues = {
-  title: '',
-  description: '',
-  image: null,
-  publicationDate: getCurrentDate(),
-};
-
 const AddArticleForm = () => {
   const router = useRouter();
+
+  const { draft, setDraft, clearDraft } = useArticleDraftStore();
+
   const [previewUrl, setPreviewUrl] = useState('');
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: createArticle,
 
     onSuccess: article => {
+      clearDraft();
+      setPreviewUrl('');
+
       toast.success('Article created successfully!');
-      router.push(`/articles/${article._id}`);
+
+      router.push(`/articles/${article.id}`);
     },
 
     onError: error => {
@@ -52,6 +54,14 @@ const AddArticleForm = () => {
       );
     },
   });
+
+  const initialValues: CreateArticleFormValues = {
+    title: draft.title,
+    article: draft.article,
+    image: null,
+    publicationDate:
+      draft.publicationDate || getCurrentDate(),
+  };
 
   const handleImageChange = (
     file: File | null,
@@ -81,6 +91,7 @@ const AddArticleForm = () => {
       initialValues={initialValues}
       validationSchema={createArticleSchema}
       onSubmit={handleSubmit}
+      enableReinitialize
     >
       {({
         isSubmitting,
@@ -100,7 +111,7 @@ const AddArticleForm = () => {
               }
               error={
                 touched.image && errors.image
-                  ? errors.image
+                  ? String(errors.image)
                   : undefined
               }
             />
@@ -138,6 +149,18 @@ const AddArticleForm = () => {
                 type="text"
                 placeholder="Enter the title"
                 className={css.input}
+                onChange={(
+                  event: React.ChangeEvent<HTMLInputElement>,
+                ) => {
+                  const value = event.target.value;
+
+                  setFieldValue('title', value);
+
+                  setDraft({
+                    ...draft,
+                    title: value,
+                  });
+                }}
               />
 
               <svg
@@ -155,14 +178,14 @@ const AddArticleForm = () => {
             />
           </div>
 
-          {/* DESCRIPTION */}
+          {/* ARTICLE */}
 
           <div className={css.descriptionField}>
             <div
               className={`${css.textareaWrapper} ${
-                touched.description && errors.description
+                touched.article && errors.article
                   ? css.errorState
-                  : values.description
+                  : values.article
                     ? css.filledState
                     : ''
               }`}
@@ -175,12 +198,25 @@ const AddArticleForm = () => {
               </svg>
 
               <Field
-                as="textarea"
-                id="description"
-                name="description"
-                placeholder="Enter a text"
-                className={css.textarea}
-              />
+  as="textarea"
+  id="article"
+  name="article"
+  placeholder="Enter a text"
+  className={css.textarea}
+  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = event.target.value;
+
+    setFieldValue('article', value);
+
+    setDraft({
+      ...draft,
+      article: value,
+    });
+
+    event.target.style.height = 'auto';
+    event.target.style.height = `${event.target.scrollHeight}px`;
+  }}
+/>
 
               <svg
                 className={css.textareaIcon}
@@ -191,7 +227,43 @@ const AddArticleForm = () => {
             </div>
 
             <ErrorMessage
-              name="description"
+              name="article"
+              component="p"
+              className={css.error}
+            />
+          </div>
+
+          {/* PUBLICATION DATE */}
+
+          <div className={css.formGroup}>
+            <label
+              htmlFor="publicationDate"
+              className={css.label}
+            >
+              Publication date
+            </label>
+
+            <Field
+              id="publicationDate"
+              name="publicationDate"
+              type="date"
+              className={css.input}
+              onChange={(
+                event: React.ChangeEvent<HTMLInputElement>,
+              ) => {
+                const value = event.target.value;
+
+                setFieldValue('publicationDate', value);
+
+                setDraft({
+                  ...draft,
+                  publicationDate: value,
+                });
+              }}
+            />
+
+            <ErrorMessage
+              name="publicationDate"
               component="p"
               className={css.error}
             />
@@ -205,10 +277,10 @@ const AddArticleForm = () => {
             size="md"
             className={css.submitButton}
             disabled={isSubmitting || isPending}
-           >
-           {isSubmitting || isPending
-             ? 'Publishing...'
-             : 'Publish Article'}
+          >
+            {isSubmitting || isPending
+              ? 'Publishing...'
+              : 'Publish Article'}
           </Button>
         </Form>
       )}
