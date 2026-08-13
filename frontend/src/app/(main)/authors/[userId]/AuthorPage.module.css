@@ -1,42 +1,5 @@
 .page {
-  padding-top: 46px;
-  padding-bottom: 46px;
-  text-align: center;
-}
-.wrapper {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-}
-.user_info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--spacing-2xs);
-}
-.avatar {
-  border-radius: var(--border-radius-full);
-  object-fit: cover;
-  display: block;
-}
-.name {
-  font-family: var(--font-family-main);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-title-md);
-  text-align: center;
-  color: var(--color-dark);
-}
-.articles {
-  font-family: var(--font-family-main);
-  font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-main);
-  color: var(--color-dark);
-}
-/* Tablet Layout (від 768px) */
-@media screen and (min-width: 768px) {
-  .avatar {
-    width: 137px;
-  }
+  width: min(100% - 32px, 1200px);
+  margin-inline: auto;
+  padding-block: 40px;
 }
