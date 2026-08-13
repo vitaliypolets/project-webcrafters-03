@@ -17,8 +17,5 @@ export const createArticleController = async (req, res) => {
 
   res.status(201).json(article);
 
-console.log('BODY:', req.body);
-console.log('FILE:', req.file?.originalname);
-console.log('USER:', req.user?._id);
 };
 
