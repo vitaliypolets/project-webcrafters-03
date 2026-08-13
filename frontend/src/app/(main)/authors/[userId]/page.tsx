@@ -44,7 +44,7 @@ export default function AuthorPage({ params }: AuthorPageProps) {
   const firstName = author.name.split(' ')[0];
 
   return (
-    <main className={styles.page}>
+    <section className={styles.page}>
       <Container>
         <div className={styles.wrapper}>
           <Image
@@ -63,6 +63,6 @@ export default function AuthorPage({ params }: AuthorPageProps) {
         <AuthorArticles userId={userId} author={author} />
 
       </Container>
-    </main>
+    </section>
   );
 }
