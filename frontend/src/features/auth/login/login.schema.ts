@@ -1,11 +1,2 @@
-// frontend\src\features\auth\login\login.schema.ts
-
-import * as Yup from 'yup';
-
-export const loginSchema = Yup.object({
-  email: Yup.string().email('Enter a valid email').required('Email is required'),
-
-  password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
-});
+// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
+export {};

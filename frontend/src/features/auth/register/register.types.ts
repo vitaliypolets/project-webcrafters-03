@@ -1,8 +1,2 @@
-export type RegisterFormValues = {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
-
-export type RegisterDraft = RegisterFormValues;
+// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
+export {};

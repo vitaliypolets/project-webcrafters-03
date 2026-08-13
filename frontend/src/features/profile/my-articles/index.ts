@@ -1,3 +1,2 @@
-export { MyArticlesTab } from './components/MyArticlesTab';
-export { getMyArticles } from './my-articles.service';
-export type { ArticlesPage } from './my-articles.types';
+// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
+export {};
