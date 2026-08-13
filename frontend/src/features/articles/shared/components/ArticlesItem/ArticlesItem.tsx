@@ -1,27 +1,45 @@
 import Image from 'next/image';
-import Link from 'next/link';
+
+import { Button } from '@/components/ui/Button';
 
 import type { ArticlesItemProps } from '../../article-shared.types';
 import { BookmarkButton } from '../BookmarkButton/BookmarkButton';
 import styles from './ArticlesItem.module.css';
 
 export const ArticlesItem = ({ article }: ArticlesItemProps) => {
+  const imageUrl = article.imageUrl.match(/\((.*?)\)/)?.[1] ?? article.imageUrl;
+
   return (
     <article className={styles.article}>
-      <Image className={styles.image} src={article.imageUrl} alt={article.title} />
+      <Image
+        className={styles.image}
+        src={imageUrl}
+        alt={article.title}
+        width={337}
+        height={223}
+      />
 
-      <p className={styles.author}>{article.author.name}</p>
+      <div className={styles.content}>
+        <p className={styles.author}>{article.author.name}</p>
 
-      <h2 className={styles.title}>{article.title}</h2>
+        <h2 className={styles.title}>{article.title}</h2>
 
-      <p className={styles.description}>{article.description}</p>
+        <p className={styles.description}>{article.description}</p>
+      </div>
 
       <div className={styles.actions}>
-        <Link className={styles.learnMore} href={`/articles/${article.id}`}>
+        <Button
+          href={`/articles/${article.id}`}
+          variant="secondary"
+          size="sm"
+        >
           Learn more
-        </Link>
+        </Button>
 
-        <BookmarkButton articleId={article.id} isBookmarked={article.isBookmarked ?? false} />
+        <BookmarkButton
+          articleId={article.id}
+          isBookmarked={article.isBookmarked ?? false}
+        />
       </div>
     </article>
   );

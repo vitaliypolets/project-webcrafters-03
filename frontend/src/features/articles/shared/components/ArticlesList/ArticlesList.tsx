@@ -7,7 +7,10 @@ export const ArticlesList = ({ articles }: ArticlesListProps) => {
   return (
     <ul className={styles.list}>
       {articles.map((article) => (
-        <li className={styles.listItem} key={article.id}>
+        <li
+          className={styles.listItem}
+          key={article.id}
+        >
           <ArticlesItem article={article} />
         </li>
       ))}
