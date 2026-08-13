@@ -1,8 +1,23 @@
 import axios from 'axios';
 
+import { useAuthStore } from '@/store/auth.store';
+
 export const api = axios.create({
   baseURL: '/api',
   withCredentials: true,
+});
+
+api.interceptors.request.use((config) => {
+  const accessToken = useAuthStore.getState().accessToken;
+
+  if (accessToken) {
+    config.headers.set(
+      'Authorization',
+      `Bearer ${accessToken}`,
+    );
+  }
+
+  return config;
 });
 
 export class ApiError extends Error {
@@ -21,6 +36,8 @@ export async function apiRequest<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {
+  const accessToken = useAuthStore.getState().accessToken;
+
   const response = await fetch(`/api${path}`, {
     ...init,
     credentials: 'include',
@@ -28,6 +45,13 @@ export async function apiRequest<T>(
       ...(init.body instanceof FormData
         ? {}
         : { 'Content-Type': 'application/json' }),
+
+      ...(accessToken
+        ? {
+            Authorization: `Bearer ${accessToken}`,
+          }
+        : {}),
+
       ...init.headers,
     },
   });
