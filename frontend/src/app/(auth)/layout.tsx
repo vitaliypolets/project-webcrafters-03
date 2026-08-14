@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react';
-export default function AuthLayout({ children }: { children: ReactNode }) {
-  return <>{/* Logo-only header */}{children}</>;
+import { AuthLayout } from '@/components/layout';
+
+export default function AuthRouteLayout({ children }: { children: ReactNode }) {
+  return <AuthLayout>{children}</AuthLayout>;
 }

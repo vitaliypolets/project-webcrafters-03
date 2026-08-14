@@ -1,0 +1,131 @@
+/* ==========================================================================
+   Mobile First Styles (до 767px)
+   ========================================================================== */
+
+.footer {
+  width: 100%;
+  background-color: var(--color-bg-card-soft-green);
+  height: 266px;
+  display: flex;
+  align-items: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: var(--spacing-lg); /* 24px */
+}
+
+/* Логотип */
+.logoLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity var(--transition-main);
+}
+
+.logoLink:hover,
+.logoLink:focus-visible {
+  opacity: var(--opacity-hover-link);
+}
+
+.logoIcon {
+  width: 165px;
+  height: 46px;
+}
+
+/* Навігаційний блок */
+.nav {
+  display: block;
+}
+
+/* Копірайт */
+.copyright {
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-xs); /* 12px */
+  color: var(--color-dark); /* #070721 */
+  margin: 0;
+}
+
+/* Навігаційний список <ul> */
+.navList {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md); /* 16px */
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navItem {
+  display: flex;
+}
+
+/* Посилання */
+.navLink {
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-body); /* 16px */
+  font-weight: var(--font-weight-bold); /* 700 */
+  color: var(--color-primary-hover); /* #374f42 */
+  transition: opacity var(--transition-main);
+}
+
+.navLink:hover,
+.navLink:focus-visible {
+  opacity: var(--opacity-hover-link);
+}
+
+/* ==========================================================================
+   Tablet Breakpoint (від 768px)
+   ========================================================================== */
+
+@media screen and (min-width: 768px) {
+  .footer {
+    height: 200px;
+  }
+
+  .container {
+    gap: 20px;
+  }
+
+  .navList {
+    flex-direction: row;
+    gap: var(--spacing-xl); /* 32px */
+  }
+}
+
+/* ==========================================================================
+   Desktop Breakpoint (від 1440px)
+   ========================================================================== */
+
+@media screen and (min-width: 1440px) {
+  .footer {
+    height: 94px;
+  }
+
+  .container {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Порядок елементів у рядку */
+  .logoLink {
+    order: 1;
+  }
+
+  .copyright {
+    order: 2;
+  }
+
+  /* Виправлено: замість nav використано локальний клас .nav */
+  .nav {
+    order: 3;
+  }
+}

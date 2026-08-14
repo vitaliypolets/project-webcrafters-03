@@ -1,0 +1,131 @@
+.aboutSection {
+  padding-top: 40px;
+  padding-bottom: 64px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 361px;
+  margin: 0 auto;
+}
+
+.textCard {
+  background-color: #d8e4dc;
+  padding: 32px 24px;
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.title {
+  font-family: var(--font-family-main), sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a2b22;
+  line-height: 120%;
+}
+
+.description {
+  font-family: var(--font-family-main), sans-serif;
+  font-size: 14px;
+  line-height: 150%;
+  color: #2c3e35;
+}
+
+.lotusWrapper,
+.friendsWrapper,
+.meditationWrapper {
+  width: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.meditationWrapper {
+  display: none;
+}
+
+/* --- Tablet (768px – 1199px) --- */
+@media (min-width: 768px) {
+  .aboutSection {
+    padding-top: 60px;
+    padding-bottom: 80px;
+  }
+
+  .container {
+    max-width: 704px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: 24px;
+  }
+
+  .textCard {
+    padding: 40px 32px;
+    border-radius: 32px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .description {
+    font-size: 16px;
+  }
+
+  .lotusWrapper {
+    border-radius: 32px;
+    height: 100%;
+  }
+
+  .friendsWrapper {
+    grid-column: 1 / -1;
+    height: 380px;
+    border-radius: 32px;
+  }
+}
+
+/* --- Desktop (від 1200px) --- */
+@media (min-width: 1200px) {
+  .aboutSection {
+    padding-top: 80px;
+    padding-bottom: 120px;
+  }
+
+  .container {
+    max-width: 1280px;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+  }
+
+  .textCard {
+    padding: 48px 40px;
+    border-radius: 32px;
+  }
+
+  .lotusWrapper {
+    border-radius: 32px;
+    height: 100%;
+  }
+
+  .friendsWrapper {
+    grid-column: 1 / 2;
+    height: 420px;
+    border-radius: 32px;
+  }
+
+  .meditationWrapper {
+    display: block;
+    grid-column: 2 / 3;
+    height: 420px;
+    border-radius: 32px;
+  }
+}
