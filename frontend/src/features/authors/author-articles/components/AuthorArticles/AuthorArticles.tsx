@@ -59,7 +59,7 @@ export function AuthorArticles({ userId, author }: AuthorArticlesProps) {
     for (const article of page.data) {
       articlesById.set(article.id, {
         ...article,
-        author: article.author ?? author,
+        author,
       });
     }
   }
