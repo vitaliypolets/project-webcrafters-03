@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import LogoutUserModalClient from "@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client";
+import { Container } from "../ui/Container/Container"
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +27,7 @@ export default function Header() {
   return (
     <>
       <header className={css.header}>
+        <Container>
         <div className={css.headerWrapper}>
           <Link
             onClick={() => setIsOpen(false)}
@@ -65,16 +67,7 @@ export default function Header() {
                     Creators
                   </Link>
                 </li>
-                <li><button
-  type="button"
-  onClick={() => setIsLogoutOpen(true)}
-  className={css.logoutButton}
-  aria-label="Log out"
->
-  <svg className={css.icon} width="24" height="24">
-    <use href="/icons/sprite.svg#icon-log-out" />
-  </svg>
-</button></li>
+                
 
                 {isAuthenticated ? (
                   <>
@@ -102,7 +95,7 @@ export default function Header() {
 
                     <li className={css.userFieldDesc}>
                       <div className={css.userFieldFirst}>
-                      <Image className={css.userAvatar} src={user?.avatarUrl || "/avatar.png"} width={40} height={40} alt={user?.name || "User name"}/>
+                      <Image className={css.userAvatar} src={user?.avatarUrl || "/images/default-avatar.png"} width={40} height={40} alt={user?.name || "User name"}/>
 
                         <p className={css.userName}>{user?.email}</p>
                       </div>
@@ -164,7 +157,9 @@ export default function Header() {
             </div>
           </div>
         </div>
+        </Container>
       </header>
+      <Container>
       <div className={isOpen ? `${css.navBarMob} ${css.isOpen}` : css.navBarMob}>
         <nav aria-label="Main Navigation">
           <ul className={css.navigation}>
@@ -264,10 +259,12 @@ export default function Header() {
           </ul>
         </nav>
       </div>
+      </Container>
       <LogoutUserModalClient
   isOpen={isLogoutOpen}
   onClose={() => setIsLogoutOpen(false)}
 />
+
     </>
   );
 }
