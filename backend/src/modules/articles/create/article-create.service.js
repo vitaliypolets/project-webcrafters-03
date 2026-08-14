@@ -115,6 +115,8 @@ export const createArticle = async ({ data, file, user }) => {
     viewsCount: 0,
   });
 
+  const author = await User.findById(user._id).select('name');
+
   await User.findByIdAndUpdate(user._id, {
     $inc: { articlesAmount: 1 },
   });
@@ -127,6 +129,7 @@ export const createArticle = async ({ data, file, user }) => {
     imageUrl: article.imageUrl,
     publicationDate: article.publicationDate,
     authorId: article.authorId.toString(),
+    authorName: author.name,
     viewsCount: article.viewsCount,
     category: article.category,
   };
