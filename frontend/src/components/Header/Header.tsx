@@ -97,7 +97,7 @@ export default function Header() {
                       <div className={css.userFieldFirst}>
                       <Image className={css.userAvatar} src={user?.avatarUrl || "/images/default-avatar.png"} width={40} height={40} alt={user?.name || "User name"}/>
 
-                        <p className={css.userName}>{user?.email}</p>
+                        <p className={css.userName}>{user?.name}</p>
                       </div>
                      <button
   type="button"
@@ -159,7 +159,7 @@ export default function Header() {
         </div>
         </Container>
       </header>
-      <Container>
+      
       <div className={isOpen ? `${css.navBarMob} ${css.isOpen}` : css.navBarMob}>
         <nav aria-label="Main Navigation">
           <ul className={css.navigation}>
@@ -216,7 +216,7 @@ export default function Header() {
                 <li className={css.userField}>
                   <div className={css.userFieldFirst}>
                     <Image className={css.userAvatar} src={user?.avatarUrl || "/avatar.png"} width={40} height={40} alt={user?.name || "User name"}/>
-                    <p className={css.userName}>{user?.email}</p>
+                    <p className={css.userName}>{user?.name}</p>
                   </div>
 
                  <button
@@ -247,7 +247,7 @@ export default function Header() {
                 <li className={css.navigationItem}>
                   <Link
                     onClick={() => setIsOpen(false)}
-                    href="/"
+                    href="/register"
                     prefetch={false}
                     className={css.navigationLinkJoin}
                   >
@@ -259,7 +259,7 @@ export default function Header() {
           </ul>
         </nav>
       </div>
-      </Container>
+    
       <LogoutUserModalClient
   isOpen={isLogoutOpen}
   onClose={() => setIsLogoutOpen(false)}
