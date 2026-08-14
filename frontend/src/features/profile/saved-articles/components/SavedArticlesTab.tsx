@@ -10,14 +10,10 @@ import { useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
-import type { User } from '@/types/user';
 import { EmptyArticlesState } from '../../my-articles/components/EmptyArticlesState';
 import styles from '../../my-articles/components/ArticlesTab.module.css';
 import { getSavedArticles, removeSavedArticle } from '../saved-articles.service';
 import type { SavedArticlesPage } from '../saved-articles.types';
-
-const getUserId = (user: User | null) =>
-  user?.id ?? (user as (User & { _id?: string }) | null)?._id;
 
 export function SavedArticlesTab() {
   const searchParams = useSearchParams();
@@ -25,7 +21,7 @@ export function SavedArticlesTab() {
   const user = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
   const queryClient = useQueryClient();
-  const userId = getUserId(user);
+  const userId = user?.id;
   const queryKey = ['profile', 'saved-articles', userId] as const;
   const active = searchParams.get('tab') === 'saved-articles';
 
