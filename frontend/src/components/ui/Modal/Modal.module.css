@@ -13,6 +13,10 @@
   animation: fadeIn 0.2s ease-out forwards;
 }
 
+.backdropBody {
+  background-color: var(--color-bg-body);
+}
+
 /* Тіло модального вікна */
 .modalContent {
   position: relative;
