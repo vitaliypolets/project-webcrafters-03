@@ -71,12 +71,14 @@ export default function AuthorsPage() {
 
         if (firstNewAuthor) {
           requestAnimationFrame(() => {
-            const element = document.querySelector(`[data-author-id="${firstNewAuthor.id}"]`);
+            setTimeout(() => {
+              const element = document.querySelector(`[data-author-id="${firstNewAuthor.id}"]`);
 
-            element?.scrollIntoView({
-              behavior: 'smooth',
-              block: 'start',
-            });
+              element?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start',
+              });
+            }, 0);
           });
         }
       }
@@ -94,7 +96,7 @@ export default function AuthorsPage() {
   }
 
   return (
-    <main className={styles.page}>
+    <section className={styles.page}>
       <Container>
         <h1 className={styles.title}>Authors</h1>
 
@@ -112,6 +114,6 @@ export default function AuthorsPage() {
           </Button>
         )}
       </Container>
-    </main>
+    </section>
   );
 }

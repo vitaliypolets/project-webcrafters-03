@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Modal from "@/components/ui/Modal/Modal";
 import { useAuthStore } from "@/store/auth.store";
-
+import { logout } from "@/features/auth/session/session.service"
 import css from "./LogoutUserModal.module.css";
 
 interface LogoutUserModalClientProps {
@@ -27,7 +27,7 @@ export default function LogoutUserModalClient({
     setIsLoading(true);
 
     try {
-      // await logout();
+      await logout();
       clearIsAuthenticated();
       onClose();
     } catch (error) {
