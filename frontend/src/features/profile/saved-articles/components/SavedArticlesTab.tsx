@@ -33,12 +33,12 @@ export function SavedArticlesTab() {
     queryKey,
     enabled: active && Boolean(accessToken && userId),
     initialPageParam: 1,
-    queryFn: ({ pageParam }) => getSavedArticles(accessToken!, pageParam),
+    queryFn: ({ pageParam }) => getSavedArticles(pageParam),
     getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.page + 1 : undefined),
   });
 
   const removeMutation = useMutation({
-    mutationFn: (articleId: string) => removeSavedArticle(articleId, accessToken!),
+    mutationFn: removeSavedArticle,
     onMutate: async (articleId) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData<InfiniteData<SavedArticlesPage>>(queryKey);
