@@ -4,13 +4,14 @@ import type { Article } from '@/types/article';
 import type { PublicUser } from '@/types/user';
 import type { ArticlesPage } from './my-articles.types';
 
-type ArticleWithoutAuthor = Omit<Article, 'author'> & {
-  author?: Article['author'];
-};
+type MyArticleApiItem = Pick<
+  Article,
+  'id' | 'title' | 'description' | 'imageUrl' | 'publicationDate'
+>;
 
-type ArticlesApiPage = Omit<ApiResponse<ArticleWithoutAuthor[]>, 'message'> &
+type ArticlesApiPage = Omit<ApiResponse<MyArticleApiItem[]>, 'message'> &
   PaginationMeta & {
-    message?: ApiResponse<ArticleWithoutAuthor[]>['message'];
+    message?: ApiResponse<MyArticleApiItem[]>['message'];
   };
 
 export async function getMyArticles(
@@ -27,7 +28,7 @@ export async function getMyArticles(
     ...response.data,
     data: response.data.data.map((article) => ({
       ...article,
-      author: article.author ?? author,
+      author,
     })),
   };
 }
