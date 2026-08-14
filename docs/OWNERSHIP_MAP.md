@@ -1,8 +1,5 @@
 # project-webcrafters-03 — OWNERSHIP MAP (Карта відповідальності)
 
-> **Зафіксований стек:** Frontend — TypeScript (`.ts`, `.tsx`); окремий Express Backend — JavaScript ES6+ (`.js`).
-> На Backend не створюємо `*.types.ts`; перевірку вхідних даних виконуємо через `*.validation.js`.
-
 ## 1. Архітектура репозиторію
 
 Проєкт ведеться в одному monorepo:
@@ -267,7 +264,7 @@ project-webcrafters-03/
 1. Кожен учасник працює тільки у своїх папках.
 2. Shared-файли можуть мати конкретного owner.
 3. Інші учасники не змінюють shared-файли без погодження з owner і Team Lead.
-4. Центральне підключення Express router у `backend/src/routes/index.js` виконує Team Lead.
+4. Центральне підключення Express router у `backend/src/routes/index.ts` виконує Team Lead.
 5. Route Handler у Next.js створює учасник, за яким закріплений відповідний Backend route.
 6. Next Route Handler використовується як проксі:
 
@@ -314,13 +311,13 @@ frontend/src/types/
 backend/package.json
 backend/tsconfig.json
 backend/.env.example
-backend/src/app.js
-backend/src/server.js
+backend/src/app.ts
+backend/src/server.ts
 backend/src/config/
 backend/src/db/
 backend/src/middlewares/
 backend/src/models/
-backend/src/routes/index.js
+backend/src/routes/index.ts
 backend/src/types/
 backend/src/utils/
 ```
@@ -407,19 +404,20 @@ POST /api/auth/register
 
 ```text
 backend/src/modules/auth/register/
-├── register.route.js
-├── register.controller.js
-├── register.service.js
-├── register.validation.js
-└── index.js
+├── register.route.ts
+├── register.controller.ts
+├── register.service.ts
+├── register.validation.ts
+├── register.types.ts
+└── index.ts
 ```
 
 ## Не змінювати без погодження
 
 ```text
 frontend/src/store/auth.store.ts
-backend/src/models/User.js
-backend/src/routes/index.js
+backend/src/models/User.ts
+backend/src/routes/index.ts
 ```
 
 ---
@@ -488,11 +486,12 @@ POST /api/auth/login
 
 ```text
 backend/src/modules/auth/login/
-├── login.route.js
-├── login.controller.js
-├── login.service.js
-├── login.validation.js
-└── index.js
+├── login.route.ts
+├── login.controller.ts
+├── login.service.ts
+├── login.validation.ts
+├── login.types.ts
+└── index.ts
 ```
 
 ---
@@ -557,11 +556,12 @@ DELETE /api/auth/session
 
 ```text
 backend/src/modules/auth/session/
-├── session.route.js
-├── session.controller.js
-├── session.service.js
-├── session.validation.js
-└── index.js
+├── session.route.ts
+├── session.controller.ts
+├── session.service.ts
+├── session.validation.ts
+├── session.types.ts
+└── index.ts
 ```
 
 ---
@@ -625,11 +625,12 @@ PATCH /api/users/me
 
 ```text
 backend/src/modules/users/me/
-├── me.route.js
-├── me.controller.js
-├── me.service.js
-├── me.validation.js
-└── index.js
+├── me.route.ts
+├── me.controller.ts
+├── me.service.ts
+├── me.validation.ts
+├── me.types.ts
+└── index.ts
 ```
 
 ---
@@ -690,11 +691,12 @@ GET /api/users
 
 ```text
 backend/src/modules/users/list/
-├── users-list.route.js
-├── users-list.controller.js
-├── users-list.service.js
-├── users-list.validation.js
-└── index.js
+├── users-list.route.ts
+├── users-list.controller.ts
+├── users-list.service.ts
+├── users-list.validation.ts
+├── users-list.types.ts
+└── index.ts
 ```
 
 ---
@@ -750,11 +752,12 @@ GET /api/users/:userId
 
 ```text
 backend/src/modules/users/details/
-├── user-details.route.js
-├── user-details.controller.js
-├── user-details.service.js
-├── user-details.validation.js
-└── index.js
+├── user-details.route.ts
+├── user-details.controller.ts
+├── user-details.service.ts
+├── user-details.validation.ts
+├── user-details.types.ts
+└── index.ts
 ```
 
 ---
@@ -824,11 +827,12 @@ GET /api/users/:userId/articles
 
 ```text
 backend/src/modules/users/articles/
-├── user-articles.route.js
-├── user-articles.controller.js
-├── user-articles.service.js
-├── user-articles.validation.js
-└── index.js
+├── user-articles.route.ts
+├── user-articles.controller.ts
+├── user-articles.service.ts
+├── user-articles.validation.ts
+├── user-articles.types.ts
+└── index.ts
 ```
 
 ---
@@ -932,11 +936,12 @@ Body для POST:
 
 ```text
 backend/src/modules/users/bookmarks/
-├── bookmarks.route.js
-├── bookmarks.controller.js
-├── bookmarks.service.js
-├── bookmarks.validation.js
-└── index.js
+├── bookmarks.route.ts
+├── bookmarks.controller.ts
+├── bookmarks.service.ts
+├── bookmarks.validation.ts
+├── bookmarks.types.ts
+└── index.ts
 ```
 
 ---
@@ -1005,11 +1010,12 @@ recommendations
 
 ```text
 backend/src/modules/articles/details/
-├── article-details.route.js
-├── article-details.controller.js
-├── article-details.service.js
-├── article-details.validation.js
-└── index.js
+├── article-details.route.ts
+├── article-details.controller.ts
+├── article-details.service.ts
+├── article-details.validation.ts
+├── article-details.types.ts
+└── index.ts
 ```
 
 ---
@@ -1087,11 +1093,12 @@ GET /api/articles
 
 ```text
 backend/src/modules/articles/list/
-├── articles-list.route.js
-├── articles-list.controller.js
-├── articles-list.service.js
-├── articles-list.validation.js
-└── index.js
+├── articles-list.route.ts
+├── articles-list.controller.ts
+├── articles-list.service.ts
+├── articles-list.validation.ts
+├── articles-list.types.ts
+└── index.ts
 ```
 
 ---
@@ -1162,11 +1169,12 @@ DELETE /api/articles/:articleId
 
 ```text
 backend/src/modules/articles/manage/
-├── article-manage.route.js
-├── article-manage.controller.js
-├── article-manage.service.js
-├── article-manage.validation.js
-└── index.js
+├── article-manage.route.ts
+├── article-manage.controller.ts
+├── article-manage.service.ts
+├── article-manage.validation.ts
+├── article-manage.types.ts
+└── index.ts
 ```
 
 ---
@@ -1233,11 +1241,12 @@ POST /api/articles
 
 ```text
 backend/src/modules/articles/create/
-├── article-create.route.js
-├── article-create.controller.js
-├── article-create.service.js
-├── article-create.validation.js
-└── index.js
+├── article-create.route.ts
+├── article-create.controller.ts
+├── article-create.service.ts
+├── article-create.validation.ts
+├── article-create.types.ts
+└── index.ts
 ```
 
 ---
@@ -1387,9 +1396,9 @@ frontend/src/app/globals.css
 frontend/src/lib/api/client.ts
 frontend/src/types/
 
-backend/src/app.js
-backend/src/server.js
-backend/src/routes/index.js
+backend/src/app.ts
+backend/src/server.ts
+backend/src/routes/index.ts
 backend/src/models/
 backend/src/middlewares/
 backend/src/config/
