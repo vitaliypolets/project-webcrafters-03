@@ -1,6 +1,5 @@
 export interface Creator {
   id: string;
-  _id: string;
   name: string;
   avatarUrl: string | null;
   articlesAmount: number;
@@ -13,4 +12,3 @@ export interface CreatorsResponse {
   perPage: number;
   hasNextPage: boolean;
 }
-//articlesCount

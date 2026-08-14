@@ -3,12 +3,12 @@ import type { PublicUser } from '@/types/user';
 export type AuthorResponse = {
   id: string;
   name: string;
-  avatar: string | null;
+  avatarUrl: string | null;
   articlesAmount: number;
 };
 export type AuthorsApiResponse = {
   data: {
-    _id: string;
+    id: string;
     name: string;
     avatarUrl?: string;
     articlesAmount: number;
