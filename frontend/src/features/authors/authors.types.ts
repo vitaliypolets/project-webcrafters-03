@@ -8,7 +8,7 @@ export type AuthorResponse = {
 };
 export type AuthorsApiResponse = {
   data: {
-    _id: string;
+    id: string;
     name: string;
     avatarUrl?: string;
     articlesAmount: number;
