@@ -2,24 +2,46 @@ import { User } from '../../../models/User.js';
 
 export const getUsersListService = async (query) => {
   const page = Number(query.page) || 1;
-  const limit = Number(query.limit) || Number(query.perPage) || 6;
-  const skip = (page - 1) * limit;
+  const perPage = Number(query.perPage) || 6;
+  const skip = (page - 1) * perPage;
+
   const sort = query.sort || 'createdAt';
 
-  let sortOption = {
-    createdAt: -1,
-    _id: -1,
-  };
+  const normalizedSort = sort === 'popular' ? 'articlesAmount' : sort;
 
-  if (sort === 'popular') {
-    sortOption = {
-      articlesAmount: -1,
-      _id: -1,
-    };
+  let sortOption;
+
+  switch (normalizedSort) {
+    case 'articlesAmount':
+      sortOption = {
+        articlesAmount: -1,
+        _id: -1,
+      };
+      break;
+
+    case 'name':
+      sortOption = {
+        name: 1,
+        _id: 1,
+      };
+      break;
+
+    case 'createdAt':
+    default:
+      sortOption = {
+        createdAt: -1,
+        _id: -1,
+      };
+      break;
   }
 
   const [users, total] = await Promise.all([
-    User.find({}, 'name avatarUrl articlesAmount').sort(sortOption).skip(skip).limit(limit).lean(),
+    User.find({}, 'name avatarUrl articlesAmount')
+      .sort(sortOption)
+      .skip(skip)
+      .limit(perPage)
+      .lean(),
+
     User.countDocuments(),
   ]);
 
@@ -27,9 +49,8 @@ export const getUsersListService = async (query) => {
 
   const formattedUsers = users.map((user) => ({
     id: user._id.toString(),
-    _id: user._id.toString(),
     name: user.name,
-    avatarUrl: user.avatarUrl,
+    avatarUrl: user.avatarUrl ?? null,
     articlesAmount: user.articlesAmount ?? 0,
   }));
 
@@ -37,7 +58,7 @@ export const getUsersListService = async (query) => {
     data: formattedUsers,
     total,
     page,
-    perPage: limit,
+    perPage,
     hasNextPage,
   };
 };

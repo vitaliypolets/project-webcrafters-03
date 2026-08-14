@@ -43,7 +43,7 @@ export function MyArticlesTab() {
           id: userId,
           name: user.name,
           avatarUrl: user.avatarUrl,
-          articlesCount: user.articlesAmount,
+          articlesAmount: user.articlesAmount,
         }
       : null;
 

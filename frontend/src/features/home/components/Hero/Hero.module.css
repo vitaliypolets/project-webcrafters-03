@@ -1,28 +1,45 @@
 .heroSection {
-  padding-top: 40px;
-  padding-bottom: 60px;
-}
+  padding-top: 16px;
+  padding-bottom: 88px;
 
-.container {
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 0px;
+  max-width: 393px;
+  margin: 0 auto;
+}
+
+
+/* --- Mobile First (до 767px) --- */
+
+.imageWrapper {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+}
+
+.heroImage {
+  min-height: 322px;
+  min-width: 361px;
+  display: block;
 }
 
 .content {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 30px;
 }
 
 .title {
-  font-size: 36px;
-  line-height: 1.15;
+  font-family: var(--font-family-main), sans-serif;
+  font-size: 40px;
   font-weight: 700;
-  color: var(--color-text-main, #1d2939);
+  color: #374f42;
 }
 
 .italic {
+  font-family: 'Merienda', serif, cursive;
   font-style: italic;
   font-weight: 400;
 }
@@ -30,95 +47,143 @@
 .buttons {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 24px;
 }
 
-.btnPrimary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 14px 28px;
-  background-color: var(--color-primary, #5a8d7a);
-  color: #ffffff;
-  border-radius: 100px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
-}
-
-.btnPrimary:hover {
-  background-color: var(--color-primary-hover, #487263);
-}
-
+/* Кнопки (Мобілка: 100% ширини) */
+.btnPrimary,
 .btnSecondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 14px 28px;
+  padding: 16px 0;
+  width: 100%;
+  border-radius: 64px;
+  font-family: var(--font-family-main), sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.btnPrimary {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: 1px solid transparent;
+  transition: background-color 0.3s ease;
+}
+
+.btnPrimary:hover {
+  background-color: #374f42;
+}
+
+.btnSecondary {
   background-color: transparent;
-  color: var(--color-text-main, #1d2939);
-  border: 1px solid var(--color-border, #d0d5dd);
-  border-radius: 100px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: border-color 0.2s ease;
+  color: #374f42;
+  border: 1px solid #374f42;
+  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
 }
 
 .btnSecondary:hover {
-  border-color: var(--color-primary, #5a8d7a);
+  background-color: rgba(55, 79, 66, 0.05);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
 }
 
-.imageWrapper {
-  position: relative;
-  width: 100%;
-  height: 320px;
-  border-radius: 32px 32px 32px 80px;
-  overflow: hidden;
-}
-
-.heroImage {
-  object-fit: cover;
-}
-
-/* Tablet (от 768px) */
+/* --- Tablet (768px – 1199px) --- */
 @media (min-width: 768px) {
   .heroSection {
-    padding-top: 60px;
-    padding-bottom: 80px;
+  padding-top: 16px;
+  padding-bottom: 88px;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: 0px;
+  max-width: 1224px;
+  margin: 0 auto;
+
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+
+  .imageWrapper {
+    width: 100%;
+    height: 100%;
+    margin: 0 auto;
+    overflow: visible;
   }
 
-  .container {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+  .heroImage {
+    min-height: 383px;
+    min-width: 430px;
+    display: block;
+    object-fit: cover;
   }
 
   .content {
     flex: 1;
-    max-width: 480px;
+    display: flex;
+    flex-direction: column;
+    order: 1;
+    gap: 133px;
+    z-index: 2;
   }
 
+  .imageWrapper {
+    width: 430px;
+    margin: 0;
+    margin-left: -100px;
+    order: 2;
+    z-index: 1;
+  }
+
+
   .title {
-    font-size: 52px;
+    font-size: 40px;
+    font-weight: 700;
+    color: #374f42;
   }
 
   .buttons {
-    flex-direction: row;
+    flex-direction: column;
+    gap: 16px;
   }
 
-  .imageWrapper {
-    flex: 1;
-    height: 420px;
+  .btnPrimary,
+  .btnSecondary {
+    width: 249px;
   }
 }
 
-/* Desktop (от 1200px) */
+/* --- Desktop (від 1200px) --- */
 @media (min-width: 1200px) {
+  .heroSection {
+    padding-top: 64px;
+    padding-bottom: 96px;
+  }
+
+  .content {
+    gap: 40px;
+  }
+
   .title {
-    font-size: 64px;
+    font-weight: 800;
+    font-size: 92px;
+    line-height: 100%;
+    letter-spacing: -0.02em;
   }
 
   .imageWrapper {
-    height: 480px;
+    width: 806px;
+    margin-left: -178px;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    width: 184px;
   }
 }
