@@ -1,4 +1,4 @@
-'use client';
+/*'use client';
 
 import { useEffect, type ReactNode } from 'react';
 import { Toaster } from 'react-hot-toast';
@@ -58,3 +58,42 @@ export function AppProviders({ children }: { children: ReactNode }) {
     </QueryProvider>
   );
 }
+*/
+
+'use client';
+
+import { useEffect, type ReactNode } from 'react';
+import { Toaster } from 'react-hot-toast';
+
+import { useAuthStore } from '@/store/auth.store';
+
+import { QueryProvider } from './QueryProvider';
+
+export function AppProviders({ children }: { children: ReactNode }) {
+  const setRefreshing = useAuthStore((state) => state.setRefreshing);
+
+  const setInitialized = useAuthStore((state) => state.setInitialized);
+
+  useEffect(() => {
+    // ==========================================
+    // LOCAL MOCK AUTH
+    // ==========================================
+
+    setRefreshing(false);
+    setInitialized(true);
+  }, [setRefreshing, setInitialized]);
+
+  return (
+    <QueryProvider>
+      {children}
+
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 4000,
+        }}
+      />
+    </QueryProvider>
+  );
+}
+
