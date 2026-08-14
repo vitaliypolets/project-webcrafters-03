@@ -7,38 +7,50 @@ type Props = {
 };
 
 function parseRecommendation(recommend: RecommendedArticleType) {
-  const { title, _id, author } = recommend;
-
-  const articleLink = _id ? `/articles/${_id}` : '/login';
-  const authorLink = author?._id ? `/users/${author._id}` : '/login';
+  const { title, id, author } = recommend;
 
   return {
-    articleLink,
-    articleTitle: title,
+    articleLink: id ? `/articles/${id}` : '#',
+    articleTitle: title || 'Без назви',
     authorName: author?.name || 'Невідомий автор',
-    authorLink,
+    authorLink: author?.id ? `/authors/${author.id}` : '#',
   };
 }
 
 const ArticleRecommendations = ({ recommendations }: Props) => {
+  if (!recommendations || recommendations.length === 0) return null;
+
   return (
     <ul className={styles.recommendList}>
       {recommendations.map((item) => {
         const parsed = parseRecommendation(item);
 
         return (
-          <li key={item._id} className={styles.recommendItem}>
+          <li
+            key={item.id}
+            className={styles.recommendItem}
+          >
             <div className={styles.recommendArticleLinkItem}>
-              <Link href={parsed.articleLink} className={styles.recommendArticleText}>
+              <Link
+                href={parsed.articleLink}
+                className={styles.recommendArticleText}
+              >
                 {parsed.articleTitle}
               </Link>
               <div className={styles.recommendArticleiconWrapper}>
-                <svg className={styles.recommendArticleicon} width="40" height="40">
+                <svg
+                  className={styles.recommendArticleicon}
+                  width="40"
+                  height="40"
+                >
                   <use href="/icons/sprite.svg#icon-arrow-right"></use>
                 </svg>
               </div>
             </div>
-            <Link href={parsed.authorLink} className={styles.recommendAuthorLink}>
+            <Link
+              href={parsed.authorLink}
+              className={styles.recommendAuthorLink}
+            >
               {parsed.authorName}
             </Link>
           </li>
