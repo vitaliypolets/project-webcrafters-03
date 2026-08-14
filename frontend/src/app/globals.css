@@ -5,19 +5,19 @@
   /* ==========================================================================
      1. Brand & Primary Palette
      ========================================================================== */
-  --color-primary: #649179;           /* Normal Green Button Background */
-  --color-primary-hover: #374f42;     /* Hover Green Button */
+  --color-primary: #649179; /* Normal Green Button Background */
+  --color-primary-hover: #374f42; /* Hover Green Button */
 
   /* ==========================================================================
      2. Neutral & Base Colors
      ========================================================================== */
   --color-black: #000000;
   --color-white: #ffffff;
-  --color-dark: #070721;               /* Article Text & Headings */
+  --color-dark: #070721; /* Article Text & Headings */
   --color-dark-alt: #232533;
   --color-gray-dark: #212529;
-  --color-gray-medium: #595d62;       /* Input Text & Asterisk & Placeholder text (*) */
-  --color-gray-muted: #9f9f9f;        /* Input Border */
+  --color-gray-medium: #595d62; /* Input Text & Asterisk & Placeholder text (*) */
+  --color-gray-muted: #9f9f9f; /* Input Border */
   --color-gray-light: #ced4da;
   --color-gray-bg: #f8f9fa;
 
@@ -25,20 +25,20 @@
      3. Semantic Tokens
      ========================================================================== */
   /* Surfaces & Backgrounds */
-  --color-bg-body: #f7fffb;                   /* Main Body/Page Background */
-  --color-bg-card-soft-green: #d1e0d8;        /* Soft Green bg for Header, Footer & Cards */
-  --color-bg-input: #f7fffb;                  /* Input Field Background */
+  --color-bg-body: #f7fffb; /* Main Body/Page Background */
+  --color-bg-card-soft-green: #d1e0d8; /* Soft Green bg for Header, Footer & Cards */
+  --color-bg-input: #f7fffb; /* Input Field Background */
 
   /* Text colors */
-  --color-text-main: var(--color-dark);               /* #070721 */
-  --color-text-hero: var(--color-primary-hover);      /* #374f42 */
-  --color-text-secondary: var(--color-gray-medium);   /* #595d62 */
-  --color-text-link: var(--color-primary-hover);      /* #374f42 */
-  --color-text-on-primary: #f7fffb;                   /* #f7fffb (для зеленої кнопки) */
-  --color-text-on-light: var(--color-dark);           /* #070721 (для білої кнопки) */
+  --color-text-main: var(--color-dark); /* #070721 */
+  --color-text-hero: var(--color-primary-hover); /* #374f42 */
+  --color-text-secondary: var(--color-gray-medium); /* #595d62 */
+  --color-text-link: var(--color-primary-hover); /* #374f42 */
+  --color-text-on-primary: #f7fffb; /* #f7fffb (для зеленої кнопки) */
+  --color-text-on-light: var(--color-dark); /* #070721 (для білої кнопки) */
 
   /* Feedback States */
-  --color-error: #ad6a6c;                             /* Validation error */
+  --color-error: #ad6a6c; /* Validation error */
 
   /* Shadows & Focus States */
   --focus-ring-shadow: 0 0 0 4px rgba(100, 145, 121, 0.2);
@@ -51,7 +51,15 @@
   /* ==========================================================================
      4. Typography
      ========================================================================== */
-  --font-family-main: "Manrope", sans-serif;
+  /* Fonts are loaded centrally in app/layout.tsx via next/font/google. */
+  --font-family-main: var(--next-font-manrope), sans-serif;
+  --font-family-secondary: var(--next-font-dm-sans), sans-serif;
+  --font-family-third: var(--next-font-noto-sans), sans-serif;
+
+  /* Design aliases kept for compatibility with Figma/design tokens. */
+  --font-family: var(--font-family-main);
+  --second-family: var(--font-family-secondary);
+  --third-family: var(--font-family-third);
 
   --font-weight-regular: 400;
   --font-weight-bold: 700;
@@ -74,16 +82,16 @@
   /* Border Radius */
   --border-radius-xs: 2px;
   --border-radius-sm: 4px;
-  --border-radius-md: 8px;            /* 8px for Inputs */
+  --border-radius-md: 8px; /* 8px for Inputs */
   --border-radius-lg: 16px;
   --border-radius-xl: 24px;
-  --border-radius-card: 32px;         /* 32px for Cards */
-  --border-radius-btn: 64px;          /* 64px for Buttons */
+  --border-radius-card: 32px; /* 32px for Cards */
+  --border-radius-btn: 64px; /* 64px for Buttons */
   --border-radius-full: 256px;
 
   /* Border Widths */
-  --border-width-sm: 1px;             /* 1px for Inputs & Outlined Buttons */
-  --border-width-md: 2px;             /* 2px for Active / Focus states */
+  --border-width-sm: 1px; /* 1px for Inputs & Outlined Buttons */
+  --border-width-md: 2px; /* 2px for Active / Focus states */
 
   /* Layout Constraints */
   --container-max-width: 1440px;
@@ -94,9 +102,9 @@
   --btn-height-lg: 48px;
   --btn-height-xl: 57px;
 
-  --input-height-sm: 33px; 
-  --input-height-md: 41px; 
-  --input-height-lg: 48px; 
+  --input-height-sm: 33px;
+  --input-height-md: 41px;
+  --input-height-lg: 48px;
   --input-height-textarea: 144px;
 
   /* ==========================================================================
@@ -145,11 +153,18 @@ main {
   flex-grow: 1;
 }
 
-h1, h2, h3, h4, h5, h6, p {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
   margin: 0;
 }
 
-ul, ol {
+ul,
+ol {
   list-style: none;
   padding: 0;
   margin: 0;
@@ -196,30 +211,4 @@ select {
   white-space: nowrap;
   border: 0;
   clip-path: inset(100%);
-}
-
-/* Global Responsive Container (Mobile First) */
-.container {
-  width: 100%;
-  max-width: var(--container-max-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: 16px;
-  padding-right: 16px;
-}
-
-/* Tablet Layout (від 768px) */
-@media screen and (min-width: 768px) {
-  .container {
-    padding-left: 32px;
-    padding-right: 32px;
-  }
-}
-
-/* Desktop Layout (від 1440px) */
-@media screen and (min-width: 1440px) {
-  .container {
-    padding-left: 108px;
-    padding-right: 108px;
-  }
 }
