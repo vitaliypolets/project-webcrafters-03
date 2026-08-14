@@ -1,14 +1,2 @@
-export interface Creator {
-  id: string;
-  name: string;
-  avatarUrl: string | null;
-  articlesAmount: number;
-}
-
-export interface CreatorsResponse {
-  data: Creator[];
-  total: number;
-  page: number;
-  perPage: number;
-  hasNextPage: boolean;
-}
+// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
+export {};

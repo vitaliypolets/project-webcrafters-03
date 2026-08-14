@@ -24,29 +24,14 @@ https://github.com/vitaliypolets/project-webcrafters-03.git
 | ------------------ | ----------------------------------------------------------------- |
 | Frontend           | HTML5, CSS3, TypeScript, React, Next.js (App Router), CSS Modules |
 | Frontend API Layer | Next.js Route Handlers (proxy/BFF до Express Backend)             |
-| Backend            | Node.js, Express, JavaScript                                      |
+| Backend            | Node.js, Express, TypeScript                                      |
 | База даних         | MongoDB, Mongoose                                                 |
-| Робота з API       | REST API, Axios, TanStack Query                                   |
+| Робота з API       | REST API, Axios                                                   |
 | Авторизація        | JWT, Bcrypt                                                       |
-| Форми              | Formik                                                            |
-| Валідація          | Yup                                                               |
-| Global State       | Zustand                                                           |
-| Повідомлення       | react-hot-toast                                                   |
-| Upload             | Multer, Cloudinary                                                |
+| Валідація          | React Hook Form, Zod                                              |
 | Інструменти        | Git, GitHub, npm, ESLint, Prettier, VS Code                       |
 | Дизайн             | Figma                                                             |
 | Деплой             | Vercel / Render                                                   |
-
-### Правила використання
-
-- Axios використовується у frontend service/API layer для запитів до `/api/...`.
-- TanStack Query використовується для server state, кешування та мутацій.
-- Next.js Route Handlers використовують `fetch` / `proxyToBackend` для проксіювання запитів до Express Backend.
-- Formik + Yup використовуються для форм та їх валідації.
-- Zustand використовується для глобального client state.
-- react-hot-toast використовується для toast-повідомлень.
-- `alert()` для повідомлень користувачу не використовується.
-- Multer + Cloudinary використовуються для завантаження зображень.
 
 ---
 

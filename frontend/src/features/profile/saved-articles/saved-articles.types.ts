@@ -1,8 +1,2 @@
-import type { ApiResponse } from '@/types/api';
-import type { Article } from '@/types/article';
-import type { ArticlesPage } from '../my-articles/my-articles.types';
-
-export type SavedArticlesPage = ArticlesPage;
-export type SavedArticle = Article & { isBookmarked: true };
-
-export type BookmarkMutationResponse = ApiResponse<Article | { articleId: string }>;
+// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
+export {};
