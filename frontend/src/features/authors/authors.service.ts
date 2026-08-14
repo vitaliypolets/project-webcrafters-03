@@ -8,7 +8,7 @@ export const getAuthors = async (page = 1): Promise<AuthorsResponse> => {
 
   return {
     authors: data.data.map((author) => ({
-      id: author._id,
+      id: author.id,
       name: author.name,
       avatarUrl: author.avatarUrl ?? null,
      articlesAmount: author.articlesAmount,
@@ -25,7 +25,7 @@ export const getAuthorById = async (userId: string): Promise<PublicUser> => {
   return {
     id: data.data.id,
     name: data.data.name,
-    avatarUrl: data.data.avatar,
+    avatarUrl: data.data.avatarUrl,
     articlesAmount: data.data.articlesAmount,
   };
 };
