@@ -25,7 +25,7 @@ export const getAuthorById = async (userId: string): Promise<PublicUser> => {
   return {
     id: data.data.id,
     name: data.data.name,
-    avatarUrl: data.data.avatar,
+    avatarUrl: data.data.avatarUrl,
     articlesAmount: data.data.articlesAmount,
   };
 };
