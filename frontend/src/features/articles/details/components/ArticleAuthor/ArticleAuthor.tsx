@@ -19,13 +19,16 @@ const formatDate = (dateString?: string) => {
 };
 
 const ArticleAuthor = ({ author, publicationDate }: Props) => {
-  const authorLink = author?._id ? `/users/${author._id}` : '/login';
+  const authorLink = author?.id ? `/authors/${author.id}` : '/login';
 
   return (
     <div className={styles.authorWrapper}>
       <p className={styles.authorSubText}>
         Author:
-        <Link href={authorLink} className={(styles.authorText, styles.authorTextName)}>
+        <Link
+          href={authorLink}
+          className={styles.authorTextName}
+        >
           {author?.name}
         </Link>
       </p>

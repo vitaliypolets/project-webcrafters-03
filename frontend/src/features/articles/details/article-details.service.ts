@@ -14,7 +14,9 @@ export const fetchArticleById = async (articleId: string): Promise<ArticleDetail
     });
     
     if (!res.ok) {
-      throw new Error(`Failed to fetch article: ${res.status}`);
+      const error = new Error(`Failed to fetch article: ${res.status}`) as Error & { status?: number };
+      error.status = res.status;
+      throw error;
     }
     
     return res.json();
