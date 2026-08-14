@@ -6,12 +6,10 @@ export type AuthorArticlesProps = {
   author: PublicUser;
 };
 
-export type AuthorArticleApiItem = Omit<Article, 'author'> & {
-  author?: Article['author'];
-  authorId: string;
-  viewsCount: number;
-  category: string;
-};
+export type AuthorArticleApiItem = Pick<
+  Article,
+  'id' | 'title' | 'description' | 'imageUrl' | 'publicationDate'
+>;
 
 export type UserArticlesPage = {
   data: AuthorArticleApiItem[];

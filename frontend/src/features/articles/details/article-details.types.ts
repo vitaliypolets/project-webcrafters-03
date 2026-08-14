@@ -1,12 +1,16 @@
 import { ArticleEntity } from "@/types/article";
 
 export type ArticleAuthor = {
-  _id: string;
+  id: string;
   name: string;
 };
 
+export interface Article extends ArticleEntity {
+  id: string;
+}
+
 export type RecommendedArticle = {
-  _id: string;
+  id: string;
   title: string;
   description: string;
   imageUrl: string;
@@ -17,7 +21,7 @@ export type RecommendedArticle = {
 };
 
 export type ArticleDetailsResponse = {
-  article: ArticleEntity;
+  article: Article;
   author: ArticleAuthor | null;
   isBookmarked: boolean;
   recommendations: RecommendedArticle[];

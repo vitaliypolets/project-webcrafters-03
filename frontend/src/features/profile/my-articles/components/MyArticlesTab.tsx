@@ -10,7 +10,6 @@ import { useState, type MouseEvent } from 'react';
 
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
-import type { User } from '@/types/user';
 
 import { getMyArticles } from '../my-articles.service';
 import {
@@ -20,9 +19,6 @@ import {
 import { EmptyArticlesState } from './EmptyArticlesState';
 
 import styles from './ArticlesTab.module.css';
-
-const getUserId = (user: User | null) =>
-  user?.id ?? (user as (User & { _id?: string }) | null)?._id;
 
 export function MyArticlesTab() {
   const searchParams = useSearchParams();
@@ -35,7 +31,7 @@ export function MyArticlesTab() {
   const user = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
 
-  const userId = getUserId(user);
+  const userId = user?.id;
 
   const author =
     user && userId
@@ -43,7 +39,7 @@ export function MyArticlesTab() {
           id: userId,
           name: user.name,
           avatarUrl: user.avatarUrl,
-          articlesCount: user.articlesAmount,
+          articlesAmount: user.articlesAmount,
         }
       : null;
 

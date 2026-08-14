@@ -74,8 +74,6 @@ export default function AuthorsPage() {
             setTimeout(() => {
               const element = document.querySelector(`[data-author-id="${firstNewAuthor.id}"]`);
 
-              console.log('element after timeout:', element);
-
               element?.scrollIntoView({
                 behavior: 'smooth',
                 block: 'start',
