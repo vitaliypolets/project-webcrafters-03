@@ -87,7 +87,19 @@ export const BookmarkButton = ({ articleId, isBookmarked }: BookmarkButtonProps)
         aria-label={saved ? 'Remove bookmark' : 'Save bookmark'}
         aria-pressed={saved}
       >
-        {mutation.isPending ? 'Saving...' : saved ? 'Saved' : 'Save'}
+        <svg
+          className={styles.icon}
+          viewBox="0 0 24 24"
+          aria-hidden="true"
+        >
+          <path
+            d="M6 4.5C6 3.67 6.67 3 7.5 3h9c.83 0 1.5.67 1.5 1.5V21l-6-3.5L6 21V4.5Z"
+            fill={saved ? 'currentColor' : 'none'}
+            stroke="currentColor"
+            strokeWidth="1.8"
+            strokeLinejoin="round"
+          />
+        </svg>
       </button>
 
       {showErrorModal && (

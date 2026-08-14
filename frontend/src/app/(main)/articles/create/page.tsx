@@ -28,12 +28,12 @@ export const metadata: Metadata = {
 export default function CreateArticlePage() {
   return (
     <AuthGuard>
-      <main>
+      <section>
         <Container className={styles.page}>
           <h1 className={styles.title}>Create an article</h1>
           <AddArticleForm />
         </Container>
-      </main>
+      </section>
     </AuthGuard>
   );
 }
