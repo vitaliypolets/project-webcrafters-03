@@ -1,7 +1,7 @@
-import { ArticleDraft } from '@/features/articles/create/create-article.types';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
+import type { ArticleDraft } from '@/features/articles/create/create-article.types';
 
 type ArticleDraftStore = {
   draft: ArticleDraft;
@@ -21,7 +21,7 @@ const getCurrentDate = (): string => {
 
 const initialDraft: ArticleDraft = {
   title: '',
-  description: '',
+  article: '',
   publicationDate: getCurrentDate(),
 };
 
@@ -29,11 +29,20 @@ export const useArticleDraftStore = create<ArticleDraftStore>()(
   persist(
     set => ({
       draft: initialDraft,
-      setDraft: article => set({ draft: article }),
-      clearDraft: () => set({ draft: initialDraft }),
+
+      setDraft: article =>
+        set({
+          draft: article,
+        }),
+
+      clearDraft: () =>
+        set({
+          draft: initialDraft,
+        }),
     }),
     {
       name: 'article-draft',
+
       partialize: state => ({
         draft: state.draft,
       }),

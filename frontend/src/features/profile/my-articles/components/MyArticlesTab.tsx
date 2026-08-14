@@ -1,13 +1,22 @@
 'use client';
 
-import { useInfiniteQuery } from '@tanstack/react-query';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import { useState, type MouseEvent } from 'react';
 
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
 import type { User } from '@/types/user';
 
 import { getMyArticles } from '../my-articles.service';
+import {
+  addSavedArticle,
+  removeSavedArticle,
+} from '../../saved-articles/saved-articles.service';
 import { EmptyArticlesState } from './EmptyArticlesState';
 
 import styles from './ArticlesTab.module.css';
@@ -17,6 +26,11 @@ const getUserId = (user: User | null) =>
 
 export function MyArticlesTab() {
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
+  const [bookmarkOverrides, setBookmarkOverrides] = useState<
+    Record<string, boolean>
+  >({});
+  const [bookmarkRenderKey, setBookmarkRenderKey] = useState(0);
 
   const user = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
@@ -29,7 +43,7 @@ export function MyArticlesTab() {
           id: userId,
           name: user.name,
           avatarUrl: user.avatarUrl,
-          articlesCount: user.articlesAmount,
+          articlesAmount: user.articlesAmount,
         }
       : null;
 
@@ -46,10 +60,65 @@ export function MyArticlesTab() {
       lastPage.hasNextPage ? lastPage.page + 1 : undefined,
   });
 
+  const bookmarkMutation = useMutation({
+    mutationFn: ({
+      articleId,
+      shouldSave,
+    }: {
+      articleId: string;
+      shouldSave: boolean;
+    }) =>
+      shouldSave
+        ? addSavedArticle(articleId)
+        : removeSavedArticle(articleId),
+    onSuccess: (_response, { articleId, shouldSave }) => {
+      setBookmarkOverrides((current) => ({
+        ...current,
+        [articleId]: shouldSave,
+      }));
+      setBookmarkRenderKey((current) => current + 1);
+
+      void queryClient.invalidateQueries({
+        queryKey: ['profile', 'saved-articles', userId],
+      });
+    },
+  });
+
   if (!active) return null;
 
   const articles =
     query.data?.pages.flatMap((page) => page.data) ?? [];
+  const displayedArticles = articles.map((article) => ({
+    ...article,
+    isBookmarked:
+      bookmarkOverrides[article.id] ?? article.isBookmarked,
+  }));
+
+  // Keep bookmark requests local to participant #9 until ArticlesList exposes
+  // a bookmark callback. The shared BookmarkButton remains unchanged.
+  const handleBookmarkClick = (event: MouseEvent<HTMLDivElement>) => {
+    const target = event.target as HTMLElement;
+    const button = target.closest<HTMLButtonElement>(
+      'button[aria-label="Save bookmark"], button[aria-label="Remove bookmark"]',
+    );
+    const item = target.closest('li');
+
+    if (!button || !item || bookmarkMutation.isPending) return;
+
+    const items = Array.from(
+      event.currentTarget.querySelectorAll('li'),
+    );
+    const article = displayedArticles[items.indexOf(item)];
+
+    if (!article) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    bookmarkMutation.mutate({
+      articleId: article.id,
+      shouldSave: !article.isBookmarked,
+    });
+  };
 
   return (
     <section
@@ -90,8 +159,22 @@ export function MyArticlesTab() {
         />
       ) : null}
 
+      {bookmarkMutation.isError ? (
+        <p className={styles.error} role="alert">
+          Could not update the bookmark.
+        </p>
+      ) : null}
+
       {articles.length > 0 ? (
-        <ArticlesList articles={articles} />
+        <div
+          className={styles.articles}
+          onClickCapture={handleBookmarkClick}
+        >
+          <ArticlesList
+            key={bookmarkRenderKey}
+            articles={displayedArticles}
+          />
+        </div>
       ) : null}
 
       {query.hasNextPage ? (
