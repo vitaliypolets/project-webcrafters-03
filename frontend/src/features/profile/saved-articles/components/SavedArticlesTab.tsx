@@ -10,14 +10,10 @@ import { useSearchParams } from 'next/navigation';
 import type { MouseEvent } from 'react';
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
-import type { User } from '@/types/user';
 import { EmptyArticlesState } from '../../my-articles/components/EmptyArticlesState';
 import styles from '../../my-articles/components/ArticlesTab.module.css';
 import { getSavedArticles, removeSavedArticle } from '../saved-articles.service';
 import type { SavedArticlesPage } from '../saved-articles.types';
-
-const getUserId = (user: User | null) =>
-  user?.id ?? (user as (User & { _id?: string }) | null)?._id;
 
 export function SavedArticlesTab() {
   const searchParams = useSearchParams();
@@ -25,7 +21,7 @@ export function SavedArticlesTab() {
   const user = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
   const queryClient = useQueryClient();
-  const userId = getUserId(user);
+  const userId = user?.id;
   const queryKey = ['profile', 'saved-articles', userId] as const;
   const active = searchParams.get('tab') === 'saved-articles';
 
@@ -33,12 +29,12 @@ export function SavedArticlesTab() {
     queryKey,
     enabled: active && Boolean(accessToken && userId),
     initialPageParam: 1,
-    queryFn: ({ pageParam }) => getSavedArticles(accessToken!, pageParam),
+    queryFn: ({ pageParam }) => getSavedArticles(pageParam),
     getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.page + 1 : undefined),
   });
 
   const removeMutation = useMutation({
-    mutationFn: (articleId: string) => removeSavedArticle(articleId, accessToken!),
+    mutationFn: removeSavedArticle,
     onMutate: async (articleId) => {
       await queryClient.cancelQueries({ queryKey });
       const previous = queryClient.getQueryData<InfiniteData<SavedArticlesPage>>(queryKey);
