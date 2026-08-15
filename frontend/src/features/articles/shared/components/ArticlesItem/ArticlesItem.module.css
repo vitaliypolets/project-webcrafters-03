@@ -28,6 +28,8 @@
   flex-direction: column;
 
   min-width: 0;
+
+  text-align: left;
 }
 
 .author {
@@ -35,12 +37,14 @@
   margin-bottom: 0;
 
   font-size: 10px;
+  font-weight: var(--font-weight-bold);
   line-height: 1.2;
 }
 
 .title {
   display: -webkit-box;
 
+  height: calc(2 * 1.2em);
   margin-top: 2px;
   margin-bottom: 0;
 
@@ -58,6 +62,7 @@
 .description {
   display: -webkit-box;
 
+  height: calc(2 * 1.35em);
   margin-top: 2px;
   margin-bottom: 0;
 
@@ -87,16 +92,11 @@
 }
 
 .bookmark {
-  /* width: 24px;
-  height: 24px;
-
   flex-shrink: 0;
-  color: var(--color-text-primary); */
-  flex-shrink: 0;
-}
 
-.bookmark svg {
-  width: 12px;
-  height: 15px;
-  stroke: currentColor;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+
+  background-color: transparent;
 }

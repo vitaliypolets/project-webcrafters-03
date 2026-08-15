@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image';
+import Link from "next/link";
 import { useQuery } from '@tanstack/react-query';
 
 import { Loader } from '@/components/ui/Loader/Loader';
@@ -26,19 +27,15 @@ export const TopCreators = () => {
   }
 
   return (
-    <section
-      className={styles.section}
-      id="top-creators"
-    >
+    <section className={styles.section} id="top-creators">
       <div className={styles.container}>
         <h2 className={styles.title}>Top Creators</h2>
-
+        <Link href="/creators" className={styles.link}>
+          Go to all Creators <span className={styles.arrow}>↗</span>
+        </Link>
         <ul className={styles.list}>
           {data.data.map((creator) => (
-            <li
-              key={creator.id}
-              className={styles.item}
-            >
+            <li key={creator.id} className={styles.item}>
               <div className={styles.avatarWrapper}>
                 {creator.avatarUrl ? (
                   <Image
