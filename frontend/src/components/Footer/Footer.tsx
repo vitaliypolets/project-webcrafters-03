@@ -3,11 +3,19 @@ import { Container } from '@/components/ui/Container';
 import styles from './Footer.module.css';
 
 const NAV_LINKS = [
-  { label: 'Articles', href: '/#articles' },
+  { label: 'Articles', href: '/articles' },
   { label: 'Account', href: '/profile' },
 ];
 
-export function Footer() {
+const AUTH_NAV_LINKS = [{ label: 'Articles', href: '/articles' }];
+
+interface FooterProps {
+  isAuthPage?: boolean;
+}
+
+export function Footer({ isAuthPage = false }: FooterProps) {
+  const navLinks = isAuthPage ? AUTH_NAV_LINKS : NAV_LINKS;
+
   return (
     <footer className={styles.footer}>
       <Container className={styles.container}>
@@ -29,13 +37,13 @@ export function Footer() {
         {/* Копірайт */}
         <p className={styles.copyright}>© 2025 Harmoniq. All rights reserved.</p>
 
-        {/* Додано className={styles.nav} */}
+        {/* Навігація */}
         <nav
           className={styles.nav}
           aria-label="Footer Navigation"
         >
           <ul className={styles.navList}>
-            {NAV_LINKS.map((link) => (
+            {navLinks.map((link) => (
               <li
                 key={link.href}
                 className={styles.navItem}
