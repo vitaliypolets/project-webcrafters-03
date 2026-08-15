@@ -1,8 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
-import styles from './Modal.module.css';
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+
+import styles from "./Modal.module.css";
+
+type ModalBackdrop = "dark" | "transparent";
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,50 +13,56 @@ interface ModalProps {
   children: ReactNode;
   className?: string;
   showCloseButton?: boolean;
+  backdrop?: ModalBackdrop;
 }
 
 export const Modal = ({
   isOpen,
   onClose,
   children,
-  className = '',
+  className = "",
   showCloseButton = true,
+  backdrop = "dark",
 }: ModalProps) => {
   const [mounted, setMounted] = useState(false);
 
-  // Перевірка на клієнтське середовище для безпечного createPortal
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Блокування скролу та обробка натискання Escape
   useEffect(() => {
     if (!isOpen) return;
 
     const originalStyle = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = originalStyle;
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
 
-  // Якщо компонент ще не вмонтований на клієнті або закритий — нічого не рендеримо
   if (!mounted || !isOpen) return null;
 
-  const modalClasses = [styles.modalContent, className].filter(Boolean).join(' ');
+  const modalClasses = [styles.modalContent, className].filter(Boolean).join(" ");
+
+  const backdropClasses = [
+    styles.backdrop,
+    backdrop === "transparent" && styles.backdropTransparent,
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return createPortal(
-    <div className={styles.backdrop} onClick={onClose}>
+    <div className={backdropClasses} onClick={onClose}>
       <div
         className={modalClasses}
         onClick={(e) => e.stopPropagation()}

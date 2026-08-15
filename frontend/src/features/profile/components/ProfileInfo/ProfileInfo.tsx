@@ -12,7 +12,6 @@ export function ProfileInfo({
   name,
   avatarUrl,
   articlesAmount,
-  isArticlesAmountLoading = false,
 }: ProfileInfoProps) {
   const fallbackAvatar = getAvatarSrc(null);
   const [avatarSrc, setAvatarSrc] = useState(getAvatarSrc(avatarUrl));
@@ -21,11 +20,7 @@ export function ProfileInfo({
     setAvatarSrc(getAvatarSrc(avatarUrl));
   }, [avatarUrl]);
 
-  const articlesLabel = isArticlesAmountLoading
-    ? 'Loading articles...'
-    : articlesAmount === undefined
-      ? 'Articles unavailable'
-      : `${articlesAmount} ${articlesAmount === 1 ? 'article' : 'articles'}`;
+  const articlesLabel = `${articlesAmount} ${articlesAmount === 1 ? 'article' : 'articles'}`;
 
   return (
     <section

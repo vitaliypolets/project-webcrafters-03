@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { isAxiosError } from 'axios';
-import toast from 'react-hot-toast';
-import Image from 'next/image';
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { isAxiosError } from "axios";
+import toast from "react-hot-toast";
+import Image from "next/image";
 
-import { Button } from '@/components/ui/Button';
-import Modal from '@/components/ui/Modal/Modal';
-import { useAuthStore } from '@/store/auth.store';
-import { getAvatarSrc } from '@/utils/getAvatarSrc';
-import { getRegisterDraft, clearRegisterDraft } from '@/features/auth/register';
-import { registerUser } from '../../photo.service';
-import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE } from '../../photo.schema';
-import styles from './UploadPhotoForm.module.css';
+import { Button } from "@/components/ui/Button";
+import Modal from "@/components/ui/Modal/Modal";
+import { useAuthStore } from "@/store/auth.store";
+import { getAvatarSrc } from "@/utils/getAvatarSrc";
+import { getRegisterDraft, clearRegisterDraft } from "@/features/auth/register";
+import { registerUser } from "../../photo.service";
+import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE } from "../../photo.schema";
+import styles from "./UploadPhotoForm.module.css";
 
 export default function UploadPhotoForm() {
   const router = useRouter();
@@ -29,7 +29,7 @@ export default function UploadPhotoForm() {
 
   useEffect(() => {
     if (!getRegisterDraft()) {
-      router.replace('/register');
+      router.replace("/register");
     }
   }, [router]);
 
@@ -50,14 +50,14 @@ export default function UploadPhotoForm() {
     }
 
     if (!ALLOWED_AVATAR_MIME_TYPES.includes(file.type)) {
-      setError('Only JPEG, PNG, GIF and WebP are allowed');
-      event.target.value = '';
+      setError("Only JPEG, PNG and WebP are allowed");
+      event.target.value = "";
       return;
     }
 
     if (file.size > MAX_AVATAR_SIZE) {
-      setError('Avatar must be up to 1 MB');
-      event.target.value = '';
+      setError("Avatar must be up to 1 MB");
+      event.target.value = "";
       return;
     }
 
@@ -70,7 +70,7 @@ export default function UploadPhotoForm() {
 
     const draft = getRegisterDraft();
     if (!draft) {
-      router.replace('/register');
+      router.replace("/register");
       return;
     }
 
@@ -87,14 +87,14 @@ export default function UploadPhotoForm() {
 
       setSession(result.user, result.accessToken);
       clearRegisterDraft();
-      toast.success('Welcome to Harmoniq!');
-      router.replace('/');
+      toast.success("Welcome to Harmoniq!");
+      router.replace("/");
     } catch (err) {
       completedRef.current = false;
 
       const message = isAxiosError<{ message?: string }>(err)
-        ? (err.response?.data?.message ?? 'Registration failed. Please try again.')
-        : 'Registration failed. Please try again.';
+        ? (err.response?.data?.message ?? "Registration failed. Please try again.")
+        : "Registration failed. Please try again.";
 
       toast.error(message);
     } finally {
@@ -107,7 +107,7 @@ export default function UploadPhotoForm() {
   };
 
   return (
-    <Modal isOpen onClose={handleClose}>
+    <Modal isOpen onClose={handleClose} backdrop="transparent">
       <div className={styles.content}>
         <h1 className={styles.title}>Upload your photo</h1>
 
@@ -119,7 +119,7 @@ export default function UploadPhotoForm() {
         >
           <Image
             src={previewUrl ?? getAvatarSrc(null)}
-            alt={previewUrl ? 'Avatar preview' : 'Default avatar'}
+            alt={previewUrl ? "Avatar preview" : "Default avatar"}
             className={styles.avatarPreview}
             width={136}
             height={136}
@@ -130,7 +130,7 @@ export default function UploadPhotoForm() {
         <input
           ref={inputRef}
           type="file"
-          accept={ALLOWED_AVATAR_MIME_TYPES.join(',')}
+          accept={ALLOWED_AVATAR_MIME_TYPES.join(",")}
           className={styles.fileInput}
           onChange={handleFileChange}
         />
@@ -145,7 +145,7 @@ export default function UploadPhotoForm() {
           disabled={isSubmitting || !avatarFile}
           onClick={() => completeRegistration(avatarFile)}
         >
-          {isSubmitting ? 'Saving...' : 'Save'}
+          {isSubmitting ? "Saving..." : "Save"}
         </Button>
       </div>
     </Modal>

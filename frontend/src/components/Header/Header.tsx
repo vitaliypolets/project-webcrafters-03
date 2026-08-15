@@ -21,6 +21,14 @@ export default function Header() {
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  
+  useEffect(() => {
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+
+  return () => {
+    document.body.style.overflow = '';
+  };
+}, [isOpen]);
 
   const getLinkClass = (path: string) => {
     return pathname === path

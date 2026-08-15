@@ -1,46 +1,60 @@
 .aboutSection {
-  padding-top: 40px;
-  padding-bottom: 64px;
+  margin-bottom: var(--spacing-3xl);
 }
 
 .container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  max-width: 361px;
-  margin: 0 auto;
+  gap: var(--spacing-md);
+}
+
+/* Mobile first: everything stacks in one column */
+.topRow,
+.bottomRow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md);
 }
 
 .textCard {
-  background-color: #d8e4dc;
-  padding: 32px 24px;
-  border-radius: 24px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl) var(--spacing-lg);
+  border-radius: var(--border-radius-xl);
+  background-color: var(--color-bg-card-soft-green);
 }
 
 .title {
-  font-family: var(--font-family-main), sans-serif;
-  font-size: 28px;
-  font-weight: 700;
-  color: #1a2b22;
-  line-height: 120%;
+  font-family: var(--font-family-main);
+  font-size: 32px;
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-secondary);
+  color: var(--color-text-hero);
 }
 
 .description {
-  font-family: var(--font-family-main), sans-serif;
-  font-size: 14px;
-  line-height: 150%;
-  color: #2c3e35;
+  font-family: var(--font-family-main);
+  line-height: var(--line-height-main);
+  color: var(--color-text-hero);
+  font-size: 16px;
 }
 
 .lotusWrapper,
 .friendsWrapper,
 .meditationWrapper {
-  width: 100%;
-  border-radius: 24px;
+  border-radius: var(--border-radius-xl);
   overflow: hidden;
+}
+
+/* Ratios keep the blocks proportional instead of pinning them to px sizes */
+.lotusWrapper {
+  aspect-ratio: 361 / 365;
+}
+
+.friendsWrapper {
+  aspect-ratio: 361 / 365;
 }
 
 .image {
@@ -54,78 +68,78 @@
   display: none;
 }
 
-/* --- Tablet (768px – 1199px) --- */
+/* Tablet */
 @media (min-width: 768px) {
-  .aboutSection {
-    padding-top: 60px;
-    padding-bottom: 80px;
+  .container {
+    gap: var(--spacing-lg);
   }
 
-  .container {
-    max-width: 704px;
-    display: grid;
-    grid-template-columns: 1fr 280px;
-    gap: 24px;
+  .topRow {
+    /* 431 : 249 from the design, expressed as a ratio so it scales */
+    grid-template-columns: 431fr 249fr;
+    gap: var(--spacing-lg);
   }
 
   .textCard {
-    padding: 40px 32px;
-    border-radius: 32px;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
   }
 
   .title {
-    font-size: 36px;
+    font-size: var(--font-size-title-md);
   }
 
   .description {
-    font-size: 16px;
+    font-size: var(--font-size-body);
+    line-height: var(--line-height-main);
   }
 
   .lotusWrapper {
-    border-radius: 32px;
-    height: 100%;
+    aspect-ratio: 249 / 326;
+  }
+
+  .lotusWrapper .image {
+    object-position: 35% 55%;
   }
 
   .friendsWrapper {
-    grid-column: 1 / -1;
-    height: 380px;
-    border-radius: 32px;
+    aspect-ratio: 704 / 398;
   }
 }
 
-/* --- Desktop (від 1200px) --- */
-@media (min-width: 1200px) {
-  .aboutSection {
-    padding-top: 80px;
-    padding-bottom: 120px;
+/* Desktop */
+@media (min-width: 1440px) {
+  .topRow {
+    /* 496 : 704 */
+    grid-template-columns: 496fr 704fr;
   }
 
-  .container {
-    max-width: 1280px;
-    grid-template-columns: 1fr 1fr;
-    gap: 32px;
+  .bottomRow {
+    /* 804 : 388 */
+    grid-template-columns: 804fr 388fr;
+    gap: var(--spacing-xl);
   }
 
-  .textCard {
-    padding: 48px 40px;
-    border-radius: 32px;
+  .title {
+    font-size: var(--font-size-title-lg);
   }
 
   .lotusWrapper {
-    border-radius: 32px;
-    height: 100%;
+    aspect-ratio: 704 / 326;
+  }
+
+  .lotusWrapper .image {
+    object-position: 50% 50%;
   }
 
   .friendsWrapper {
-    grid-column: 1 / 2;
-    height: 420px;
-    border-radius: 32px;
+    aspect-ratio: 804 / 398;
+    border-radius: var(--border-radius-card);
   }
 
   .meditationWrapper {
     display: block;
-    grid-column: 2 / 3;
-    height: 420px;
-    border-radius: 32px;
+    aspect-ratio: 388 / 398;
+    border-radius: var(--border-radius-card);
   }
 }

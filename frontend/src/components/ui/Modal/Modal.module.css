@@ -13,14 +13,18 @@
   animation: fadeIn 0.2s ease-out forwards;
 }
 
+.backdropTransparent {
+  background-color: transparent;
+}
+
 /* Тіло модального вікна */
 .modalContent {
   position: relative;
   background-color: var(--color-bg-card-soft-green);
-  border-radius: var(--border-radius-card); /* 32px */
-  padding: 56px var(--spacing-xl) var(--spacing-xl); /* 56px 32px 32px */
+  border-radius: var(--border-radius-card);
+  padding: 56px var(--spacing-xl) var(--spacing-xl);
   width: 100%;
-  max-width: 361px; /* Mobile width з Figma */
+  max-width: 361px;
   box-sizing: border-box;
 
   /* Захист від виходу за межі екрана на малих дисплеях */
@@ -31,15 +35,15 @@
   scrollbar-width: thin;
   scrollbar-color: var(--color-text-main) transparent;
 
-  /* Анімація появи самого вікна (масштабування + плавність) */
+  /* Анімація появи самого вікна */
   animation: scaleIn 0.2s ease-out forwards;
 }
 
 /* Кнопка закриття (хрестик) */
 .closeButton {
   position: absolute;
-  top: var(--spacing-md); /* 16px */
-  right: var(--spacing-xl); /* 32px */
+  top: var(--spacing-md);
+  right: var(--spacing-xl);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -85,6 +89,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -95,6 +100,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
   }
