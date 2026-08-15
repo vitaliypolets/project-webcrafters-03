@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect, useState, type ReactNode } from 'react';
-import { createPortal } from 'react-dom';
+import { useEffect, useState, type ReactNode } from "react";
+import { createPortal } from "react-dom";
 
-import styles from './Modal.module.css';
+import styles from "./Modal.module.css";
 
-type ModalBackdrop = 'dark' | 'body';
+type ModalBackdrop = "dark" | "transparent";
 
 interface ModalProps {
   isOpen: boolean;
@@ -20,9 +20,9 @@ export const Modal = ({
   isOpen,
   onClose,
   children,
-  className = '',
+  className = "",
   showCloseButton = true,
-  backdrop = 'dark',
+  backdrop = "dark",
 }: ModalProps) => {
   const [mounted, setMounted] = useState(false);
 
@@ -34,35 +34,35 @@ export const Modal = ({
     if (!isOpen) return;
 
     const originalStyle = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
+      if (e.key === "Escape") {
         onClose();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.body.style.overflow = originalStyle;
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose]);
 
   if (!mounted || !isOpen) return null;
 
-  const modalClasses = [styles.modalContent, className].filter(Boolean).join(' ');
+  const modalClasses = [styles.modalContent, className].filter(Boolean).join(" ");
 
-  const backdropClasses = [styles.backdrop, backdrop === 'body' && styles.backdropBody]
+  const backdropClasses = [
+    styles.backdrop,
+    backdrop === "transparent" && styles.backdropTransparent,
+  ]
     .filter(Boolean)
-    .join(' ');
+    .join(" ");
 
   return createPortal(
-    <div
-      className={backdropClasses}
-      onClick={onClose}
-    >
+    <div className={backdropClasses} onClick={onClose}>
       <div
         className={modalClasses}
         onClick={(e) => e.stopPropagation()}
