@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import type { User } from '@/types/user';
+import { create } from "zustand";
+import type { User } from "@/types/user";
 
 type AuthState = {
   user: User | null;
@@ -9,6 +9,7 @@ type AuthState = {
   isInitialized: boolean;
 
   setSession: (user: User, accessToken: string) => void;
+  updateUser: (user: Partial<User>) => void;
   clearSession: () => void;
   setRefreshing: (value: boolean) => void;
   setInitialized: (value: boolean) => void;
@@ -28,6 +29,16 @@ export const useAuthStore = create<AuthState>((set) => ({
       isAuthenticated: true,
     }),
 
+  updateUser: (updatedUser) =>
+    set((state) => ({
+      user: state.user
+        ? {
+            ...state.user,
+            ...updatedUser,
+          }
+        : null,
+    })),
+
   clearSession: () =>
     set({
       user: null,
@@ -35,7 +46,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       isAuthenticated: false,
     }),
 
-  setRefreshing: (isRefreshing) => set({ isRefreshing }),
+  setRefreshing: (isRefreshing) =>
+    set({
+      isRefreshing,
+    }),
 
-  setInitialized: (isInitialized) => set({ isInitialized }),
+  setInitialized: (isInitialized) =>
+    set({
+      isInitialized,
+    }),
 }));
