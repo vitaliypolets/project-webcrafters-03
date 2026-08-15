@@ -4,8 +4,7 @@ import Link from "next/link";
 import css from "./Header.module.css";
 import { useAuthStore } from "@/store/auth.store";
 import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LogoutUserModalClient from "@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client";
 import { Container } from "../ui/Container/Container";
 import UserBar from "@/features/user/user-bar/components/UserBar/UserBar";
@@ -20,6 +19,14 @@ export default function Header() {
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  
+  useEffect(() => {
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+
+  return () => {
+    document.body.style.overflow = '';
+  };
+}, [isOpen]);
 
   const handleBurger = () => {
     setIsOpen((prev) => !prev);

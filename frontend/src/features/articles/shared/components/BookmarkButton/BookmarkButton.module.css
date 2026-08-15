@@ -26,6 +26,11 @@
 .icon {
   width: 20px;
   height: 20px;
+  stroke: currentColor;
+}
+
+.saved {
+  color: var(--color-text-primary);
 }
 
 .button:hover:not(:disabled) {

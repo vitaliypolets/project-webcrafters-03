@@ -11,6 +11,7 @@ export type ArticlesListProps = {
 export type BookmarkButtonProps = {
   articleId: string;
   isBookmarked: boolean;
+  className?: string;
 };
 
 export type ModalErrorSaveProps = {
