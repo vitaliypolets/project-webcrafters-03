@@ -3,7 +3,7 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchArticles } from '../articles-catalog.service';
 import type { ArticleFilter } from '../articles-catalog.types';
 
-const PER_PAGE = 12;
+const PER_PAGE = 8;
 
 export const useArticlesQuery = (activeFilter: ArticleFilter = 'all') => {
   const queryClient = useQueryClient();

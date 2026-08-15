@@ -5,7 +5,7 @@ export const fetchArticles = async (
 ): Promise<getArticlesResponse> => {
   const {
     page = 1,
-    perPage = 12,
+    perPage = 8,
     filter = 'all',
     authorId,
     excludeId,
@@ -40,14 +40,5 @@ export const fetchArticles = async (
 
   const data: getArticlesResponse = await response.json();
 
-  const sanitizedArticles = (data.articles || []).map((article, index) => ({
-    ...article,
-    id: article.id || `article-p${page}-${index}`,
-    author: article.author || { name: 'Unknown Author' },
-  }));
-
-  return {
-    ...data,
-    articles: sanitizedArticles,
-  };
+  return data;
 };
