@@ -1,3 +1,5 @@
+import type { Article } from '@/types/article';
+
 export interface Creator {
   id: string;
   name: string;
@@ -10,5 +12,14 @@ export interface CreatorsResponse {
   total: number;
   page: number;
   perPage: number;
+  hasNextPage: boolean;
+}
+
+export interface ArticlesResponse {
+  articles: Article[];
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
   hasNextPage: boolean;
 }
