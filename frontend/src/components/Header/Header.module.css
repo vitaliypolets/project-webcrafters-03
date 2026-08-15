@@ -51,6 +51,10 @@
   display: flex;
   align-items: center;
 }
+.navigationItemCreate {
+  display: flex;
+  align-items: center;
+}
 
 .navigationItemDesc {
   display: none;
@@ -244,6 +248,9 @@
   .navigationDesc {
     display: flex;
   }
+  .navigationItemCreate {
+  display: none;
+}
 
   .navigationLinkJoinDesc {
     display: block;

@@ -34,10 +34,17 @@ export default function Header() {
 
   // Забороняємо скрол сторінки при відкритому мобільному меню
   useEffect(() => {
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+    if (isOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
 
     return () => {
-      document.body.style.overflow = '';
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
     };
   }, [isOpen]);
 
@@ -222,7 +229,7 @@ export default function Header() {
                   </Link>
                 </li>
 
-                <li className={css.navigationItem}>
+                <li className={css.navigationItemCreate}>
                   <Link
                     onClick={() => setIsOpen(false)}
                     href="/articles/create"
