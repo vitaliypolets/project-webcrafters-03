@@ -29,10 +29,12 @@ export const TopCreators = () => {
   return (
     <section className={styles.section} id="top-creators">
       <div className={styles.container}>
-        <h2 className={styles.title}>Top Creators</h2>
-        <Link href="/creators" className={styles.link}>
-          Go to all Creators <span className={styles.arrow}>↗</span>
-        </Link>
+        <div className={styles.header}>
+          <h2 className={styles.title}>Top Creators</h2>
+          <Link href="/creators" className={styles.link}>
+            Go to all Creators <span className={styles.arrow}>↗</span>
+          </Link>
+        </div>
         <ul className={styles.list}>
           {data.data.map((creator) => (
             <li key={creator.id} className={styles.item}>

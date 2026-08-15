@@ -1,5 +1,6 @@
 .section {
-  padding: 40px 0;
+  margin: 0px 0px 72px 0px;
+  padding: 0px 0;
 }
 
 .container {
@@ -7,7 +8,7 @@
   min-width: 320px;
   max-width: 375px;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 0 0px;
 }
 
 .centerContainer {
@@ -20,23 +21,23 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 16px;
+  margin-bottom: 16px;
 }
 
 .title {
-  font-size: 24px;
   font-weight: 700;
-  line-height: 1.2;
+  font-size: 32px;
+  color: #000;
 }
 
 .link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  color: var(--color-primary, #0070f3);
+  font-weight: 700;
+  font-size: 16px;
+  color: #374F42;
   text-decoration: none;
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.2s ease;
@@ -55,18 +56,33 @@
   transition: transform 0.2s ease;
 }
 
+/* Grid & List Styles */
+.list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--spacing-md, 20px);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.listItem {
+  display: flex;
+  max-width: 361px;
+}
+
 /* Tablet adaptive */
 @media (min-width: 768px) {
   .container {
     max-width: 768px;
-    padding: 0 32px;
+    padding: 0 0px;
   }
 
   .header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 32px;
+    margin-bottom: 16px;
   }
 
   .title {
@@ -74,14 +90,53 @@
   }
 
   .link {
-    font-size: 16px;
+    display: none;
   }
-}
+
+  .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .listItem {
+    display: flex;
+    max-width: 340px;
+  }
+  }
 
 /* Desktop adaptive */
 @media (min-width: 1440px) {
   .container {
-    max-width: 1440px;
-    padding: 0 80px;
+    max-width: 1224px;
+    padding: 0 0px;
+  }
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .title {
+    font-size: 40px;
+  }
+
+  .link {
+    display: inline-flex;
+  }
+
+  .list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 24px;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+  }
+  .listItem {
+    display: flex;
+    max-width: 392px;
+  }
+  .listItem:nth-child(n + 4) {
+    display: none;
   }
 }
