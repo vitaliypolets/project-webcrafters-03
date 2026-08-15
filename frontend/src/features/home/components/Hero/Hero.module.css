@@ -1,19 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
-
 .heroSection {
-  padding-top: 16px;
+  padding-top: var(--spacing-md);
   overflow: hidden;
+  margin-bottom: var(--spacing-3xl);
+}
+
+.heroContainer {
   display: flex;
   flex-direction: column;
   max-width: 393px;
-  margin: 0 auto 72px;
 }
 
-/* --- Mobile First (до 767px) --- */
-
+/* Mobile First (до 767px) */
 .imageWrapper {
-  height: 280px;
+  display: none;
+}
+
+.imageWrapperMobile {
+  display: block;
   width: 361px;
+  height: 322px;
   margin: 0 auto;
   flex-shrink: 0;
 }
@@ -28,152 +33,106 @@
 .content {
   display: flex;
   flex-direction: column;
-  gap: 30px;
+  gap: var(--spacing-xl);
 }
 
 .title {
-  font-family: var(--font-family-main), sans-serif;
-  font-size: 40px;
-  font-weight: 700;
-  color: #374f42;
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-title-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-hero);
 }
 
 .italic {
-  font-family: 'Merienda', serif;
+  font-family: var(--font-family-secondary);
+  font-style: italic;
 }
 
 .buttons {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--spacing-lg);
 }
 
-/* Кнопки (Мобілка: 100% ширини) */
-.btnPrimary,
-.btnSecondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 0;
+.heroButton {
   width: 100%;
-  border-radius: 64px;
-  font-family: var(--font-family-main), sans-serif;
-  font-size: 18px;
-  font-weight: 700;
+  font-size: var(--font-size-main);
+  font-weight: var(--font-weight-bold);
   text-align: center;
-  box-sizing: border-box;
 }
 
-.btnPrimary {
-  background-color: var(--color-primary);
-  color: var(--color-white);
-  border: 1px solid transparent;
-  transition: background-color 0.3s ease;
-}
-
-.btnSecondary {
-  background-color: transparent;
-  color: #374f42;
-  border: 1px solid #374f42;
-  transition: border-color 0.3s ease, color 0.3s ease, background-color 0.3s ease;
-}
-
-
+/* Tablet */
 @media (min-width: 768px) {
-  .heroSection {
-    padding-top: 16px;
-    max-width: 704px;
+  .heroContainer {
     flex-direction: row;
+    padding: 0;
+    max-width: var(--container-max-width);
   }
 
-  .imageWrapper {
+  .imageWrapperMobile {
     order: 2;
-    height: 383px;
     width: 430px;
+    height: 383px;
     max-width: none;
-  }
-
-  .heroImage {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
+    margin-left: auto;
+    margin-right: 0;
   }
 
   .content {
     order: 1;
-    margin-right: -100px;
     height: 383px;
-    display: flex;
-    flex-direction: column;
+    margin-right: -100px;
     justify-content: space-between;
   }
 
   .title {
-    text-wrap: inherit;
-    height: 112px;
     width: 372px;
+    height: 112px;
   }
 
-  .btnPrimary,
-  .btnSecondary {
+  .heroButton {
     width: 249px;
-    height: 57px;
-    gap: 24px;
   }
 }
 
-
-@media (min-width: 1224px) {
+/* Desktop */
+@media (min-width: 1440px) {
   .heroSection {
-    padding-top: 48px;
-    max-width: 1224px;
+    padding-top: var(--spacing-2xl);
   }
 
   .imageWrapper {
+    display: block;
     order: 2;
     width: 805px;
     height: 561px;
     max-width: none;
   }
 
-  .heroImage {
-    width: 100%;
-    height: 100%;
-    max-width: none;
-    object-fit: cover;
+  .imageWrapperMobile {
+    display: none;
   }
 
   .content {
-    margin-right: -180px;
-    height: 389px;
     width: 599px;
+    height: 389px;
+    margin-right: -180px;
   }
 
   .title {
-    height: 112px;
-    width: 372px;
-    font-size: 92px;
+    width: 599px;
+    height: 276px;
+    font-size: var(--font-size-hero);
     line-height: 1;
     letter-spacing: -0.02em;
-    font-weight: 800;
-    height: 276px;
-    width: 599px;
+    font-weight: var(--font-weight-extrabold);
   }
 
   .buttons {
     flex-direction: row;
   }
-  .btnPrimary,
-  .btnSecondary {
+
+  .heroButton {
     width: 184px;
-  }
-  .btnPrimary:hover {
-    background-color: #374f42;
-  }
-  .btnSecondary:hover {
-    background-color: rgba(55, 79, 66, 0.05);
-    border-color: var(--color-primary);
-    color: var(--color-primary);
   }
 }

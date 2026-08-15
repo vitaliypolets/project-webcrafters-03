@@ -1,14 +1,5 @@
 .section {
-  margin: 0px 0px 72px 0px;
-  padding: 0px 0;
-}
-
-.container {
-  width: 100%;
-  min-width: 320px;
-  max-width: 375px;
-  margin: 0 auto;
-  padding: 0 0px;
+  margin-bottom: var(--spacing-3xl);
 }
 
 .centerContainer {
@@ -21,30 +12,32 @@
 .header {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
 }
 
 .title {
-  font-weight: 700;
-  font-size: 32px;
-  color: #000;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-title-md);
+  color: var(--color-black);
 }
 
 .link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-weight: 700;
-  font-size: 16px;
-  color: #374F42;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-link);
   text-decoration: none;
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity var(--transition-main),
+    transform var(--transition-main);
 }
 
 .link:hover {
-  opacity: 0.8;
+  opacity: var(--opacity-hover-link);
 }
 
 .link:hover .arrow {
@@ -53,40 +46,28 @@
 
 .arrow {
   display: inline-block;
-  transition: transform 0.2s ease;
+  transition: transform var(--transition-main);
 }
 
-/* Grid & List Styles */
 .list {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--spacing-md, 20px);
-  padding: 0;
-  margin: 0;
-  list-style: none;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-md);
 }
 
+/* Stretches the card to the tallest one in the row so the CTAs line up */
 .listItem {
   display: flex;
-  max-width: 361px;
+  min-width: 0;
 }
 
 /* Tablet adaptive */
 @media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-    padding: 0 0px;
-  }
-
   .header {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
-  }
-
-  .title {
-    font-size: 32px;
+    margin-bottom: var(--spacing-lg);
   }
 
   .link {
@@ -95,47 +76,25 @@
 
   .list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 24px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
+    gap: var(--spacing-lg);
   }
-  .listItem {
-    display: flex;
-    max-width: 340px;
-  }
-  }
+}
 
 /* Desktop adaptive */
 @media (min-width: 1440px) {
-  .container {
-    max-width: 1224px;
-    padding: 0 0px;
-  }
-  .header {
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .title {
-    font-size: 40px;
-  }
-
   .link {
     display: inline-flex;
   }
 
+  .title {
+    font-size: var(--font-size-title-lg);
+  }
+
   .list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 24px;
-    padding: 0;
-    margin: 0;
-    list-style: none;
   }
-  .listItem {
-    display: flex;
-    max-width: 392px;
-  }
+
+  /* Design shows 3 cards on desktop; the service still fetches 4 for tablet */
   .listItem:nth-child(n + 4) {
     display: none;
   }

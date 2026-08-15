@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
+
+import { Container } from "@/components/ui/Container/Container";
 import { Loader } from "@/components/ui/Loader/Loader";
 import { ArticlesItem } from "@/features/articles/shared/components/ArticlesItem/ArticlesItem";
+
 import { getPopularArticles } from "../../home.service";
 import styles from "./PopularArticles.module.css";
 
@@ -27,7 +30,7 @@ export const PopularArticles = () => {
 
   return (
     <section className={styles.section} id="popular-articles">
-      <div className={styles.container}>
+      <Container>
         <div className={styles.header}>
           <h2 className={styles.title}>Popular Articles</h2>
           <Link href="/articles" className={styles.link}>
@@ -42,7 +45,7 @@ export const PopularArticles = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     </section>
   );
 };
