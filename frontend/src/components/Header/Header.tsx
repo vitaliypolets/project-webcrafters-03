@@ -1,29 +1,53 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import css from "./Header.module.css";
-import { useAuthStore } from "@/store/auth.store";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { useState } from "react";
-import LogoutUserModalClient from "@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client";
-import { Container } from "../ui/Container/Container";
-import UserBar from "@/features/user/user-bar/components/UserBar/UserBar";
+import Link from 'next/link';
+import css from './Header.module.css';
+import { useAuthStore } from '@/store/auth.store';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import LogoutUserModalClient from '@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client';
+import UserBar from '@/features/user/user-bar/components/UserBar/UserBar';
+import { UserModal } from '@/features/user/profile-edit';
+
+import { Container } from '../ui/Container/Container';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+
   const pathname = usePathname();
-  const getLinkClass = (path: string) => {
-    return pathname === path ? `${css.navigationLink} ${css.active}` : css.navigationLink;
-  };
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  
+  useEffect(() => {
+  document.body.style.overflow = isOpen ? 'hidden' : '';
+
+  return () => {
+    document.body.style.overflow = '';
+  };
+}, [isOpen]);
+
+  const getLinkClass = (path: string) => {
+    return pathname === path
+      ? `${css.navigationLink} ${css.active}`
+      : css.navigationLink;
+  };
 
   const handleBurger = () => {
     setIsOpen((prev) => !prev);
   };
+
+  // Забороняємо скрол сторінки при відкритому мобільному меню
+  useEffect(() => {
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   return (
     <>
@@ -40,11 +64,16 @@ export default function Header() {
                 <use href="/icons/sprite.svg#icon-logo" />
               </svg>
             </Link>
+
             <div className={css.navigationDescFild}>
               <nav aria-label="Main Navigation">
                 <ul className={css.navigationDesc}>
                   <li className={css.navigationItemDesc}>
-                    <Link onClick={() => setIsOpen(false)} href="/" className={getLinkClass("/")}>
+                    <Link
+                      onClick={() => setIsOpen(false)}
+                      href="/"
+                      className={getLinkClass('/')}
+                    >
                       Home
                     </Link>
                   </li>
@@ -53,7 +82,7 @@ export default function Header() {
                     <Link
                       onClick={() => setIsOpen(false)}
                       href="/articles"
-                      className={getLinkClass("/articles")}
+                      className={getLinkClass('/articles')}
                     >
                       Articles
                     </Link>
@@ -63,7 +92,7 @@ export default function Header() {
                     <Link
                       onClick={() => setIsOpen(false)}
                       href="/authors"
-                      className={getLinkClass("/authors")}
+                      className={getLinkClass('/authors')}
                     >
                       Creators
                     </Link>
@@ -76,7 +105,7 @@ export default function Header() {
                           onClick={() => setIsOpen(false)}
                           href="/profile"
                           prefetch={false}
-                          className={getLinkClass("/profile")}
+                          className={getLinkClass('/profile')}
                         >
                           My Profile
                         </Link>
@@ -96,6 +125,7 @@ export default function Header() {
                       <UserBar
                         user={user || null}
                         setIsLogoutOpen={setIsLogoutOpen}
+                        setIsUserModalOpen={setIsUserModalOpen}
                         userField="userFieldDesc"
                       />
                     </>
@@ -106,7 +136,7 @@ export default function Header() {
                           onClick={() => setIsOpen(false)}
                           href="/login"
                           prefetch={false}
-                          className={getLinkClass("/login")}
+                          className={getLinkClass('/login')}
                         >
                           Log in
                         </Link>
@@ -126,21 +156,21 @@ export default function Header() {
                   )}
                 </ul>
               </nav>
+
               <div>
-                <button className={css.navBarMobButton} type="button" onClick={handleBurger}>
-                  {isOpen ? (
-                    <>
-                      <svg className={css.icon}>
-                        <use href="/icons/sprite.svg#icon-close" />
-                      </svg>
-                    </>
-                  ) : (
-                    <>
-                      <svg className={css.icon}>
-                        <use href="/icons/sprite.svg#icon-burger" />
-                      </svg>
-                    </>
-                  )}
+                <button
+                  className={css.navBarMobButton}
+                  type="button"
+                  onClick={handleBurger}
+                  aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                >
+                  <svg className={css.icon}>
+                    <use
+                      href={`/icons/sprite.svg#icon-${
+                        isOpen ? 'close' : 'burger'
+                      }`}
+                    />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -148,11 +178,21 @@ export default function Header() {
         </Container>
       </header>
 
-      <div className={isOpen ? `${css.navBarMob} ${css.isOpen}` : css.navBarMob}>
+      <div
+        className={
+          isOpen
+            ? `${css.navBarMob} ${css.isOpen}`
+            : css.navBarMob
+        }
+      >
         <nav aria-label="Main Navigation">
           <ul className={css.navigation}>
             <li className={css.navigationItem}>
-              <Link onClick={() => setIsOpen(false)} href="/" className={getLinkClass("/")}>
+              <Link
+                onClick={() => setIsOpen(false)}
+                href="/"
+                className={getLinkClass('/')}
+              >
                 Home
               </Link>
             </li>
@@ -161,7 +201,7 @@ export default function Header() {
               <Link
                 onClick={() => setIsOpen(false)}
                 href="/articles"
-                className={getLinkClass("/articles")}
+                className={getLinkClass('/articles')}
               >
                 Articles
               </Link>
@@ -171,7 +211,7 @@ export default function Header() {
               <Link
                 onClick={() => setIsOpen(false)}
                 href="/authors"
-                className={getLinkClass("/authors")}
+                className={getLinkClass('/authors')}
               >
                 Creators
               </Link>
@@ -184,7 +224,7 @@ export default function Header() {
                     onClick={() => setIsOpen(false)}
                     href="/profile"
                     prefetch={false}
-                    className={getLinkClass("/profile")}
+                    className={getLinkClass('/profile')}
                   >
                     My Profile
                   </Link>
@@ -204,6 +244,7 @@ export default function Header() {
                 <UserBar
                   user={user || null}
                   setIsLogoutOpen={setIsLogoutOpen}
+                  setIsUserModalOpen={setIsUserModalOpen}
                   userField="userField"
                 />
               </>
@@ -214,7 +255,7 @@ export default function Header() {
                     onClick={() => setIsOpen(false)}
                     href="/login"
                     prefetch={false}
-                    className={getLinkClass("/login")}
+                    className={getLinkClass('/login')}
                   >
                     Log in
                   </Link>
@@ -236,7 +277,15 @@ export default function Header() {
         </nav>
       </div>
 
-      <LogoutUserModalClient isOpen={isLogoutOpen} onClose={() => setIsLogoutOpen(false)} />
+      <LogoutUserModalClient
+        isOpen={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+      />
+
+      <UserModal
+        isOpen={isUserModalOpen}
+        onClose={() => setIsUserModalOpen(false)}
+      />
     </>
   );
 }

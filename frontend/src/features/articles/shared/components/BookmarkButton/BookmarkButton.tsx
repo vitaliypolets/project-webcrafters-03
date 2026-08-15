@@ -58,6 +58,14 @@ export const BookmarkButton = ({
       void queryClient.invalidateQueries({
         queryKey: ["article", articleId],
       });
+
+      void queryClient.invalidateQueries({
+        queryKey: ['saved-articles'],
+      });
+
+      void queryClient.invalidateQueries({
+        queryKey: ['article', articleId],
+      });
     },
 
     onError: (error) => {

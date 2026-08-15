@@ -2,7 +2,7 @@ import { User } from '../../../models/User.js';
 
 export const getUsersListService = async (query) => {
   const page = Number(query.page) || 1;
-  const perPage = Number(query.perPage) || 6;
+  const perPage = Number(query.perPage) || 20;
   const skip = (page - 1) * perPage;
 
   const sort = query.sort || 'createdAt';
