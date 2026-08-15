@@ -31,7 +31,7 @@ export const TopCreators = () => {
 
   return (
     <section className={styles.section} id="top-creators">
-      <Container>
+      <Container className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>Top Creators</h2>
           <Link href="/authors" className={styles.link}>

@@ -1,13 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Merienda:wght@300..900&display=swap');
+
 .heroSection {
   padding-top: var(--spacing-md);
   overflow: hidden;
   margin-bottom: var(--spacing-3xl);
 }
 
+.heroSection .heroContainer {
+  padding-inline: 0;
+}
+
 .heroContainer {
   display: flex;
   flex-direction: column;
-  max-width: 393px;
 }
 
 /* Mobile First (до 767px) */
@@ -17,8 +22,9 @@
 
 .imageWrapperMobile {
   display: block;
-  width: 361px;
-  height: 322px;
+  width: 100%;
+  max-width: 361px;
+  aspect-ratio: 361 / 322;
   margin: 0 auto;
   flex-shrink: 0;
 }
@@ -44,8 +50,7 @@
 }
 
 .italic {
-  font-family: var(--font-family-secondary);
-  font-style: italic;
+  font-family: "Merienda",  var(--next-font-dm-sans);
 }
 
 .buttons {
@@ -65,14 +70,12 @@
 @media (min-width: 768px) {
   .heroContainer {
     flex-direction: row;
-    padding: 0;
-    max-width: var(--container-max-width);
   }
 
   .imageWrapperMobile {
     order: 2;
     width: 430px;
-    height: 383px;
+    aspect-ratio: 430 / 383;
     max-width: none;
     margin-left: auto;
     margin-right: 0;
@@ -105,7 +108,7 @@
     display: block;
     order: 2;
     width: 805px;
-    height: 561px;
+    aspect-ratio: 805 / 561;
     max-width: none;
   }
 

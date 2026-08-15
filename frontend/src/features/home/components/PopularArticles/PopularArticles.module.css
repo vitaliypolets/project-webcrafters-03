@@ -2,6 +2,10 @@
   margin-bottom: var(--spacing-3xl);
 }
 
+.section .container {
+  padding-inline: 0;
+}
+
 .centerContainer {
   display: flex;
   justify-content: center;
