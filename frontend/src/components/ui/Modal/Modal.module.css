@@ -13,8 +13,8 @@
   animation: fadeIn 0.2s ease-out forwards;
 }
 
-.backdropBody {
-  background-color: var(--color-bg-body);
+.backdropTransparent {
+  background-color: transparent;
 }
 
 /* Тіло модального вікна */
