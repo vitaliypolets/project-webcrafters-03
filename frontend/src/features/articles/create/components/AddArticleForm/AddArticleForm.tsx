@@ -127,7 +127,7 @@ const AddArticleForm = () => {
               htmlFor="title"
               className={css.label}
             >
-              Title
+              {values.title ? 'Article Title' : 'Title'}
             </label>
 
             <div
@@ -155,8 +155,7 @@ const AddArticleForm = () => {
                 onChange={(
                   event: React.ChangeEvent<HTMLInputElement>,
                 ) => {
-                  const value =
-                    event.target.value;
+                  const value = event.target.value;
 
                   setFieldValue('title', value);
 
@@ -210,8 +209,7 @@ const AddArticleForm = () => {
                 onChange={(
                   event: React.ChangeEvent<HTMLTextAreaElement>,
                 ) => {
-                  const value =
-                    event.target.value;
+                  const value = event.target.value;
 
                   setFieldValue('article', value);
 
@@ -220,8 +218,7 @@ const AddArticleForm = () => {
                     article: value,
                   });
 
-                  event.target.style.height =
-                    'auto';
+                  event.target.style.height = 'auto';
 
                   event.target.style.height = `${event.target.scrollHeight}px`;
                 }}
