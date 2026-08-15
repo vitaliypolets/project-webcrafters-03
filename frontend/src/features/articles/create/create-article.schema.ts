@@ -5,9 +5,7 @@ const MAX_IMAGE_SIZE = 1024 * 1024;
 
 const ALLOWED_IMAGE_TYPES = [
   'image/jpeg',
-  'image/jpg',
   'image/png',
-  'image/gif',
   'image/webp',
 ];
 
@@ -37,7 +35,7 @@ export const createArticleSchema = Yup.object({
     )
     .test(
       'fileType',
-      'Only JPG, JPEG, PNG, GIF and WEBP images are allowed',
+      'Only JPEG, PNG and WEBP images are allowed',
       value => {
         if (!value) return false;
 

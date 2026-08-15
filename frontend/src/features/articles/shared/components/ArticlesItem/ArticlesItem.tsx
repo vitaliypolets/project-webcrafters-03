@@ -32,6 +32,7 @@ export const ArticlesItem = ({ article }: ArticlesItemProps) => {
           href={`/articles/${article.id}`}
           variant="secondary"
           size="sm"
+          className={styles.learnMore}
         >
           Learn more
         </Button>
@@ -39,6 +40,7 @@ export const ArticlesItem = ({ article }: ArticlesItemProps) => {
         <BookmarkButton
           articleId={article.id}
           isBookmarked={article.isBookmarked ?? false}
+          className={styles.bookmark}
         />
       </div>
     </article>

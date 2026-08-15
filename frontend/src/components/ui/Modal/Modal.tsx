@@ -2,7 +2,10 @@
 
 import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
+
 import styles from './Modal.module.css';
+
+type ModalBackdrop = 'dark' | 'body';
 
 interface ModalProps {
   isOpen: boolean;
@@ -10,6 +13,7 @@ interface ModalProps {
   children: ReactNode;
   className?: string;
   showCloseButton?: boolean;
+  backdrop?: ModalBackdrop;
 }
 
 export const Modal = ({
@@ -18,15 +22,14 @@ export const Modal = ({
   children,
   className = '',
   showCloseButton = true,
+  backdrop = 'dark',
 }: ModalProps) => {
   const [mounted, setMounted] = useState(false);
 
-  // Перевірка на клієнтське середовище для безпечного createPortal
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Блокування скролу та обробка натискання Escape
   useEffect(() => {
     if (!isOpen) return;
 
@@ -47,13 +50,19 @@ export const Modal = ({
     };
   }, [isOpen, onClose]);
 
-  // Якщо компонент ще не вмонтований на клієнті або закритий — нічого не рендеримо
   if (!mounted || !isOpen) return null;
 
   const modalClasses = [styles.modalContent, className].filter(Boolean).join(' ');
 
+  const backdropClasses = [styles.backdrop, backdrop === 'body' && styles.backdropBody]
+    .filter(Boolean)
+    .join(' ');
+
   return createPortal(
-    <div className={styles.backdrop} onClick={onClose}>
+    <div
+      className={backdropClasses}
+      onClick={onClose}
+    >
       <div
         className={modalClasses}
         onClick={(e) => e.stopPropagation()}
