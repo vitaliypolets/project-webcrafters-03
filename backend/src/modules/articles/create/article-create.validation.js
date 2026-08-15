@@ -9,16 +9,11 @@ export const createArticleSchema = z.object({
     .min(3, 'Title must contain at least 3 characters')
     .max(48, 'Title must contain at most 48 characters'),
 
-  description: z
-    .string()
-    .trim()
-    .min(100, 'Description must contain at least 100 characters')
-    .max(4000, 'Description must contain at most 4000 characters'),
-
   article: z
     .string()
     .trim()
-    .min(1, 'Article text is required'),
+    .min(100, 'Article must contain at least 100 characters')
+    .max(4000, 'Article must contain at most 4000 characters'),
 
   publicationDate: z
     .string()
@@ -36,7 +31,6 @@ export const validateCreateArticle = (req, res, next) => {
 
     const errors = {
       title: tree.properties?.title?.errors ?? [],
-      description: tree.properties?.description?.errors ?? [],
       article: tree.properties?.article?.errors ?? [],
       publicationDate: tree.properties?.publicationDate?.errors ?? [],
     };

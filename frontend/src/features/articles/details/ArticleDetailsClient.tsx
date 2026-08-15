@@ -50,7 +50,10 @@ const ArticleDetailsClient = ({ articleId }: Props) => {
         <ArticleDetails article={article}>
           <div className={styles.subContent}>
             <div className={styles.recomendation}>
-              <ArticleAuthor author={author} publicationDate={publicationDate} />
+              <ArticleAuthor
+                author={author}
+                publicationDate={publicationDate}
+              />
 
               <p className={styles.intrastedText}>You can also interested</p>
 
@@ -58,7 +61,10 @@ const ArticleDetailsClient = ({ articleId }: Props) => {
             </div>
 
             <div className={styles.articleBookmarkWrapper}>
-              <BookmarkButton articleId={article._id} isBookmarked={isBookmarked} />
+              <BookmarkButton
+                articleId={article.id}
+                isBookmarked={isBookmarked}
+              />
             </div>
           </div>
         </ArticleDetails>

@@ -11,10 +11,11 @@ import { createArticle } from '../../create-article.service';
 import type { CreateArticleFormValues } from '../../create-article.types';
 
 import Button from '@/components/ui/Button/Button';
+import { useArticleDraftStore } from '@/store/articleDraftStore';
+
 import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
 
 import css from './AddArticleForm.module.css';
-import { useArticleDraftStore } from '@/store/articleDraftStore';
 
 const getCurrentDate = (): string => {
   const date = new Date();
@@ -29,7 +30,8 @@ const getCurrentDate = (): string => {
 const AddArticleForm = () => {
   const router = useRouter();
 
-  const { draft, setDraft, clearDraft } = useArticleDraftStore();
+  const { draft, setDraft, clearDraft } =
+    useArticleDraftStore();
 
   const [previewUrl, setPreviewUrl] = useState('');
 
@@ -42,7 +44,7 @@ const AddArticleForm = () => {
 
       toast.success('Article created successfully!');
 
-      router.push(`/articles/${article._id}`);
+      router.push(`/articles/${article.id}`);
     },
 
     onError: error => {
@@ -56,9 +58,12 @@ const AddArticleForm = () => {
 
   const initialValues: CreateArticleFormValues = {
     title: draft.title,
-    description: draft.description,
+    article: draft.article,
     image: null,
-    publicationDate: draft.publicationDate || getCurrentDate(),
+
+    // Publication date is always the current date.
+    // It is not taken from the draft.
+    publicationDate: getCurrentDate(),
   };
 
   const handleImageChange = (
@@ -109,7 +114,7 @@ const AddArticleForm = () => {
               }
               error={
                 touched.image && errors.image
-                  ? errors.image
+                  ? String(errors.image)
                   : undefined
               }
             />
@@ -150,7 +155,8 @@ const AddArticleForm = () => {
                 onChange={(
                   event: React.ChangeEvent<HTMLInputElement>,
                 ) => {
-                  const value = event.target.value;
+                  const value =
+                    event.target.value;
 
                   setFieldValue('title', value);
 
@@ -176,14 +182,14 @@ const AddArticleForm = () => {
             />
           </div>
 
-          {/* DESCRIPTION */}
+          {/* ARTICLE */}
 
           <div className={css.descriptionField}>
             <div
               className={`${css.textareaWrapper} ${
-                touched.description && errors.description
+                touched.article && errors.article
                   ? css.errorState
-                  : values.description
+                  : values.article
                     ? css.filledState
                     : ''
               }`}
@@ -197,21 +203,27 @@ const AddArticleForm = () => {
 
               <Field
                 as="textarea"
-                id="description"
-                name="description"
+                id="article"
+                name="article"
                 placeholder="Enter a text"
                 className={css.textarea}
                 onChange={(
                   event: React.ChangeEvent<HTMLTextAreaElement>,
                 ) => {
-                  const value = event.target.value;
+                  const value =
+                    event.target.value;
 
-                  setFieldValue('description', value);
+                  setFieldValue('article', value);
 
                   setDraft({
                     ...draft,
-                    description: value,
+                    article: value,
                   });
+
+                  event.target.style.height =
+                    'auto';
+
+                  event.target.style.height = `${event.target.scrollHeight}px`;
                 }}
               />
 
@@ -224,7 +236,7 @@ const AddArticleForm = () => {
             </div>
 
             <ErrorMessage
-              name="description"
+              name="article"
               component="p"
               className={css.error}
             />
@@ -243,20 +255,11 @@ const AddArticleForm = () => {
             <Field
               id="publicationDate"
               name="publicationDate"
-              type="date"
+              type="text"
               className={css.input}
-              onChange={(
-                event: React.ChangeEvent<HTMLInputElement>,
-              ) => {
-                const value = event.target.value;
-
-                setFieldValue('publicationDate', value);
-
-                setDraft({
-                  ...draft,
-                  publicationDate: value,
-                });
-              }}
+              value={values.publicationDate}
+              readOnly
+              aria-readonly="true"
             />
 
             <ErrorMessage
@@ -273,7 +276,9 @@ const AddArticleForm = () => {
             variant="primary"
             size="md"
             className={css.submitButton}
-            disabled={isSubmitting || isPending}
+            disabled={
+              isSubmitting || isPending
+            }
           >
             {isSubmitting || isPending
               ? 'Publishing...'

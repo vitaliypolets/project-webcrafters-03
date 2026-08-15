@@ -1,31 +1,53 @@
 .form {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
   grid-template-areas:
-    "image"
-    "titleField"
-    "description"
-    "submit";
-  row-gap: var(--spacing-lg);
+    'image'
+    'titleField'
+    'description'
+    'publicationDate'
+    'submit';
+
   width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+  row-gap: var(--spacing-lg);
+}
+
+/* =========================
+FORM FIELDS
+========================= */
+
+.imageField,
+.titleField,
+.descriptionField,
+.formGroup {
+  width: 100%;
+  min-width: 0;
 }
 
 .imageField {
   grid-area: image;
-  width: 100%;
 }
 
 .titleField {
   grid-area: titleField;
-  width: 100%;
   margin: 0;
 }
 
 .descriptionField {
   grid-area: description;
-  width: 100%;
   margin: 0;
 }
+
+.formGroup {
+  grid-area: publicationDate;
+  margin: 0;
+}
+
+/* =========================
+LABEL
+========================= */
 
 .label {
   display: block;
@@ -34,34 +56,32 @@
 }
 
 /* =========================
-   INPUT / TEXTAREA WRAPPERS
-   ========================= */
+INPUT / TEXTAREA WRAPPERS
+========================= */
 
 .inputWrapper,
 .textareaWrapper {
   position: relative;
   width: 100%;
+  min-width: 0;
   color: var(--color-text-secondary);
 }
 
 /* =========================
-   INPUT / TEXTAREA
-   ========================= */
+INPUT / TEXTAREA
+========================= */
 
 .input,
 .textarea {
   display: block;
   width: 100%;
+  min-width: 0;
   margin: 0;
-
   border: var(--border-width-sm) solid var(--color-gray-muted);
   border-radius: var(--border-radius-md);
-
   background-color: var(--color-bg-input);
-  color: var(--color-text-primary);
-
+  color: var(--color-text-main);
   outline: none;
-
   transition:
     border-color var(--transition-main),
     box-shadow var(--transition-main),
@@ -76,7 +96,8 @@
 .textarea {
   min-height: 393px;
   padding: var(--spacing-sm) 44px;
-  resize: vertical;
+  resize: none;
+  overflow: hidden;
 }
 
 .input::placeholder,
@@ -86,16 +107,14 @@
 }
 
 /* =========================
-   ICONS
-   ========================= */
+ICONS
+========================= */
 
 .inputIcon {
   position: absolute;
   top: 50%;
-
   width: 20px;
   height: 20px;
-
   transform: translateY(-50%);
   pointer-events: none;
 }
@@ -113,10 +132,8 @@
 .textareaIcon {
   position: absolute;
   top: var(--spacing-sm);
-
   width: 20px;
   height: 20px;
-
   pointer-events: none;
 }
 
@@ -131,12 +148,12 @@
 }
 
 /* =========================
-   HOVER
-   ========================= */
+HOVER
+========================= */
 
 .inputWrapper:hover,
 .textareaWrapper:hover {
-  color: var(--color-text-primary);
+  color: var(--color-text-main);
 }
 
 .inputWrapper:hover .input,
@@ -145,11 +162,11 @@
 }
 
 /* =========================
-   FILLED
-   ========================= */
+FILLED
+========================= */
 
 .filledState {
-  color: var(--color-text-primary);
+  color: var(--color-text-main);
 }
 
 .filledState .input,
@@ -159,16 +176,16 @@
 
 .filledState .input::placeholder,
 .filledState .textarea::placeholder {
-  color: var(--color-text-primary);
+  color: var(--color-text-main);
 }
 
 /* =========================
-   ACTIVE / FOCUS
-   ========================= */
+ACTIVE / FOCUS
+========================= */
 
 .inputWrapper:focus-within,
 .textareaWrapper:focus-within {
-  color: var(--color-text-primary);
+  color: var(--color-text-main);
 }
 
 .inputWrapper:focus-within .input,
@@ -178,8 +195,16 @@
 }
 
 /* =========================
-   ERROR
-   ========================= */
+PUBLICATION DATE
+========================= */
+
+.formGroup .input {
+  cursor: default;
+}
+
+/* =========================
+ERROR
+========================= */
 
 .errorState {
   color: var(--color-error);
@@ -197,53 +222,67 @@
 }
 
 /* =========================
-   ERROR + ACTIVE
-   ========================= */
+ERROR + ACTIVE
+========================= */
 
 .errorState:focus-within .input,
+.errorState .input:focus,
 .errorState:focus-within .textarea {
   border-color: var(--color-error);
   box-shadow: var(--focus-ring-shadow);
 }
 
 /* =========================
-   ERROR MESSAGE
-   ========================= */
+ERROR MESSAGE
+========================= */
 
 .error {
   margin: var(--spacing-2xs) 0 0;
-
   font-size: var(--font-size-xs);
   line-height: var(--line-height-secondary);
-
   color: var(--color-error);
 }
 
 /* =========================
-   SUBMIT BUTTON
-   ========================= */
+SUBMIT BUTTON
+========================= */
 
 .submitButton {
   grid-area: submit;
   width: 100%;
-  margin: 0;
-  padding: 12px 16px;
-  margin: 0;
+  min-width: 0;
+  height: var(--btn-height-lg);
+  padding: 0 var(--spacing-md);
   border-radius: var(--border-radius-btn);
-  border: none;
   background-color: var(--color-primary);
-  color: var(--color-white);
+  color: var(--color-text-on-primary);
   font-weight: var(--font-weight-bold);
   transition:
-      background-color var(--transition-main),
-      opacity var(--transition-main),
-      box-shadow var(--transition-main);
+    background-color var(--transition-main),
+    opacity var(--transition-main),
+    box-shadow var(--transition-main);
 }
 
+.submitButton:hover {
+  background-color: var(--color-primary-hover);
+}
 
 /* =========================
-   TABLET
-   ========================= */
+MOBILE
+375px–767px
+========================= */
+
+@media screen and (min-width: 375px) {
+  .form {
+    width: 100%;
+    row-gap: var(--spacing-lg);
+  }
+}
+
+/* =========================
+TABLET
+768px–1439px
+========================= */
 
 @media screen and (min-width: 768px) {
   .form {
@@ -251,10 +290,12 @@
       minmax(0, 1fr) minmax(0, 1fr);
 
     grid-template-areas:
-      "image titleField"
-      "description description"
-      "submit submit";
+      'image titleField'
+      'description description'
+      'publicationDate publicationDate'
+      'submit submit';
 
+    width: 100%;
     column-gap: var(--spacing-lg);
     row-gap: var(--spacing-lg);
   }
@@ -266,8 +307,9 @@
 }
 
 /* =========================
-   DESKTOP
-   ========================= */
+DESKTOP
+1440px+
+========================= */
 
 @media screen and (min-width: 1440px) {
   .form {
@@ -275,10 +317,12 @@
       minmax(0, 2fr) minmax(360px, 1fr);
 
     grid-template-areas:
-      "titleField image"
-      "description image"
-      "submit image";
+      'titleField image'
+      'description image'
+      'publicationDate image'
+      'submit image';
 
+    width: 100%;
     column-gap: var(--spacing-lg);
     row-gap: var(--spacing-xl);
   }

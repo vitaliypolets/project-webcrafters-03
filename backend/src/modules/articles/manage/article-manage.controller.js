@@ -8,6 +8,7 @@ export const updateArticleController = async (req, res) => {
   const article = await updateArticle({
     articleId,
     data: req.body,
+    file: req.file,
     userId: req.user._id,
   });
 

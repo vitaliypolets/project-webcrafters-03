@@ -1,20 +1,25 @@
-// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
+import type { Article } from '@/types/article';
+
 export interface Creator {
   id: string;
-  _id: string;
   name: string;
   avatarUrl: string | null;
-  articlesCount: number;
+  articlesAmount: number;
 }
 
 export interface CreatorsResponse {
-  data: {
-    users: Creator[];
-    page: number;
-    perPage: number;
-    totalItems: number;
-    totalPages: number;
-    hasNextPage: boolean;
-  };
-  message: string;
+  data: Creator[];
+  total: number;
+  page: number;
+  perPage: number;
+  hasNextPage: boolean;
+}
+
+export interface ArticlesResponse {
+  articles: Article[];
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
 }

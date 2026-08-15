@@ -3,8 +3,8 @@
 import { Router } from 'express';
 
 import { authenticate } from '../../../middlewares/authenticate.js';
+import { articleUpload } from '../../../middlewares/articleUpload.js';
 import { controllerWrapper } from '../../../middlewares/controllerWrapper.js';
-
 import { deleteArticleController, updateArticleController } from './article-manage.controller.js';
 import { validateUpdateArticle } from './article-manage.validation.js';
 
@@ -13,6 +13,7 @@ export const articleManageRouter = Router();
 articleManageRouter.patch(
   '/:articleId',
   authenticate,
+  articleUpload.single('image'),
   validateUpdateArticle,
   controllerWrapper(updateArticleController),
 );

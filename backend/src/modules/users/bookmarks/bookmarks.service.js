@@ -12,7 +12,7 @@ const toArticleDto = (article) => ({
     id: article.authorId._id.toString(),
     name: article.authorId.name,
     avatarUrl: article.authorId.avatarUrl ?? null,
-    articlesCount: article.authorId.articlesAmount,
+    articlesAmount: article.authorId.articlesAmount,
   },
   isBookmarked: true,
 });

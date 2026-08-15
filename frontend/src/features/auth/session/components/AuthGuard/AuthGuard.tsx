@@ -1,12 +1,11 @@
-// frontend\src\features\auth\session\components\AuthGuard\AuthGuard.tsx
+// frontend/src/features/auth/session/components/AuthGuard/AuthGuard.tsx
 
-'use client';
+"use client";
 
-import { useEffect, type ReactNode } from 'react';
-import { useRouter } from 'next/navigation';
+import { useEffect, type ReactNode } from "react";
+import { useRouter } from "next/navigation";
 
-import { restoreSession } from '../../session.service';
-import { useAuthStore } from '@/store/auth.store';
+import { useAuthStore } from "@/store/auth.store";
 
 type AuthGuardProps = {
   children: ReactNode;
@@ -16,34 +15,12 @@ export default function AuthGuard({ children }: AuthGuardProps) {
   const router = useRouter();
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+
   const isInitialized = useAuthStore((state) => state.isInitialized);
-
-  const setSession = useAuthStore((state) => state.setSession);
-  const setInitialized = useAuthStore((state) => state.setInitialized);
-
-  useEffect(() => {
-    if (isInitialized) {
-      return;
-    }
-
-    const initializeSession = async () => {
-      try {
-        const session = await restoreSession();
-
-        setSession(session.user, session.accessToken);
-      } catch {
-        // Користувач не авторизований.
-      } finally {
-        setInitialized(true);
-      }
-    };
-
-    void initializeSession();
-  }, [isInitialized, setInitialized, setSession]);
 
   useEffect(() => {
     if (isInitialized && !isAuthenticated) {
-      router.replace('/login');
+      router.replace("/login");
     }
   }, [isAuthenticated, isInitialized, router]);
 
