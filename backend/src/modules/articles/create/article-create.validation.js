@@ -10,10 +10,10 @@ export const createArticleSchema = z.object({
     .max(48, 'Title must contain at most 48 characters'),
 
   article: z
-  .string()
-  .trim()
-  .min(100, 'Article must contain at least 100 characters')
-  .max(4000, 'Article must contain at most 4000 characters'),
+    .string()
+    .trim()
+    .min(100, 'Article must contain at least 100 characters')
+    .max(4000, 'Article must contain at most 4000 characters'),
 
   publicationDate: z
     .string()
