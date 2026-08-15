@@ -117,14 +117,15 @@
   align-items: center;
   font-size: var(--font-size-main);
   color: var(--color-text-on-primary);
-}
-.articleBookmarkWrapper button {
-  background: transparent;
-  border: none;
-  color: inherit;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
+
+  button {
+    background: transparent;
+    border: none;
+    color: inherit;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+  }
 }
 
 /* Tablet (від 768px) */
@@ -174,6 +175,9 @@
   }
   .articleBookmarkWrapper:hover {
     background-color: var(--color-primary-hover);
+    button {
+      background: transparent;
+    }
   }
   .articleBookmarkWrapper:focus {
     box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;

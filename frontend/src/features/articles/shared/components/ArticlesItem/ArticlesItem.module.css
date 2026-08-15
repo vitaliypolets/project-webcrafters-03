@@ -3,13 +3,12 @@
   flex-direction: column;
 
   width: 100%;
-  height: 100%;
   min-width: 0;
 
-  padding: var(--spacing-md);
+  padding: 7px;
 
   background-color: var(--color-bg-card-soft-green);
-  border-radius: var(--border-radius-card);
+  border-radius: 18px;
 }
 
 .image {
@@ -17,9 +16,9 @@
 
   width: 100%;
   height: auto;
-  aspect-ratio: 337 / 223;
+  aspect-ratio: 198 / 126;
 
-  border-radius: var(--border-radius-lg);
+  border-radius: 15px;
 
   object-fit: cover;
 }
@@ -27,29 +26,29 @@
 .content {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+
   min-width: 0;
 }
 
 .author {
-  margin-top: var(--spacing-xs);
+  margin-top: 7px;
+  margin-bottom: 0;
 
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-secondary);
+  font-size: 10px;
+  line-height: 1.2;
 }
 
 .title {
   display: -webkit-box;
 
-  height: calc(2 * var(--font-size-main) * var(--line-height-secondary));
-  min-height: calc(2 * var(--font-size-main) * var(--line-height-secondary));
-  margin-top: var(--spacing-2xs);
+  margin-top: 2px;
+  margin-bottom: 0;
 
   overflow: hidden;
 
-  font-size: var(--font-size-main);
+  font-size: 14px;
   font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-secondary);
+  line-height: 1.2;
 
   line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -59,14 +58,13 @@
 .description {
   display: -webkit-box;
 
-  height: calc(2 * var(--font-size-xs) * var(--line-height-main));
-  min-height: calc(2 * var(--font-size-xs) * var(--line-height-main));
-  margin-top: var(--spacing-2xs);
+  margin-top: 2px;
+  margin-bottom: 0;
 
   overflow: hidden;
 
-  font-size: var(--font-size-xs);
-  line-height: var(--line-height-main);
+  font-size: 10px;
+  line-height: 1.35;
 
   line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -76,10 +74,29 @@
 .actions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
 
-  gap: var(--spacing-md);
+  width: 100%;
+  gap: 8px;
 
-  margin-top: auto;
-  padding-top: var(--spacing-lg);
+  margin-top: 16px;
+}
+
+.learnMore {
+  flex: 1;
+  min-width: 0;
+}
+
+.bookmark {
+  /* width: 24px;
+  height: 24px;
+
+  flex-shrink: 0;
+  color: var(--color-text-primary); */
+  flex-shrink: 0;
+}
+
+.bookmark svg {
+  width: 12px;
+  height: 15px;
+  stroke: currentColor;
 }
