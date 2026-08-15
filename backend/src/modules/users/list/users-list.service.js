@@ -1,33 +1,64 @@
 import { User } from '../../../models/User.js';
 
-export const getUsersListService = async (queryParams) => {
-  const { page, perPage, sort, limit } = queryParams;
+export const getUsersListService = async (query) => {
+  const page = Number(query.page) || 1;
+  const perPage = Number(query.perPage) || 20;
+  const skip = (page - 1) * perPage;
 
-  const effectiveLimit = limit || perPage;
-  const skip = (page - 1) * effectiveLimit;
+  const sort = query.sort || 'createdAt';
 
-  let sortOption = { createdAt: -1 };
-  if (sort === 'popular') {
-    sortOption = { articlesCount: -1 };
+  const normalizedSort = sort === 'popular' ? 'articlesAmount' : sort;
+
+  let sortOption;
+
+  switch (normalizedSort) {
+    case 'articlesAmount':
+      sortOption = {
+        articlesAmount: -1,
+        _id: -1,
+      };
+      break;
+
+    case 'name':
+      sortOption = {
+        name: 1,
+        _id: 1,
+      };
+      break;
+
+    case 'createdAt':
+    default:
+      sortOption = {
+        createdAt: -1,
+        _id: -1,
+      };
+      break;
   }
 
   const [users, total] = await Promise.all([
-    User.find({}, 'name avatarUrl').sort(sortOption).skip(skip).limit(effectiveLimit).lean(),
-    User.countDocuments({}),
+    User.find({}, 'name avatarUrl articlesAmount')
+      .sort(sortOption)
+      .skip(skip)
+      .limit(perPage)
+      .lean(),
+
+    User.countDocuments(),
   ]);
 
-  const hasNextPage = page * effectiveLimit < total;
+  const hasNextPage = skip + users.length < total;
+
+  const formattedUsers = users.map((user) => ({
+    id: user._id.toString(),
+    name: user.name,
+    avatarUrl: user.avatarUrl ?? null,
+    articlesAmount: user.articlesAmount ?? 0,
+  }));
 
   return {
-    data: users.map((user) => ({
-      _id: user._id.toString(),
-      name: user.name,
-      avatarUrl: user.avatarUrl ?? undefined,
-      articlesCount: 0,
-    })),
+    data: formattedUsers,
     total,
     page,
-    perPage: effectiveLimit,
+    perPage,
     hasNextPage,
   };
 };

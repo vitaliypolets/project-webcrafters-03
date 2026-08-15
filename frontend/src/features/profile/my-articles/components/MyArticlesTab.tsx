@@ -2,49 +2,61 @@
 
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
-import type { User } from '@/types/user';
+
 import { getMyArticles } from '../my-articles.service';
 import { EmptyArticlesState } from './EmptyArticlesState';
-import styles from './ArticlesTab.module.css';
 
-const getUserId = (user: User | null) =>
-  user?.id ?? (user as (User & { _id?: string }) | null)?._id;
+import styles from './ArticlesTab.module.css';
 
 export function MyArticlesTab() {
   const searchParams = useSearchParams();
+
   const user = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
-  const userId = getUserId(user);
+
+  const userId = user?.id;
+
   const author =
     user && userId
       ? {
           id: userId,
           name: user.name,
           avatarUrl: user.avatarUrl,
-          articlesCount:
-            user.articlesCount ?? (user as User & { articlesAmount?: number }).articlesAmount,
+          articlesAmount: user.articlesAmount,
         }
       : null;
-  const active = (searchParams.get('tab') ?? 'my-articles') === 'my-articles';
+
+  const active =
+    (searchParams.get('tab') ?? 'my-articles') === 'my-articles';
 
   const query = useInfiniteQuery({
     queryKey: ['profile', 'my-articles', userId],
     enabled: active && Boolean(userId && author),
     initialPageParam: 1,
-    queryFn: ({ pageParam }) => getMyArticles(userId!, author!, pageParam),
-    getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.page + 1 : undefined),
+    queryFn: ({ pageParam }) =>
+      getMyArticles(userId!, author!, pageParam),
+    getNextPageParam: (lastPage) =>
+      lastPage.hasNextPage ? lastPage.page + 1 : undefined,
   });
 
   if (!active) return null;
 
-  const articles = query.data?.pages.flatMap((page) => page.data) ?? [];
+  const articles =
+    query.data?.pages.flatMap((page) => page.data) ?? [];
 
   return (
-    <section className={styles.section} aria-label="My Articles">
-      {!isInitialized || (Boolean(userId) && query.isPending) ? (
-        <p className={styles.status}>Loading articles…</p>
+    <section
+      className={styles.section}
+      aria-label="My Articles"
+    >
+      {!isInitialized ||
+      (Boolean(userId) && query.isPending) ? (
+        <p className={styles.status}>
+          Loading articles…
+        </p>
       ) : null}
 
       {isInitialized && !userId ? (
@@ -56,7 +68,11 @@ export function MyArticlesTab() {
       {query.isError ? (
         <div className={styles.error} role="alert">
           <p>Could not load your articles.</p>
-          <button type="button" onClick={() => query.refetch()}>
+
+          <button
+            type="button"
+            onClick={() => query.refetch()}
+          >
             Try again
           </button>
         </div>
@@ -70,7 +86,11 @@ export function MyArticlesTab() {
         />
       ) : null}
 
-      {articles.length > 0 ? <ArticlesList articles={articles} /> : null}
+      {articles.length > 0 ? (
+        <div className={styles.articles}>
+          <ArticlesList articles={articles} />
+        </div>
+      ) : null}
 
       {query.hasNextPage ? (
         <button
@@ -79,7 +99,9 @@ export function MyArticlesTab() {
           disabled={query.isFetchingNextPage}
           onClick={() => query.fetchNextPage()}
         >
-          {query.isFetchingNextPage ? 'Loading…' : 'Load More'}
+          {query.isFetchingNextPage
+            ? 'Loading…'
+            : 'Load More'}
         </button>
       ) : null}
     </section>
