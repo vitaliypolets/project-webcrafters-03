@@ -1,16 +1,19 @@
-'use client'
+"use client";
 
-import Image from 'next/image';
+import Image from "next/image";
 import Link from "next/link";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
-import { Loader } from '@/components/ui/Loader/Loader';
-import { getTopCreators } from '../../home.service';
-import styles from './TopCreators.module.css';
+import { Container } from "@/components/ui/Container/Container";
+import { Loader } from "@/components/ui/Loader/Loader";
+import { getAvatarSrc } from "@/utils/getAvatarSrc";
+
+import { getTopCreators } from "../../home.service";
+import styles from "./TopCreators.module.css";
 
 export const TopCreators = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['topCreators'],
+    queryKey: ["topCreators"],
     queryFn: getTopCreators,
   });
 
@@ -28,35 +31,32 @@ export const TopCreators = () => {
 
   return (
     <section className={styles.section} id="top-creators">
-      <div className={styles.container}>
-        <h2 className={styles.title}>Top Creators</h2>
-        <Link href="/creators" className={styles.link}>
-          Go to all Creators <span className={styles.arrow}>↗</span>
-        </Link>
+      <Container>
+        <div className={styles.header}>
+          <h2 className={styles.title}>Top Creators</h2>
+          <Link href="/authors" className={styles.link}>
+            Go to all Creators <span className={styles.arrow}>↗</span>
+          </Link>
+        </div>
+
         <ul className={styles.list}>
           {data.data.map((creator) => (
             <li key={creator.id} className={styles.item}>
               <div className={styles.avatarWrapper}>
-                {creator.avatarUrl ? (
-                  <Image
-                    src={creator.avatarUrl}
-                    alt={creator.name}
-                    width={64}
-                    height={64}
-                    className={styles.avatar}
-                  />
-                ) : (
-                  <div className={styles.avatarPlaceholder}>
-                    {creator.name.charAt(0).toUpperCase()}
-                  </div>
-                )}
+                <Image
+                  src={getAvatarSrc(creator.avatarUrl)}
+                  alt={creator.name}
+                  width={64}
+                  height={64}
+                  className={styles.avatar}
+                />
               </div>
               <h3 className={styles.name}>{creator.name}</h3>
               <p className={styles.articlesCount}>{creator.articlesAmount} articles</p>
             </li>
           ))}
         </ul>
-      </div>
+      </Container>
     </section>
   );
 };
