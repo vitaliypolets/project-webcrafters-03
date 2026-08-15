@@ -1,6 +1,5 @@
 .aboutSection {
-  padding-top: 40px;
-  padding-bottom: 64px;
+  margin-bottom: 72px;
 }
 
 .container {
@@ -31,14 +30,15 @@
 .description {
   font-family: var(--font-family-main), sans-serif;
   font-size: 14px;
-  line-height: 150%;
+  line-height: 1.5;
   color: #2c3e35;
 }
 
 .lotusWrapper,
 .friendsWrapper,
 .meditationWrapper {
-  width: 100%;
+  width:361px;
+  height: 365px;
   border-radius: 24px;
   overflow: hidden;
 }
@@ -56,11 +56,6 @@
 
 /* --- Tablet (768px – 1199px) --- */
 @media (min-width: 768px) {
-  .aboutSection {
-    padding-top: 60px;
-    padding-bottom: 80px;
-  }
-
   .container {
     max-width: 704px;
     display: grid;
@@ -69,37 +64,37 @@
   }
 
   .textCard {
-    padding: 40px 32px;
-    border-radius: 32px;
+    width: 431px;
+    gap: 32px;
+    padding: 32px 32px;
   }
 
   .title {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   .description {
+    max-width: 368px;
     font-size: 16px;
+    line-height: 1.55;
   }
 
   .lotusWrapper {
-    border-radius: 32px;
-    height: 100%;
+    height: 326px;
+    width: 249px;
   }
-
   .friendsWrapper {
     grid-column: 1 / -1;
-    height: 380px;
-    border-radius: 32px;
+    height: 398px;
+    width:704px;
+  }
+  .lotusWrapper .image {
+    object-position: 35% 55%;
   }
 }
 
 /* --- Desktop (від 1200px) --- */
 @media (min-width: 1200px) {
-  .aboutSection {
-    padding-top: 80px;
-    padding-bottom: 120px;
-  }
-
   .container {
     max-width: 1280px;
     grid-template-columns: 1fr 1fr;
@@ -107,25 +102,43 @@
   }
 
   .textCard {
-    padding: 48px 40px;
-    border-radius: 32px;
+    width: 496px;
+    gap: 32px;
+    padding: 32px 32px;
+  }
+
+  .title {
+    font-size: 40px;
+  }
+
+  .description {
+    max-width: 430px;
+    font-size: 16px;
+    line-height: 1.55;
   }
 
   .lotusWrapper {
-    border-radius: 32px;
-    height: 100%;
+    height: 326px;
+    width: 704px;
+    margin-left: -316px;
+  }
+
+  .lotusWrapper .image {
+    object-position: 50% 50%;
   }
 
   .friendsWrapper {
     grid-column: 1 / 2;
-    height: 420px;
+    width: 804px;
+    height: 398px;
     border-radius: 32px;
   }
 
   .meditationWrapper {
     display: block;
     grid-column: 2 / 3;
-    height: 420px;
+    width: 388px;
+    height: 398px;
     border-radius: 32px;
   }
 }

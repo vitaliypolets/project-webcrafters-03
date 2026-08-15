@@ -30,7 +30,8 @@ const getCurrentDate = (): string => {
 const AddArticleForm = () => {
   const router = useRouter();
 
-  const { draft, setDraft, clearDraft } = useArticleDraftStore();
+  const { draft, setDraft, clearDraft } =
+    useArticleDraftStore();
 
   const [previewUrl, setPreviewUrl] = useState('');
 
@@ -59,8 +60,10 @@ const AddArticleForm = () => {
     title: draft.title,
     article: draft.article,
     image: null,
-    publicationDate:
-      draft.publicationDate || getCurrentDate(),
+
+    // Publication date is always the current date.
+    // It is not taken from the draft.
+    publicationDate: getCurrentDate(),
   };
 
   const handleImageChange = (
@@ -124,7 +127,7 @@ const AddArticleForm = () => {
               htmlFor="title"
               className={css.label}
             >
-              Title
+              {values.title ? 'Article Title' : 'Title'}
             </label>
 
             <div
@@ -198,25 +201,28 @@ const AddArticleForm = () => {
               </svg>
 
               <Field
-  as="textarea"
-  id="article"
-  name="article"
-  placeholder="Enter a text"
-  className={css.textarea}
-  onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = event.target.value;
+                as="textarea"
+                id="article"
+                name="article"
+                placeholder="Enter a text"
+                className={css.textarea}
+                onChange={(
+                  event: React.ChangeEvent<HTMLTextAreaElement>,
+                ) => {
+                  const value = event.target.value;
 
-    setFieldValue('article', value);
+                  setFieldValue('article', value);
 
-    setDraft({
-      ...draft,
-      article: value,
-    });
+                  setDraft({
+                    ...draft,
+                    article: value,
+                  });
 
-    event.target.style.height = 'auto';
-    event.target.style.height = `${event.target.scrollHeight}px`;
-  }}
-/>
+                  event.target.style.height = 'auto';
+
+                  event.target.style.height = `${event.target.scrollHeight}px`;
+                }}
+              />
 
               <svg
                 className={css.textareaIcon}
@@ -246,20 +252,11 @@ const AddArticleForm = () => {
             <Field
               id="publicationDate"
               name="publicationDate"
-              type="date"
+              type="text"
               className={css.input}
-              onChange={(
-                event: React.ChangeEvent<HTMLInputElement>,
-              ) => {
-                const value = event.target.value;
-
-                setFieldValue('publicationDate', value);
-
-                setDraft({
-                  ...draft,
-                  publicationDate: value,
-                });
-              }}
+              value={values.publicationDate}
+              readOnly
+              aria-readonly="true"
             />
 
             <ErrorMessage
@@ -276,7 +273,9 @@ const AddArticleForm = () => {
             variant="primary"
             size="md"
             className={css.submitButton}
-            disabled={isSubmitting || isPending}
+            disabled={
+              isSubmitting || isPending
+            }
           >
             {isSubmitting || isPending
               ? 'Publishing...'
