@@ -28,9 +28,7 @@ export const BookmarkButton = ({
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const [saved, setSaved] = useState(isBookmarked);
-
   const [showErrorModal, setShowErrorModal] = useState(false);
-
   const [errorMessage, setErrorMessage] = useState("");
 
   const mutation = useMutation({
@@ -84,7 +82,6 @@ export const BookmarkButton = ({
 
     if (!isAuthenticated) {
       setErrorMessage("To save this article, you need to authorize first");
-
       setShowErrorModal(true);
 
       return;
@@ -93,10 +90,14 @@ export const BookmarkButton = ({
     mutation.mutate(saved ? "remove" : "save");
   };
 
+  const buttonClassName = [styles.button, label ? styles.withLabel : "", className ?? ""]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <>
       <button
-        className={className ? `${styles.button} ${className}` : styles.button}
+        className={buttonClassName}
         type="button"
         onClick={handleClick}
         disabled={mutation.isPending}
@@ -111,7 +112,7 @@ export const BookmarkButton = ({
           <use href="/icons/sprite.svg#icon-security" />
         </svg>
 
-        {label && <span>{label}</span>}
+        {label && <span className={styles.label}>{label}</span>}
       </button>
 
       {showErrorModal && (
