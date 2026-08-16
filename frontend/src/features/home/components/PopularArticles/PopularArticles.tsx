@@ -1,16 +1,18 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { useQuery } from '@tanstack/react-query';
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
 
-import { Loader } from '@/components/ui/Loader/Loader';
-import { ArticlesList } from '@/features/articles/shared/components/ArticlesList/ArticlesList';
-import { getPopularArticles } from '../../home.service';
-import styles from './PopularArticles.module.css';
+import { Container } from "@/components/ui/Container/Container";
+import { Loader } from "@/components/ui/Loader/Loader";
+import { ArticlesItem } from "@/features/articles/shared/components/ArticlesItem/ArticlesItem";
+
+import { getPopularArticles } from "../../home.service";
+import styles from "./PopularArticles.module.css";
 
 export const PopularArticles = () => {
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['popularArticles'],
+    queryKey: ["popularArticles"],
     queryFn: () => getPopularArticles(4),
   });
 
@@ -27,23 +29,23 @@ export const PopularArticles = () => {
   }
 
   return (
-    <section
-      className={styles.section}
-      id="popular-articles"
-    >
-      <div className={styles.container}>
+    <section className={styles.section} id="popular-articles">
+      <Container className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>Popular Articles</h2>
-          <Link
-            href="/articles"
-            className={styles.link}
-          >
+          <Link href="/articles" className={styles.link}>
             Go to all Articles <span className={styles.arrow}>↗</span>
           </Link>
         </div>
 
-        <ArticlesList articles={data.articles} />
-      </div>
+        <ul className={styles.list}>
+          {data.articles.map((article) => (
+            <li className={styles.listItem} key={article.id}>
+              <ArticlesItem article={article} />
+            </li>
+          ))}
+        </ul>
+      </Container>
     </section>
   );
 };

@@ -2,6 +2,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
   width: 100%;
   gap: 16px;
 }
@@ -9,6 +10,7 @@
 .fieldGroup {
   display: flex;
   flex-direction: column;
+  text-align: start;
   gap: 4px;
 }
 
@@ -34,7 +36,6 @@
 }
 
 .input::placeholder {
-  line-height: 1.55;
   color: var(--color-gray-medium);
 }
 
@@ -47,30 +48,12 @@
   border-color: var(--color-error);
 }
 
-.inputSuccess {
-  border-color: var(--color-primary-hover);
-}
-
-.inputSuccess:focus {
-  outline: none;
-  border-color: var(--color-primary-hover);
-}
-
 .error {
   display: flex;
   padding-inline: 12px;
   width: 100%;
   min-height: 16px;
   color: var(--color-error);
-  font-size: 12px;
-}
-
-.success {
-  display: flex;
-  padding-inline: 12px;
-  width: 100%;
-  min-height: 16px;
-  color: var(--color-primary-hover);
   font-size: 12px;
 }
 
@@ -110,57 +93,18 @@
   stroke-width: 1.8;
 }
 
-.input[type='password']::-ms-reveal,
-.input[type='password']::-ms-clear {
+.input[type="password"]::-ms-reveal,
+.input[type="password"]::-ms-clear {
   display: none;
 }
 
-.strength {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2xs);
-  margin-top: 2px;
-}
-
-.strengthBar {
-  flex: 1;
-  height: 4px;
-  border-radius: var(--border-radius-xs);
-  background-color: var(--color-gray-light);
-  transition: background-color var(--transition-main);
-}
-
-.strengthBarWeak {
-  background-color: var(--color-error);
-}
-
-.strengthBarMedium {
-  background-color: var(--color-gray-medium);
-}
-
-.strengthBarStrong {
-  background-color: var(--color-primary);
-}
-
-.strengthLabel {
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  white-space: nowrap;
-}
-
 .submitButton {
-  width: 100%;
-  margin-top: 12px;
-  margin-bottom: 20px;
-}
-
-.instructions {
-  line-height: 1.55;
-  text-align: center;
+  margin-top: 11px;
+  margin-bottom: 4px;
 }
 
 .link {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   text-decoration: underline;
   text-decoration-skip-ink: none;
 }

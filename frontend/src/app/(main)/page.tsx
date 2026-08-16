@@ -1,10 +1,17 @@
 import styles from "./HomePage.module.css";
 
+import { Hero } from "@/features/home/components/Hero/Hero";
+import { About } from "@/features/home/components/About/About";
+import { PopularArticles } from "@/features/home/components/PopularArticles/PopularArticles";
+import { TopCreators } from "@/features/home/components/TopCreators/TopCreators";
+
 export default function HomePage() {
   return (
-    <main className={styles.page}>
-      <h1>HomePage</h1>
-      <p>Заготовка сторінки відповідно до OWNERSHIP_MAP.md.</p>
-    </main>
+    <div className={styles.page}>
+      <Hero />
+      <About />
+      <PopularArticles />
+      <TopCreators />
+    </div>
   );
 }

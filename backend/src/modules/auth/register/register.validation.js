@@ -1,48 +1,42 @@
-import multer from 'multer';
-import { z } from 'zod';
-import { HttpError } from '../../../utils/HttpError.js';
+import multer from "multer";
+import { z } from "zod";
+import { HttpError } from "../../../utils/HttpError.js";
 
 export const registerBodySchema = z.object({
   name: z
-    .string({ error: 'Name is required' })
+    .string({ error: "Name is required" })
     .trim()
-    .min(2, 'Name must be at least 2 characters')
-    .max(32, 'Name must be at most 32 characters'),
+    .min(2, "Name must be at least 2 characters")
+    .max(32, "Name must be at most 32 characters"),
   email: z
-    .string({ error: 'Email is required' })
+    .string({ error: "Email is required" })
     .trim()
-    .max(64, 'Email must be at most 64 characters')
-    .email('Invalid email format'),
+    .max(64, "Email must be at most 64 characters")
+    .email("Invalid email format"),
   password: z
-    .string({ error: 'Password is required' })
-    .min(8, 'Password must be at least 8 characters')
-    .max(64, 'Password must be at most 64 characters'),
+    .string({ error: "Password is required" })
+    .min(8, "Password must be at least 8 characters")
+    .max(64, "Password must be at most 64 characters"),
 });
 
 export const validateBody = (schema) => (req, _res, next) => {
   const result = schema.safeParse(req.body ?? {});
   if (!result.success) {
-    return next(new HttpError(400, 'Validation error', result.error.flatten().fieldErrors));
+    return next(new HttpError(400, "Validation error", result.error.flatten().fieldErrors));
   }
   req.body = result.data;
   next();
 };
 
-const ALLOWED_AVATAR_MIME_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/gif',
-  'image/webp',
-];
-export const MAX_AVATAR_SIZE = 1 * 1024 * 1024; // 1 MB
+const ALLOWED_AVATAR_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
+export const MAX_AVATAR_SIZE = 1 * 1024 * 1024;
 
 export const avatarUpload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: MAX_AVATAR_SIZE },
   fileFilter: (_req, file, cb) => {
     if (!ALLOWED_AVATAR_MIME_TYPES.includes(file.mimetype)) {
-      return cb(new HttpError(400, 'Invalid file type. Only JPEG, PNG, GIF and WebP are allowed.'));
+      return cb(new HttpError(400, "Invalid file type. Only JPEG, PNG and WebP are allowed."));
     }
     cb(null, true);
   },

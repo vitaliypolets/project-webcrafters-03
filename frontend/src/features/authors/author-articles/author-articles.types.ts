@@ -1,3 +1,4 @@
+import type { PaginatedResponse } from '@/types/api';
 import type { Article } from '@/types/article';
 import type { PublicUser } from '@/types/user';
 
@@ -11,11 +12,4 @@ export type AuthorArticleApiItem = Pick<
   'id' | 'title' | 'description' | 'imageUrl' | 'publicationDate'
 >;
 
-export type UserArticlesPage = {
-  data: AuthorArticleApiItem[];
-  page: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
-  hasNextPage: boolean;
-};
+export type UserArticlesPage = PaginatedResponse<AuthorArticleApiItem>;

@@ -5,9 +5,10 @@
   padding: 1rem 2rem;
   background-color: var(--color-bg-card-soft-green);
   color: var(--color-white);
-  position: sticky;
+  position: fixed;
   z-index: 1000;
   top: 0;
+  width: 100%;
 }
 
 .headerWrapper {
@@ -48,6 +49,10 @@
 }
 
 .navigationItem {
+  display: flex;
+  align-items: center;
+}
+.navigationItemCreate {
   display: flex;
   align-items: center;
 }
@@ -244,6 +249,9 @@
   .navigationDesc {
     display: flex;
   }
+  .navigationItemCreate {
+  display: none;
+}
 
   .navigationLinkJoinDesc {
     display: block;
