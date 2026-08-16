@@ -44,7 +44,7 @@
 }
 
 .headerLink:hover {
-  color: #15291e;
+  opacity: var(--opacity-hover-link);
 }
 
 .navigation {
@@ -260,6 +260,10 @@
   width: 19px;
   height: 19px;
   color: var(--color-text-hero);
+}
+
+.iconLogout:hover {
+  background: var(--color-primary-hover);
 }
 
 @media only screen and (min-width: 768px) {
