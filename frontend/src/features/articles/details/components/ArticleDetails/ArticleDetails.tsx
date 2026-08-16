@@ -1,9 +1,9 @@
-import Image from 'next/image';
-import styles from '../../ArticleDetailsClient.module.css';
-import { ArticleEntity } from '@/types/article';
+import Image from "next/image";
+import styles from "../../ArticleDetailsClient.module.css";
+import type { ArticleDetails as ArticleDetailsType } from "@/types/article";
 
 type Props = {
-  article: ArticleEntity;
+  article: ArticleDetailsType;
   children?: React.ReactNode;
 };
 
@@ -26,7 +26,7 @@ const ArticleDetails = ({ article, children }: Props) => {
       )}
 
       <div className={styles.subContentArticle}>
-        <div className={styles.articleContentText}>{article.article.replaceAll('/n', '\n\n')}</div>
+        <div className={styles.articleContentText}>{article.article.replaceAll("/n", "\n\n")}</div>
 
         {children}
       </div>

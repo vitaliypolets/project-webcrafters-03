@@ -1,17 +1,17 @@
-'use client';
+"use client";
 
-import { useQuery } from '@tanstack/react-query';
-import { notFound } from 'next/navigation';
+import { useQuery } from "@tanstack/react-query";
+import { notFound } from "next/navigation";
 
-import { fetchArticleById } from './article-details.service';
-import styles from './ArticleDetailsClient.module.css';
-import { Container } from '@/components/ui/Container/Container';
+import { fetchArticleById } from "./article-details.service";
+import styles from "./ArticleDetailsClient.module.css";
+import { Container } from "@/components/ui/Container/Container";
 
-import ArticleDetails from './components/ArticleDetails/ArticleDetails';
-import ArticleAuthor from './components/ArticleAuthor/ArticleAuthor';
-import ArticleRecommendations from './components/ArticleRecommendations/ArticleRecommendations';
-import { BookmarkButton } from '../shared';
-import { Loader } from '@/components/ui/Loader/Loader';
+import ArticleDetails from "./components/ArticleDetails/ArticleDetails";
+import ArticleAuthor from "./components/ArticleAuthor/ArticleAuthor";
+import ArticleRecommendations from "./components/ArticleRecommendations/ArticleRecommendations";
+import { BookmarkButton } from "../shared";
+import { Loader } from "@/components/ui/Loader/Loader";
 
 type Props = {
   articleId: string;
@@ -19,7 +19,7 @@ type Props = {
 
 const ArticleDetailsClient = ({ articleId }: Props) => {
   const { data, isLoading } = useQuery({
-    queryKey: ['article', articleId],
+    queryKey: ["article", articleId],
     queryFn: async () => {
       try {
         return await fetchArticleById(articleId);
@@ -32,7 +32,7 @@ const ArticleDetailsClient = ({ articleId }: Props) => {
         throw err;
       }
     },
-    enabled: articleId !== '',
+    enabled: articleId !== "",
     refetchOnMount: false,
     throwOnError: true,
   });
@@ -50,10 +50,7 @@ const ArticleDetailsClient = ({ articleId }: Props) => {
         <ArticleDetails article={article}>
           <div className={styles.subContent}>
             <div className={styles.recomendation}>
-              <ArticleAuthor
-                author={author}
-                publicationDate={publicationDate}
-              />
+              <ArticleAuthor author={author} publicationDate={publicationDate} />
 
               <p className={styles.intrastedText}>You can also interested</p>
 
@@ -64,6 +61,8 @@ const ArticleDetailsClient = ({ articleId }: Props) => {
               <BookmarkButton
                 articleId={article.id}
                 isBookmarked={isBookmarked}
+                className={styles.articleBookmarkButton}
+                label={"Save"}
               />
             </div>
           </div>

@@ -1,2 +1,11 @@
-// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
-export {};
+export { default as UserModal } from './components/UserModal/UserModal';
+
+export { profileEditSchema } from './profile-edit.schema';
+
+export { updateMe } from './profile-edit.service';
+
+export type {
+  ProfileEditFormValues,
+  UpdateMeRequest,
+  UpdateMeResponse,
+} from './profile-edit.types';

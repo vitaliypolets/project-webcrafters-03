@@ -10,14 +10,17 @@ import styles from './AuthorPage.module.css';
 import { getAuthorById } from '@/features/authors/authors.service';
 import type { PublicUser } from '@/types/user';
 import { getAvatarSrc } from '@/utils/getAvatarSrc';
+import { useRouter } from 'next/navigation';
 
 type AuthorPageProps = {
   params: Promise<{ userId: string }>;
 };
 
 export default function AuthorPage({ params }: AuthorPageProps) {
+  const router = useRouter();
   const [author, setAuthor] = useState<PublicUser | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+
 
   useEffect(() => {
     const loadAuthor = async () => {
@@ -29,13 +32,15 @@ export default function AuthorPage({ params }: AuthorPageProps) {
         const data = await getAuthorById(userId);
         setAuthor(data);
       } catch {
-        toast.error('Не вдалося завантажити автора');
-   
+        toast.error('Не вдалося завантажити автора', {
+    id: 'author-load-error',
+  });
+        router.replace('/authors');
       }
     };
 
     loadAuthor();
-  }, [params]);
+  }, [params, router]);
 
   if (!author || !userId) {
     return 'Loading...';
@@ -60,8 +65,10 @@ export default function AuthorPage({ params }: AuthorPageProps) {
             <p className={styles.articles}>{author.articlesAmount} articles</p>
           </div>
         </div>
-        <AuthorArticles userId={userId} author={author} />
-
+        <AuthorArticles
+          userId={userId}
+          author={author}
+        />
       </Container>
     </section>
   );
