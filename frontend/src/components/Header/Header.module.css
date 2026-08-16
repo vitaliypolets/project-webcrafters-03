@@ -208,6 +208,10 @@
   transition: all 0.3s ease;
 }
 
+.logoutButton > .iconLogout:hover {
+  color: var(--color-error);
+}
+
 .navBarMob {
   z-index: 999;
   visibility: hidden;
@@ -262,8 +266,8 @@
   color: var(--color-text-hero);
 }
 
-.iconLogout:hover {
-  background: var(--color-primary-hover);
+.iconLogout:hover>svg {
+  fill: var(--color-primary-hover);
 }
 
 @media only screen and (min-width: 768px) {
