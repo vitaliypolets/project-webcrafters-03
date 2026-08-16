@@ -7,11 +7,11 @@ import { BookmarkButton } from "../BookmarkButton/BookmarkButton";
 
 import styles from "./ArticlesItem.module.css";
 
-export const ArticlesItem = ({ article, action = "bookmark" }: ArticlesItemProps) => {
+export const ArticlesItem = ({ article, action = "bookmark", className }: ArticlesItemProps) => {
   const imageUrl = article.imageUrl.match(/\((.*?)\)/)?.[1] ?? article.imageUrl;
 
   return (
-    <article className={styles.article}>
+    <article className={`${styles.article} ${className ?? ""}`}>
       <Image className={styles.image} src={imageUrl} alt={article.title} width={337} height={223} />
 
       <div className={styles.content}>
@@ -33,8 +33,16 @@ export const ArticlesItem = ({ article, action = "bookmark" }: ArticlesItemProps
         </Button>
 
         {action === "edit" ? (
-          <Button href={`/articles/${article.id}/edit`} variant="secondary" size="sm">
-            Edit
+          <Button
+            href={`/articles/${article.id}/edit`}
+            variant="secondary"
+            size="sm"
+            className={styles.editButton}
+            aria-label="Edit article"
+          >
+            <svg className={styles.editIcon} aria-hidden="true">
+              <use href="/icons/sprite.svg#icon-edit" />
+            </svg>
           </Button>
         ) : (
           <BookmarkButton
