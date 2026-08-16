@@ -3,12 +3,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
-  background-color: #d1e0d8;
-  color: white;
-  position: sticky;
+  background-color: var(--color-bg-card-soft-green);
+  color: var(--color-white);
+  position: fixed;
   z-index: 1000;
   top: 0;
+  width: 100%;
 }
+
 .headerWrapper {
   width: 100%;
   display: flex;
@@ -16,6 +18,7 @@
   justify-content: space-between;
   align-items: center;
 }
+
 .logoIcon {
   width: 165px;
   height: 46px;
@@ -25,10 +28,10 @@
 
 .headerLink {
   text-decoration: none;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  color: #374f42;
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-hero);
 }
 
 .headerLink:hover {
@@ -36,7 +39,7 @@
 }
 
 .navigation {
-  gap: 32px;
+  gap: var(--spacing-xl);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -49,6 +52,11 @@
   display: flex;
   align-items: center;
 }
+.navigationItemCreate {
+  display: flex;
+  align-items: center;
+}
+
 .navigationItemDesc {
   display: none;
   align-items: center;
@@ -57,19 +65,20 @@
 .navigationLink {
   position: relative;
   text-decoration: none;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  color: #374f42;
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-hero);
 }
+
 .navigationLink::after {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   bottom: -6px;
   width: 0;
   height: 2px;
-  background-color: #374f42;
+  background-color: var(--color-text-hero);
   transition: width 0.3s ease;
 }
 
@@ -82,56 +91,58 @@
 }
 
 .navigationLinkJoin {
-  padding: 12px 16px;
-  border-radius: 64px;
-  background: #649179;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-btn);
+  background: var(--color-primary);
   text-decoration: none;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-  color: #f7fffb;
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-on-primary);
   transition: background-color 0.3s ease;
 }
 
 .navigationLinkJoin:hover {
-  background: #374f42;
+  background: var(--color-primary-hover);
 }
+
 .navigationLinkJoinDesc {
   display: none;
-  padding: 12px 16px;
-  border-radius: 64px;
-  background: #649179;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--border-radius-btn);
+  background: var(--color-primary);
   text-decoration: none;
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-  color: #f7fffb;
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-body);
+  color: var(--color-text-on-primary);
   transition: background-color 0.3s ease;
 }
 
 .navigationLinkJoinDesc:hover {
-  background: #374f42;
+  background: var(--color-primary-hover);
 }
 
 .userField {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-md);
 }
+
 .userFieldDesc {
   display: none;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-md);
 }
 
 .userFieldFirst {
-  border-right: 2px solid #000;
+  border-right: var(--border-width-md) solid var(--color-black);
   align-items: center;
-  gap: 8px;
+  gap: var(--spacing-xs);
   height: 100%;
   display: flex;
   position: relative;
-  padding: 0 16px 0 0;
+  padding: 0 var(--spacing-md) 0 0;
 }
 
 .userAvatar {
@@ -140,37 +151,63 @@
   border-radius: 50%;
   object-fit: cover;
 }
+.avatarLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-full);
+}
 
+.avatarLink:hover {
+  animation: avatarBorderPulse 0.8s ease-in-out infinite;
+}
+
+@keyframes avatarBorderPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 2px var(--color-primary);
+  }
+
+  50% {
+    box-shadow: 0 0 0 5px var(--color-primary);
+  }
+}
+
+.userAvatar {
+  border-radius: var(--border-radius-full);
+}
 .userName {
-  font-family: 'Manrope', sans-serif;
-  font-weight: 700;
-  font-size: 12px;
-  color: #374f42;
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-hero);
 }
 
 .logoutButton {
-  padding: 8px 16px;
-  border: 1px solid #374f42;
-  border-radius: 64px;
+  border: none;
+  padding: var(--spacing-xs) var(--spacing-md);
+  border-radius: var(--border-radius-btn);
   background: transparent;
-  color: #374f42;
-  font-family: 'Manrope', sans-serif;
-  font-size: 14px;
+  color: var(--color-text-hero);
+  font-family: var(--font-family-main);
+  font-size: var(--font-size-xs);
   cursor: pointer;
   transition: all 0.3s ease;
-  border: none;
 }
 
 .navBarMob {
   z-index: 999;
   visibility: hidden;
   pointer-events: none;
-  background-color: #d1e0d8;
+  background-color: var(--color-bg-card-soft-green);
   width: 100%;
   height: 100%;
-  padding: 102px 32px 24px;
-  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
-    visibility 1s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 102px var(--spacing-xl) var(--spacing-md);
+  transition:
+    transform 0.5s var(--cubic-bezier),
+    visibility 1s var(--cubic-bezier);
   position: fixed;
   top: 0;
   transform: translateY(-100%);
@@ -178,39 +215,48 @@
 
 .isOpen {
   pointer-events: auto;
-  transition: all 0.25s;
+  transition: all var(--transition-time);
   transform: translateY(0);
   visibility: visible;
 }
+
 .navigationDesc {
   display: none;
-  gap: 32px;
+  gap: var(--spacing-xl);
 }
+
 .navigationDescFild {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 16px;
+  gap: var(--spacing-md);
 }
 
 .navBarMobButton {
-  background-color: #0000;
+  background-color: transparent;
   border: none;
-  padding: 8px;
+  padding: var(--spacing-xs);
   display: block;
 }
+
 .icon {
-  width: 32px;
-  height: 32px;
-  color: #374F42;
+  width: 24px;
+  height: 24px;
+  color: var(--color-text-hero);
 }
+
 @media only screen and (min-width: 768px) {
   .navigationDesc {
     display: flex;
   }
+  .navigationItemCreate {
+  display: none;
+}
+
   .navigationLinkJoinDesc {
     display: block;
   }
+
   .navigationLinkJoin {
     display: none;
   }
@@ -220,15 +266,19 @@
   .navBarMob {
     display: none;
   }
+
   .navBarMobButton {
     display: none;
   }
+
   .navigationDesc {
     display: flex;
   }
+
   .navigationItemDesc {
     display: flex;
   }
+
   .userFieldDesc {
     display: flex;
   }

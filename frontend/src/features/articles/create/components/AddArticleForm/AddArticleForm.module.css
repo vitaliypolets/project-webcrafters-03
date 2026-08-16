@@ -5,16 +5,23 @@
     'image'
     'titleField'
     'description'
+    'publicationDate'
     'submit';
+
   width: 100%;
   min-width: 0;
-  row-gap: var(--spacing-lg);
   margin-inline: auto;
+  row-gap: var(--spacing-lg);
 }
+
+/* =========================
+FORM FIELDS
+========================= */
 
 .imageField,
 .titleField,
-.descriptionField {
+.descriptionField,
+.formGroup {
   width: 100%;
   min-width: 0;
 }
@@ -32,6 +39,15 @@
   grid-area: description;
   margin: 0;
 }
+
+.formGroup {
+  grid-area: publicationDate;
+  margin: 0;
+}
+
+/* =========================
+LABEL
+========================= */
 
 .label {
   display: block;
@@ -61,7 +77,6 @@ INPUT / TEXTAREA
   width: 100%;
   min-width: 0;
   margin: 0;
-  box-sizing: border-box;
   border: var(--border-width-sm) solid var(--color-gray-muted);
   border-radius: var(--border-radius-md);
   background-color: var(--color-bg-input);
@@ -79,29 +94,10 @@ INPUT / TEXTAREA
 }
 
 .textarea {
-  display: block;
-  width: 100%;
-  min-width: 0;
   min-height: 393px;
-  height: auto;
-  margin: 0;
-  box-sizing: border-box;
   padding: var(--spacing-sm) 44px;
-
-  border: var(--border-width-sm) solid var(--color-gray-muted);
-  border-radius: var(--border-radius-md);
-
-  background-color: var(--color-bg-input);
-  color: var(--color-text-main);
-  outline: none;
-
   resize: none;
-  overflow-y: hidden;
-
-  transition:
-    border-color var(--transition-main),
-    box-shadow var(--transition-main),
-    color var(--transition-main);
+  overflow: hidden;
 }
 
 .input::placeholder,
@@ -199,6 +195,14 @@ ACTIVE / FOCUS
 }
 
 /* =========================
+PUBLICATION DATE
+========================= */
+
+.formGroup .input {
+  cursor: default;
+}
+
+/* =========================
 ERROR
 ========================= */
 
@@ -222,6 +226,7 @@ ERROR + ACTIVE
 ========================= */
 
 .errorState:focus-within .input,
+.errorState .input:focus,
 .errorState:focus-within .textarea {
   border-color: var(--color-error);
   box-shadow: var(--focus-ring-shadow);
@@ -247,7 +252,6 @@ SUBMIT BUTTON
   width: 100%;
   min-width: 0;
   height: var(--btn-height-lg);
-  box-sizing: border-box;
   padding: 0 var(--spacing-md);
   border-radius: var(--border-radius-btn);
   background-color: var(--color-primary);
@@ -288,6 +292,7 @@ TABLET
     grid-template-areas:
       'image titleField'
       'description description'
+      'publicationDate publicationDate'
       'submit submit';
 
     width: 100%;
@@ -314,6 +319,7 @@ DESKTOP
     grid-template-areas:
       'titleField image'
       'description image'
+      'publicationDate image'
       'submit image';
 
     width: 100%;

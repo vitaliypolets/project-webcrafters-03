@@ -1,14 +1,31 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import heroBg from './assets/hero-background.png';
-import styles from './Hero.module.css';
+import Image from "next/image";
+
+import { Button } from "@/components/ui/Button/Button";
+import { Container } from "@/components/ui/Container/Container";
+
+import heroBgDesktop from "./assets/hero-background.png";
+import heroBgMobile from "./assets/hero-background-mobile.png";
+import styles from "./Hero.module.css";
 
 export const Hero = () => {
   return (
     <section className={styles.heroSection}>
+      <Container className={styles.heroContainer}>
+        <div className={styles.imageWrapperMobile}>
+          <Image
+            src={heroBgMobile}
+            sizes="100vw"
+            alt="Person sitting peacefully in nature"
+            priority
+            placeholder="blur"
+            className={styles.heroImage}
+          />
+        </div>
+
         <div className={styles.imageWrapper}>
           <Image
-            src={heroBg}
+            src={heroBgDesktop}
+            sizes="100vw"
             alt="Person sitting peacefully in nature"
             priority
             placeholder="blur"
@@ -22,20 +39,15 @@ export const Hero = () => {
           </h1>
 
           <div className={styles.buttons}>
-            <Link
-              href="/articles"
-              className={styles.btnPrimary}
-            >
+            <Button href="/articles" variant="primary" size="xl" className={styles.heroButton}>
               Go to Articles
-            </Link>
-            <Link
-              href="/register"
-              className={styles.btnSecondary}
-            >
+            </Button>
+            <Button href="/register" variant="secondary" size="xl" className={styles.heroButton}>
               Register
-            </Link>
+            </Button>
           </div>
-      </div>
+        </div>
+      </Container>
     </section>
   );
 };

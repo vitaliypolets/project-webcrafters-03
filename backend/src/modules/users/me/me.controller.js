@@ -1,14 +1,8 @@
 // TODO (учасник №5): controllers
 
-import {
-  getUserMe,
-  updateUserMe,
-} from './me.service.js';
+import { getUserMe, updateUserMe } from './me.service.js';
 
-import {
-  saveFileToCloudinary,
-} from '../../../utils/saveFileToCloudinary.js';
-
+import { saveFileToCloudinary } from '../../../utils/saveFileToCloudinary.js';
 
 export const getMe = async (req, res, next) => {
   try {
@@ -23,7 +17,6 @@ export const getMe = async (req, res, next) => {
   }
 };
 
-
 export const updateMe = async (req, res, next) => {
   try {
     const data = {
@@ -37,10 +30,7 @@ export const updateMe = async (req, res, next) => {
       data.avatarPublicId = avatar.publicId;
     }
 
-    const user = await updateUserMe(
-      req.user.id,
-      data,
-    );
+    const user = await updateUserMe(req.user.id, data);
 
     res.status(200).json({
       success: true,

@@ -1,5 +1,6 @@
 .page {
-  width: min(100% - 32px, 1200px);
+  width: min(100% - 32px, 1224px);
   margin-inline: auto;
   padding-block: 40px;
 }
+

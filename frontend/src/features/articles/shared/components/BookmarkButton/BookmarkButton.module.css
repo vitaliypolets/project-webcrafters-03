@@ -23,9 +23,35 @@
     opacity var(--transition-main);
 }
 
+.withLabel {
+  width: auto;
+  min-width: 40px;
+
+  padding: 0 16px;
+
+  gap: 8px;
+
+  border-radius: 20px;
+}
+
 .icon {
   width: 20px;
   height: 20px;
+
+  flex-shrink: 0;
+
+  stroke: currentColor;
+  fill: none;
+}
+
+.label {
+  display: inline-block;
+
+  white-space: nowrap;
+}
+
+.saved {
+  color: var(--color-text-primary);
 }
 
 .button:hover:not(:disabled) {

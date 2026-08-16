@@ -108,32 +108,37 @@
               text-decoration-color var(--transition-main);
 }
 .articleBookmarkWrapper {
-  border-radius: var(--border-radius-btn);
-  width: 100%;
+  width: 361px;
   height: var(--btn-height-xl);
-  background: var(--color-primary);
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: var(--font-size-main);
-  color: var(--color-text-on-primary);
+  font-weight: 700;
 }
-.articleBookmarkWrapper button {
-  background: transparent;
-  border: none;
-  color: inherit;
+
+.articleBookmarkWrapper .articleBookmarkButton {
   width: 100%;
   height: 100%;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  background: var(--color-primary);
+  color: var(--color-text-on-primary);
+  border-radius: var(--border-radius-btn);
   cursor: pointer;
+  transition: background-color var(--transition-main);
 }
 
 /* Tablet (від 768px) */
 @media screen and (min-width: 768px) {
   .article {
-    max-width: 768px;
+    max-width: 704px;
   }
   .imageArticle {
     height: 358px;
+  }
+  .articleBookmarkWrapper {
+    width: 100%;
   }
 }
 
@@ -172,10 +177,10 @@
   .recommendArticleLinkItem:hover .recommendArticleicon {
     transform: rotate(-90deg);
   }
-  .articleBookmarkWrapper:hover {
+  .articleBookmarkWrapper .articleBookmarkButton:hover:not(:disabled) {
     background-color: var(--color-primary-hover);
   }
-  .articleBookmarkWrapper:focus {
+  .articleBookmarkWrapper .articleBookmarkButton:focus:not(:disabled) {
     box-shadow: 0 0 0 6px rgba(78, 70, 180, 0.12), 0 0 0 2px #fff;
   }
 }

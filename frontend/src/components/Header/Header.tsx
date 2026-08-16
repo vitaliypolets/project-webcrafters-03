@@ -1,175 +1,212 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import css from "./Header.module.css";
-import { useAuthStore } from "@/store/auth.store";
-import { usePathname } from "next/navigation";
-import Image from "next/image";
-import { useState } from "react";
-import LogoutUserModalClient from "@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client";
+import Link from 'next/link';
+import css from './Header.module.css';
+import { useAuthStore } from '@/store/auth.store';
+import { usePathname } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+import LogoutUserModalClient from '@/features/user/user-bar/components/LogoutModal/LogoutUserModal.client';
+import UserBar from '@/features/user/user-bar/components/UserBar/UserBar';
+import { UserModal } from '@/features/user/profile-edit';
+
+import { Container } from '../ui/Container/Container';
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
+
   const pathname = usePathname();
-  const getLinkClass = (path: string) => {
-    return pathname === path ? `${css.navigationLink} ${css.active}` : css.navigationLink;
-  };
 
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const user = useAuthStore((state) => state.user);
+  
+  useEffect(() => {
+    if (isOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
+  const getLinkClass = (path: string) => {
+    return pathname === path
+      ? `${css.navigationLink} ${css.active}`
+      : css.navigationLink;
+  };
 
   const handleBurger = () => {
     setIsOpen((prev) => !prev);
   };
 
+  // Забороняємо скрол сторінки при відкритому мобільному меню
+  useEffect(() => {
+    if (isOpen) {
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.documentElement.style.overflow = "";
+      document.body.style.overflow = "";
+    };
+  }, [isOpen]);
+
   return (
     <>
       <header className={css.header}>
-        <div className={css.headerWrapper}>
-          <Link
-            onClick={() => setIsOpen(false)}
-            href="/"
-            className={css.headerLink}
-            aria-label="Home"
-          >
-            <svg className={css.logoIcon}>
-              <use href="/icons/sprite.svg#icon-logo" />
-            </svg>
-          </Link>
-          <div className={css.navigationDescFild}>
-            <nav aria-label="Main Navigation">
-              <ul className={css.navigationDesc}>
-                <li className={css.navigationItemDesc}>
-                  <Link onClick={() => setIsOpen(false)} href="/" className={getLinkClass("/")}>
-                    Home
-                  </Link>
-                </li>
+        <Container>
+          <div className={css.headerWrapper}>
+            <Link
+              onClick={() => setIsOpen(false)}
+              href="/"
+              className={css.headerLink}
+              aria-label="Home"
+            >
+              <svg className={css.logoIcon}>
+                <use href="/icons/sprite.svg#icon-logo" />
+              </svg>
+            </Link>
 
-                <li className={css.navigationItemDesc}>
-                  <Link
-                    onClick={() => setIsOpen(false)}
-                    href="/articles"
-                    className={getLinkClass("/articles")}
-                  >
-                    Articles
-                  </Link>
-                </li>
+            <div className={css.navigationDescFild}>
+              <nav aria-label="Main Navigation">
+                <ul className={css.navigationDesc}>
+                  <li className={css.navigationItemDesc}>
+                    <Link
+                      onClick={() => setIsOpen(false)}
+                      href="/"
+                      className={getLinkClass('/')}
+                    >
+                      Home
+                    </Link>
+                  </li>
 
-                <li className={css.navigationItemDesc}>
-                  <Link
-                    onClick={() => setIsOpen(false)}
-                    href="/authors"
-                    className={getLinkClass("/authors")}
-                  >
-                    Creators
-                  </Link>
-                </li>
-                <li><button
-  type="button"
-  onClick={() => setIsLogoutOpen(true)}
-  className={css.logoutButton}
-  aria-label="Log out"
->
-  <svg className={css.icon} width="24" height="24">
-    <use href="/icons/sprite.svg#icon-log-out" />
-  </svg>
-</button></li>
+                  <li className={css.navigationItemDesc}>
+                    <Link
+                      onClick={() => setIsOpen(false)}
+                      href="/articles"
+                      className={getLinkClass('/articles')}
+                    >
+                      Articles
+                    </Link>
+                  </li>
 
-                {isAuthenticated ? (
-                  <>
-                    <li className={css.navigationItemDesc}>
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        href="/profile"
-                        prefetch={false}
-                        className={getLinkClass("/profile")}
-                      >
-                        My Profile
-                      </Link>
-                    </li>
+                  <li className={css.navigationItemDesc}>
+                    <Link
+                      onClick={() => setIsOpen(false)}
+                      href="/authors"
+                      className={getLinkClass('/authors')}
+                    >
+                      Creators
+                    </Link>
+                  </li>
 
-                    <li className={css.navigationItem}>
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        href="/articles/create"
-                        prefetch={false}
-                        className={css.navigationLinkJoinDesc}
-                      >
-                        Create an article
-                      </Link>
-                    </li>
+                  {isAuthenticated ? (
+                    <>
+                      <li className={css.navigationItemDesc}>
+                        <Link
+                          onClick={() => setIsOpen(false)}
+                          href="/profile"
+                          prefetch={false}
+                          className={getLinkClass('/profile')}
+                        >
+                          My Profile
+                        </Link>
+                      </li>
 
-                    <li className={css.userFieldDesc}>
-                      <div className={css.userFieldFirst}>
-                      <Image className={css.userAvatar} src={user?.avatarUrl || "/avatar.png"} width={40} height={40} alt={user?.name || "User name"}/>
+                      <li className={css.navigationItem}>
+                        <Link
+                          onClick={() => setIsOpen(false)}
+                          href="/articles/create"
+                          prefetch={false}
+                          className={css.navigationLinkJoinDesc}
+                        >
+                          Create an article
+                        </Link>
+                      </li>
 
-                        <p className={css.userName}>{user?.email}</p>
-                      </div>
-                     <button
-  type="button"
-  onClick={() => setIsLogoutOpen(true)}
-  className={css.logoutButton}
-  aria-label="Log out"
->
-  <svg className={css.icon} width="24" height="24">
-    <use href="/icons/sprite.svg#icon-log-out" />
-  </svg>
-</button>
-                    </li>
-                  </>
-                ) : (
-                  <>
-                    <li className={css.navigationItemDesc}>
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        href="/login"
-                        prefetch={false}
-                        className={getLinkClass("/login")}
-                      >
-                        Log in
-                      </Link>
-                    </li>
+                      <UserBar
+                        user={user || null}
+                        setIsLogoutOpen={setIsLogoutOpen}
+                        setIsUserModalOpen={setIsUserModalOpen}
+                        userField="userFieldDesc"
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <li className={css.navigationItemDesc}>
+                        <Link
+                          onClick={() => setIsOpen(false)}
+                          href="/login"
+                          prefetch={false}
+                          className={getLinkClass('/login')}
+                        >
+                          Log in
+                        </Link>
+                      </li>
 
-                    <li className={css.navigationItem}>
-                      <Link
-                        onClick={() => setIsOpen(false)}
-                        href="/register"
-                        prefetch={false}
-                        className={css.navigationLinkJoinDesc}
-                      >
-                        Join now
-                      </Link>
-                    </li>
-                  </>
-                )}
-              </ul>
-            </nav>
-            <div>
-              <button className={css.navBarMobButton} type="button" onClick={handleBurger}>
-                {isOpen ? (
-                  <>
-                    <svg className={css.icon}>
-                      <use href="/icons/sprite.svg#icon-close" />
-                    </svg>
-                  </>
-                ) : (
-                  <>
-                    <svg className={css.icon}>
-                      <use href="/icons/sprite.svg#icon-burger" />
-                    </svg>
-                  </>
-                )}
-              </button>
+                      <li className={css.navigationItem}>
+                        <Link
+                          onClick={() => setIsOpen(false)}
+                          href="/register"
+                          prefetch={false}
+                          className={css.navigationLinkJoinDesc}
+                        >
+                          Join now
+                        </Link>
+                      </li>
+                    </>
+                  )}
+                </ul>
+              </nav>
+
+              <div>
+                <button
+                  className={css.navBarMobButton}
+                  type="button"
+                  onClick={handleBurger}
+                  aria-label={isOpen ? 'Close menu' : 'Open menu'}
+                >
+                  <svg className={css.icon}>
+                    <use
+                      href={`/icons/sprite.svg#icon-${
+                        isOpen ? 'close' : 'burger'
+                      }`}
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </Container>
       </header>
-      <div className={isOpen ? `${css.navBarMob} ${css.isOpen}` : css.navBarMob}>
+
+      <div
+        className={
+          isOpen
+            ? `${css.navBarMob} ${css.isOpen}`
+            : css.navBarMob
+        }
+      >
         <nav aria-label="Main Navigation">
           <ul className={css.navigation}>
             <li className={css.navigationItem}>
-              <Link onClick={() => setIsOpen(false)} href="/" className={getLinkClass("/")}>
+              <Link
+                onClick={() => setIsOpen(false)}
+                href="/"
+                className={getLinkClass('/')}
+              >
                 Home
               </Link>
             </li>
@@ -178,7 +215,7 @@ export default function Header() {
               <Link
                 onClick={() => setIsOpen(false)}
                 href="/articles"
-                className={getLinkClass("/articles")}
+                className={getLinkClass('/articles')}
               >
                 Articles
               </Link>
@@ -188,7 +225,7 @@ export default function Header() {
               <Link
                 onClick={() => setIsOpen(false)}
                 href="/authors"
-                className={getLinkClass("/authors")}
+                className={getLinkClass('/authors')}
               >
                 Creators
               </Link>
@@ -201,13 +238,13 @@ export default function Header() {
                     onClick={() => setIsOpen(false)}
                     href="/profile"
                     prefetch={false}
-                    className={getLinkClass("/profile")}
+                    className={getLinkClass('/profile')}
                   >
                     My Profile
                   </Link>
                 </li>
 
-                <li className={css.navigationItem}>
+                <li className={css.navigationItemCreate}>
                   <Link
                     onClick={() => setIsOpen(false)}
                     href="/articles/create"
@@ -218,23 +255,12 @@ export default function Header() {
                   </Link>
                 </li>
 
-                <li className={css.userField}>
-                  <div className={css.userFieldFirst}>
-                    <Image className={css.userAvatar} src={user?.avatarUrl || "/avatar.png"} width={40} height={40} alt={user?.name || "User name"}/>
-                    <p className={css.userName}>{user?.email}</p>
-                  </div>
-
-                 <button
-  type="button"
-  onClick={() => setIsLogoutOpen(true)}
-  className={css.logoutButton}
-  aria-label="Log out"
->
-  <svg className={css.icon} width="24" height="24">
-    <use href="/icons/sprite.svg#icon-log-out" />
-  </svg>
-</button>
-                </li>
+                <UserBar
+                  user={user || null}
+                  setIsLogoutOpen={setIsLogoutOpen}
+                  setIsUserModalOpen={setIsUserModalOpen}
+                  userField="userField"
+                />
               </>
             ) : (
               <>
@@ -243,7 +269,7 @@ export default function Header() {
                     onClick={() => setIsOpen(false)}
                     href="/login"
                     prefetch={false}
-                    className={getLinkClass("/login")}
+                    className={getLinkClass('/login')}
                   >
                     Log in
                   </Link>
@@ -252,7 +278,7 @@ export default function Header() {
                 <li className={css.navigationItem}>
                   <Link
                     onClick={() => setIsOpen(false)}
-                    href="/"
+                    href="/register"
                     prefetch={false}
                     className={css.navigationLinkJoin}
                   >
@@ -264,10 +290,16 @@ export default function Header() {
           </ul>
         </nav>
       </div>
+
       <LogoutUserModalClient
-  isOpen={isLogoutOpen}
-  onClose={() => setIsLogoutOpen(false)}
-/>
+        isOpen={isLogoutOpen}
+        onClose={() => setIsLogoutOpen(false)}
+      />
+
+      <UserModal
+        isOpen={isUserModalOpen}
+        onClose={() => setIsUserModalOpen(false)}
+      />
     </>
   );
 }
