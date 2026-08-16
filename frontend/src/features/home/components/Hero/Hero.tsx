@@ -39,10 +39,10 @@ export const Hero = () => {
           </h1>
 
           <div className={styles.buttons}>
-            <Button href="/articles" variant="primary" size="xl" className={styles.heroButton}>
+            <Button href="#popular-articles" variant="primary" size="xl" className={styles.heroButton}>
               Go to Articles
             </Button>
-            <Button href="/register" variant="secondary" size="xl" className={styles.heroButton}>
+            <Button href="/register" variant="secondary" size="xl" className={`${styles.heroButton} ${styles.registerButton}`}>
               Register
             </Button>
           </div>
