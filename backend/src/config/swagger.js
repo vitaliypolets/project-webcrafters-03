@@ -85,7 +85,7 @@ const swaggerDefinition = {
         type: 'object',
 
         properties: {
-          _id: {
+          id: {
             type: 'string',
             example: '6881563901add19ee16fcff9',
           },
@@ -112,15 +112,6 @@ const swaggerDefinition = {
             example: 4,
           },
 
-          createdAt: {
-            type: 'string',
-            format: 'date-time',
-          },
-
-          updatedAt: {
-            type: 'string',
-            format: 'date-time',
-          },
         },
       },
 
@@ -128,7 +119,7 @@ const swaggerDefinition = {
         type: 'object',
 
         properties: {
-          _id: {
+          id: {
             type: 'string',
           },
 
@@ -152,7 +143,7 @@ const swaggerDefinition = {
         type: 'object',
 
         properties: {
-          _id: {
+          id: {
             type: 'string',
             example: '6881563901add19ee16fcff9',
           },
@@ -318,7 +309,7 @@ const swaggerDefinition = {
                   avatar: {
                     type: 'string',
                     format: 'binary',
-                    description: 'Optional avatar. JPEG, PNG, GIF or WebP. Max size 1 MB.',
+                    description: 'Optional avatar. JPEG, PNG or WebP. Max size 1 MB.',
                   },
                 },
               },
@@ -367,7 +358,8 @@ const swaggerDefinition = {
 
                   password: {
                     type: 'string',
-                    minLength: 6,
+                    minLength: 8,
+                    maxLength: 64,
                     example: 'Password123',
                   },
                 },
@@ -520,7 +512,7 @@ const swaggerDefinition = {
 
             schema: {
               type: 'string',
-              enum: ['popular', 'newest'],
+              enum: ['articlesAmount', 'createdAt', 'name', 'popular'],
             },
           },
 
@@ -932,7 +924,7 @@ const swaggerDefinition = {
               schema: {
                 type: 'object',
 
-                required: ['title', 'description', 'article', 'publicationDate', 'image'],
+                required: ['title', 'article', 'publicationDate', 'image'],
 
                 properties: {
                   title: {
@@ -941,15 +933,10 @@ const swaggerDefinition = {
                     maxLength: 48,
                   },
 
-                  description: {
+                  article: {
                     type: 'string',
                     minLength: 100,
                     maxLength: 4000,
-                  },
-
-                  article: {
-                    type: 'string',
-                    minLength: 1,
                   },
 
                   publicationDate: {
@@ -961,6 +948,7 @@ const swaggerDefinition = {
                   image: {
                     type: 'string',
                     format: 'binary',
+                    description: 'Required article image. JPEG, PNG or WebP. Max size 1 MB.',
                   },
                 },
               },
@@ -1042,7 +1030,7 @@ const swaggerDefinition = {
           required: true,
 
           content: {
-            'application/json': {
+            'multipart/form-data': {
               schema: {
                 type: 'object',
 
@@ -1053,15 +1041,10 @@ const swaggerDefinition = {
                     maxLength: 48,
                   },
 
-                  description: {
+                  article: {
                     type: 'string',
                     minLength: 100,
                     maxLength: 4000,
-                  },
-
-                  article: {
-                    type: 'string',
-                    minLength: 1,
                   },
 
                   publicationDate: {
@@ -1069,10 +1052,12 @@ const swaggerDefinition = {
                     pattern: '^\\d{4}-\\d{2}-\\d{2}$',
                   },
 
-                  category: {
+                  image: {
                     type: 'string',
-                    enum: ['popular', 'general'],
+                    format: 'binary',
+                    description: 'Optional article image. JPEG, PNG or WebP. Max size 1 MB.',
                   },
+
                 },
               },
             },
