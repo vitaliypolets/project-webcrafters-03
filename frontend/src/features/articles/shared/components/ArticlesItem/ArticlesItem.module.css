@@ -105,14 +105,22 @@
   flex: 1;
   min-width: 0;
 
-  font-family: var(--font-family);
+  font-family: var(--font-family-main);
   font-weight: var(--font-weight-bold);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-main);
   line-height: var(--line-height-secondary);
 
-  color: var(--color-primary-hover);
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border: none;
 
   text-align: left;
+}
+
+.learnMore.learnMore:hover {
+  color: var(--color-white);
+  background-color: var(--color-primary-hover);
+  border: none;
 }
 
 .bookmark,
