@@ -43,12 +43,14 @@ export const getBookmarks = async (userId, { page, perPage }) => {
   const articles = orderedArticles.slice(skip, skip + perPage).map(toArticleDto);
 
   return {
-    data: articles,
-    page,
-    perPage,
-    totalItems,
-    totalPages,
-    hasNextPage: page < totalPages,
+    items: articles,
+    meta: {
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      hasNextPage: page < totalPages,
+    },
   };
 };
 

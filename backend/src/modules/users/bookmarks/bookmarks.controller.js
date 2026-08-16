@@ -11,7 +11,7 @@ export const getBookmarksController = async (req, res) => {
   );
 
   res.status(200).json({
-    ...result,
+    data: result,
     message: 'Bookmarks retrieved successfully',
   });
 };
