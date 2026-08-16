@@ -12,5 +12,6 @@ export type UpdateMeResponse = {
 };
 
 export type ProfileEditFormValues = {
-  avatar: File;
+  name: string;
+  avatar?: File | null;
 };
