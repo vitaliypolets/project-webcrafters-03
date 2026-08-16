@@ -1,6 +1,7 @@
 // TODO (учасник №13): request validation
 
 import { z } from 'zod';
+import { HttpError } from '../../../utils/HttpError.js';
 
 export const createArticleSchema = z.object({
   title: z
@@ -23,25 +24,21 @@ export const createArticleSchema = z.object({
     ),
 });
 
-export const validateCreateArticle = (req, res, next) => {
+export const validateCreateArticle = (req, _res, next) => {
   const result = createArticleSchema.safeParse(req.body);
 
   if (!result.success) {
     const tree = z.treeifyError(result.error);
 
-    const errors = {
+    const details = {
       title: tree.properties?.title?.errors ?? [],
       article: tree.properties?.article?.errors ?? [],
       publicationDate: tree.properties?.publicationDate?.errors ?? [],
     };
 
-    return res.status(400).json({
-      message: 'Validation error',
-      errors,
-    });
+    throw new HttpError(400, 'Validation error', details);
   }
 
   req.body = result.data;
-
   next();
 };
