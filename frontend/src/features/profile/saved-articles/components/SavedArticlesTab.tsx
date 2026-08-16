@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
 import { EmptyArticlesState } from '../../my-articles/components/EmptyArticlesState';
@@ -25,13 +27,35 @@ export function SavedArticlesTab() {
     getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.page + 1 : undefined),
   });
 
+  const isPaused = query.fetchStatus === 'paused';
+  const hasQueryError = query.isError || isPaused;
+  const errorMessage = isPaused
+    ? 'You appear to be offline. Check your connection and try again.'
+    : 'Could not load saved articles.';
+
+  useEffect(() => {
+    const toastId = 'saved-articles-query-error';
+
+    if (!active || !hasQueryError) {
+      toast.dismiss(toastId);
+      return;
+    }
+
+    toast.error(errorMessage, {
+      id: toastId,
+    });
+  }, [active, errorMessage, hasQueryError]);
+
   if (!active) return null;
 
   const articles = query.data?.pages.flatMap((page) => page.data) ?? [];
 
   return (
     <section className={styles.section} aria-label="Saved Articles">
-      {!isInitialized || (Boolean(accessToken && userId) && query.isPending) ? (
+      {!isInitialized ||
+      (Boolean(accessToken && userId) &&
+        query.isPending &&
+        query.fetchStatus === 'fetching') ? (
         <p className={styles.status}>Loading saved articles…</p>
       ) : null}
 
@@ -41,16 +65,16 @@ export function SavedArticlesTab() {
         </p>
       ) : null}
 
-      {query.isError ? (
+      {hasQueryError ? (
         <div className={styles.error} role="alert">
-          <p>Could not load saved articles.</p>
+          <p>{errorMessage}</p>
           <button type="button" onClick={() => query.refetch()}>
             Try again
           </button>
         </div>
       ) : null}
 
-      {query.isSuccess && articles.length === 0 ? (
+      {query.isSuccess && !hasQueryError && articles.length === 0 ? (
         <EmptyArticlesState
           description="Save your first article"
           actionLabel="Go to articles"
