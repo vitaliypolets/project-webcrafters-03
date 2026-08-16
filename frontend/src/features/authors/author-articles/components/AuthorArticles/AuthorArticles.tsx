@@ -25,12 +25,16 @@ export function AuthorArticles({ userId, author }: AuthorArticlesProps) {
       queryClient.fetchQuery({
         queryKey: ['authors', 'articles', userId, 'page', pageParam, ARTICLES_PER_PAGE],
         queryFn: () => getAuthorArticles(userId, pageParam, ARTICLES_PER_PAGE),
+        retry: false,
       }),
-    getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.page + 1 : undefined),
+    getNextPageParam: (lastPage) =>
+      lastPage.data.meta.hasNextPage ? lastPage.data.meta.page + 1 : undefined,
   });
 
   const lastPage = query.data?.pages.at(-1);
-  const nextPageToPrefetch = lastPage?.hasNextPage ? lastPage.page + 1 : null;
+  const nextPageToPrefetch = lastPage?.data.meta.hasNextPage
+    ? lastPage.data.meta.page + 1
+    : null;
 
   useEffect(() => {
     if (nextPageToPrefetch === null) return;
@@ -56,7 +60,7 @@ export function AuthorArticles({ userId, author }: AuthorArticlesProps) {
   const articlesById = new Map<string, Article>();
 
   for (const page of query.data?.pages ?? []) {
-    for (const article of page.data) {
+    for (const article of page.data.items) {
       articlesById.set(article.id, {
         ...article,
         author,
