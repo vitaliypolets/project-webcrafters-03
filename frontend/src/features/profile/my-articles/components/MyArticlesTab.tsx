@@ -113,7 +113,7 @@ export function MyArticlesTab() {
 
       {articles.length > 0 ? (
         <div className={styles.articles}>
-          <ArticlesList articles={articles} />
+          <ArticlesList articles={articles} action="edit" />
         </div>
       ) : null}
 
