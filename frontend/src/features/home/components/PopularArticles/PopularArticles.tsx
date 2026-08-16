@@ -30,7 +30,7 @@ export const PopularArticles = () => {
 
   return (
     <section className={styles.section} id="popular-articles">
-      <Container>
+      <Container className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>Popular Articles</h2>
           <Link href="/articles" className={styles.link}>

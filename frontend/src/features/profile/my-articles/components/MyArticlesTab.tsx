@@ -1,7 +1,9 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
@@ -39,13 +41,34 @@ export function MyArticlesTab() {
     queryFn: ({ pageParam }) =>
       getMyArticles(userId!, author!, pageParam),
     getNextPageParam: (lastPage) =>
-      lastPage.hasNextPage ? lastPage.page + 1 : undefined,
+      lastPage.data.meta.hasNextPage
+        ? lastPage.data.meta.page + 1
+        : undefined,
   });
+
+  const isPaused = query.fetchStatus === 'paused';
+  const hasQueryError = query.isError || isPaused;
+  const errorMessage = isPaused
+    ? 'You appear to be offline. Check your connection and try again.'
+    : 'Could not load your articles.';
+
+  useEffect(() => {
+    const toastId = 'my-articles-query-error';
+
+    if (!active || !hasQueryError) {
+      toast.dismiss(toastId);
+      return;
+    }
+
+    toast.error(errorMessage, {
+      id: toastId,
+    });
+  }, [active, errorMessage, hasQueryError]);
 
   if (!active) return null;
 
   const articles =
-    query.data?.pages.flatMap((page) => page.data) ?? [];
+    query.data?.pages.flatMap((page) => page.data.items) ?? [];
 
   return (
     <section
@@ -53,7 +76,9 @@ export function MyArticlesTab() {
       aria-label="My Articles"
     >
       {!isInitialized ||
-      (Boolean(userId) && query.isPending) ? (
+      (Boolean(userId) &&
+        query.isPending &&
+        query.fetchStatus === 'fetching') ? (
         <p className={styles.status}>
           Loading articles…
         </p>
@@ -65,9 +90,9 @@ export function MyArticlesTab() {
         </p>
       ) : null}
 
-      {query.isError ? (
+      {hasQueryError ? (
         <div className={styles.error} role="alert">
-          <p>Could not load your articles.</p>
+          <p>{errorMessage}</p>
 
           <button
             type="button"
@@ -78,7 +103,7 @@ export function MyArticlesTab() {
         </div>
       ) : null}
 
-      {query.isSuccess && articles.length === 0 ? (
+      {query.isSuccess && !hasQueryError && articles.length === 0 ? (
         <EmptyArticlesState
           description="Write your first article"
           actionLabel="Create an article"

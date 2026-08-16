@@ -1,6 +1,7 @@
 // TODO (учасник №12): request validation
 
 import { z } from "zod";
+import { HttpError } from "../../../utils/HttpError.js";
 
 export const updateArticleSchema = z.object({
   title: z
@@ -23,36 +24,28 @@ export const updateArticleSchema = z.object({
     .optional(),
 });
 
-export const validateUpdateArticle = (req, res, next) => {
+export const validateUpdateArticle = (req, _res, next) => {
   const body = req.body ?? {};
-
   const result = updateArticleSchema.safeParse(body);
 
   if (!result.success) {
     const tree = z.treeifyError(result.error);
 
-    const errors = {
+    const details = {
       title: tree.properties?.title?.errors ?? [],
       article: tree.properties?.article?.errors ?? [],
       publicationDate: tree.properties?.publicationDate?.errors ?? [],
     };
 
-    return res.status(400).json({
-      message: "Validation error",
-      errors,
-    });
+    throw new HttpError(400, "Validation error", details);
   }
 
   if (Object.keys(result.data).length === 0 && !req.file) {
-    return res.status(400).json({
-      message: "Validation error",
-      errors: {
-        general: ["At least one field or image is required to update an article"],
-      },
+    throw new HttpError(400, "Validation error", {
+      general: ["At least one field or image is required to update an article"],
     });
   }
 
   req.body = result.data;
-
   next();
 };

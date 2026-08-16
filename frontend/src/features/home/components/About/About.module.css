@@ -2,13 +2,16 @@
   margin-bottom: var(--spacing-3xl);
 }
 
+.aboutSection .container {
+  padding-inline: 0;
+}
+
 .container {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-md);
 }
 
-/* Mobile first: everything stacks in one column */
 .topRow,
 .bottomRow {
   display: grid;
@@ -44,11 +47,11 @@
 .lotusWrapper,
 .friendsWrapper,
 .meditationWrapper {
+  width: 100%;
   border-radius: var(--border-radius-xl);
   overflow: hidden;
 }
 
-/* Ratios keep the blocks proportional instead of pinning them to px sizes */
 .lotusWrapper {
   aspect-ratio: 361 / 365;
 }
@@ -75,7 +78,6 @@
   }
 
   .topRow {
-    /* 431 : 249 from the design, expressed as a ratio so it scales */
     grid-template-columns: 431fr 249fr;
     gap: var(--spacing-lg);
   }
@@ -93,9 +95,9 @@
     font-size: var(--font-size-body);
     line-height: var(--line-height-main);
   }
-
   .lotusWrapper {
     aspect-ratio: 249 / 326;
+    max-height: 326px;
   }
 
   .lotusWrapper .image {
@@ -104,20 +106,24 @@
 
   .friendsWrapper {
     aspect-ratio: 704 / 398;
+    max-height: 398px;
   }
 }
 
 /* Desktop */
 @media (min-width: 1440px) {
+  .container,
+  .topRow,
+  .bottomRow {
+    gap: var(--spacing-md);
+  }
+
   .topRow {
-    /* 496 : 704 */
-    grid-template-columns: 496fr 704fr;
+    grid-template-columns: 496fr 712fr;
   }
 
   .bottomRow {
-    /* 804 : 388 */
-    grid-template-columns: 804fr 388fr;
-    gap: var(--spacing-xl);
+    grid-template-columns: 910fr 298fr;
   }
 
   .title {
@@ -125,7 +131,7 @@
   }
 
   .lotusWrapper {
-    aspect-ratio: 704 / 326;
+    aspect-ratio: 712 / 326;
   }
 
   .lotusWrapper .image {
@@ -133,13 +139,13 @@
   }
 
   .friendsWrapper {
-    aspect-ratio: 804 / 398;
+    aspect-ratio: 910 / 381;
     border-radius: var(--border-radius-card);
   }
 
   .meditationWrapper {
     display: block;
-    aspect-ratio: 388 / 398;
+    aspect-ratio: 298 / 381;
     border-radius: var(--border-radius-card);
   }
 }
