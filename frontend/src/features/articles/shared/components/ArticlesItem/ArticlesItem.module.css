@@ -1,134 +1,3 @@
-/* .article {
-  display: flex;
-  flex-direction: column;
-
-  width: 100%;
-  min-width: 0;
-  height: 492px;
-
-  padding: 12px;
-
-  background-color: var(--color-bg-card-soft-green);
-  border-radius: 32px;
-}
-
-.image {
-  display: block;
-
-  width: 100%;
-  height: auto;
-  aspect-ratio: 368 / 233;
-
-  border-radius: 24px;
-
-  object-fit: cover;
-}
-
-.content {
-  display: flex;
-  flex-direction: column;
-
-  min-width: 0;
-
-  text-align: left;
-}
-
-.author {
-  margin-top: 16px;
-  margin-bottom: 0;
-
-  font-family: var(--font-family);
-  font-weight: 700;
-  font-size: 16px;
-  line-height: 1.2;
-  color: var(--black);
-}
-
-.title {
-  display: -webkit-box;
-
-  height: calc(2 * 1.2em);
-  margin-top: 2px;
-  margin-bottom: 0;
-
-  overflow: hidden;
-
-  font-family: var(--font-family);
-  font-weight: 700;
-  font-size: 24px;
-  line-height: 1.2;
-  color: var(--black);
-
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.description {
-  display: -webkit-box;
-
-  height: calc(2 * 1.35em);
-  margin-top: 2px;
-  margin-bottom: 0;
-
-  overflow: hidden;
-
-  font-family: var(--font-family);
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 155%;
-  color: var(--black);
-
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-
-  width: 100%;
-  gap: 8px;
-
-  margin-top: 16px;
-}
-
-.learnMore {
-  flex: 1;
-  min-width: 0;
-
-  font-family: var(--font-family);
-  font-weight: 700;
-  font-size: 16px;
-  color: var(--green-darker);
-}
-
-.bookmark {
-  flex-shrink: 0;
-
-  width: 40px;
-  height: 40px;
-  padding: 0;
-
-  background-color: transparent;
-}
-
-.editButton {
-  flex-shrink: 0;
-
-  width: 40px;
-  height: 40px;
-  padding: 0;
-}
-
-.editIcon {
-  width: 20px;
-  height: 20px;
-
-  stroke: currentColor;
-} */
-
 .article {
   display: flex;
   flex-direction: column;
@@ -182,6 +51,7 @@
 .title {
   display: -webkit-box;
 
+  height: calc(2 * var(--line-height-secondary) * var(--font-size-main));
   margin-top: 2px;
   margin-bottom: 0;
 
@@ -202,6 +72,7 @@
 .description {
   display: -webkit-box;
 
+  height: calc(2 * 1.5 * var(--font-size-xs));
   margin-top: 2px;
   margin-bottom: 0;
 
