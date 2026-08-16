@@ -1,3 +1,4 @@
+import type { PaginatedResponse } from '@/types/api';
 import type { PublicUser } from '@/types/user';
 
 export type AuthorResponse = {
@@ -6,18 +7,7 @@ export type AuthorResponse = {
   avatarUrl: string | null;
   articlesAmount: number;
 };
-export type AuthorsApiResponse = {
-  data: {
-    id: string;
-    name: string;
-    avatarUrl?: string;
-    articlesAmount: number;
-  }[];
-  total: number;
-  page: number;
-  perPage: number;
-  hasNextPage: boolean;
-};
+export type AuthorsApiResponse = PaginatedResponse<AuthorResponse>;
 
 export type AuthorsResponse = {
   authors: PublicUser[];
