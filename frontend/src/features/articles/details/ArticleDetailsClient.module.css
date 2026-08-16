@@ -108,7 +108,7 @@
               text-decoration-color var(--transition-main);
 }
 .articleBookmarkWrapper {
-  width: 361px;
+  max-width: 100%;
   height: var(--btn-height-xl);
   font-size: var(--font-size-main);
   font-weight: 700;
@@ -136,9 +136,6 @@
   }
   .imageArticle {
     height: 358px;
-  }
-  .articleBookmarkWrapper {
-    width: 100%;
   }
 }
 
