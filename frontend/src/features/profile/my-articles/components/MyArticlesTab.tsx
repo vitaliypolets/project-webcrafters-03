@@ -41,7 +41,9 @@ export function MyArticlesTab() {
     queryFn: ({ pageParam }) =>
       getMyArticles(userId!, author!, pageParam),
     getNextPageParam: (lastPage) =>
-      lastPage.hasNextPage ? lastPage.page + 1 : undefined,
+      lastPage.data.meta.hasNextPage
+        ? lastPage.data.meta.page + 1
+        : undefined,
   });
 
   const isPaused = query.fetchStatus === 'paused';
@@ -66,7 +68,7 @@ export function MyArticlesTab() {
   if (!active) return null;
 
   const articles =
-    query.data?.pages.flatMap((page) => page.data) ?? [];
+    query.data?.pages.flatMap((page) => page.data.items) ?? [];
 
   return (
     <section

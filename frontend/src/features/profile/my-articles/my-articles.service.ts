@@ -1,5 +1,5 @@
 import { api } from '@/lib/api/client';
-import type { ApiResponse, PaginationMeta } from '@/types/api';
+import type { PaginatedResponse } from '@/types/api';
 import type { Article } from '@/types/article';
 import type { PublicUser } from '@/types/user';
 import type { ArticlesPage } from './my-articles.types';
@@ -9,10 +9,7 @@ type MyArticleApiItem = Pick<
   'id' | 'title' | 'description' | 'imageUrl' | 'publicationDate'
 >;
 
-type ArticlesApiPage = Omit<ApiResponse<MyArticleApiItem[]>, 'message'> &
-  PaginationMeta & {
-    message?: ApiResponse<MyArticleApiItem[]>['message'];
-  };
+type ArticlesApiPage = PaginatedResponse<MyArticleApiItem>;
 
 export async function getMyArticles(
   userId: string,
@@ -26,9 +23,12 @@ export async function getMyArticles(
 
   return {
     ...response.data,
-    data: response.data.data.map((article) => ({
-      ...article,
-      author,
-    })),
+    data: {
+      ...response.data.data,
+      items: response.data.data.items.map((article) => ({
+        ...article,
+        author,
+      })),
+    },
   };
 }

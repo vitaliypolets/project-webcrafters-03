@@ -24,7 +24,10 @@ export function SavedArticlesTab() {
     enabled: active && Boolean(accessToken && userId),
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getSavedArticles(pageParam),
-    getNextPageParam: (lastPage) => (lastPage.hasNextPage ? lastPage.page + 1 : undefined),
+    getNextPageParam: (lastPage) =>
+      lastPage.data.meta.hasNextPage
+        ? lastPage.data.meta.page + 1
+        : undefined,
   });
 
   const isPaused = query.fetchStatus === 'paused';
@@ -48,7 +51,8 @@ export function SavedArticlesTab() {
 
   if (!active) return null;
 
-  const articles = query.data?.pages.flatMap((page) => page.data) ?? [];
+  const articles =
+    query.data?.pages.flatMap((page) => page.data.items) ?? [];
 
   return (
     <section className={styles.section} aria-label="Saved Articles">
