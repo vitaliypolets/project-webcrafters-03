@@ -52,7 +52,12 @@ const updateArticle = async ({ articleId, data, file, userId }) => {
 
   await article.save();
 
-  return article;
+  const { _id, ...articleData } = article.toObject();
+
+  return {
+    id: _id.toString(),
+    ...articleData,
+  };
 };
 
 const deleteArticle = async ({ articleId, userId }) => {
