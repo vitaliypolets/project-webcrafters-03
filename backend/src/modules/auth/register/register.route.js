@@ -2,8 +2,13 @@ import { Router } from 'express';
 import multer from 'multer';
 import { controllerWrapper } from '../../../middlewares/controllerWrapper.js';
 import { HttpError } from '../../../utils/HttpError.js';
-import { registerController } from './register.controller.js';
-import { avatarUpload, registerBodySchema, validateBody } from './register.validation.js';
+import { checkEmailController, registerController } from './register.controller.js';
+import {
+  avatarUpload,
+  checkEmailBodySchema,
+  registerBodySchema,
+  validateBody,
+} from './register.validation.js';
 
 export const registerRouter = Router();
 
@@ -19,8 +24,20 @@ const handleAvatarUpload = (req, res, next) => {
   });
 };
 
+const registerOrCheckEmail = (req, res, next) => {
+  if (req.query.mode !== 'check-email') {
+    return next();
+  }
+
+  validateBody(checkEmailBodySchema)(req, res, (error) => {
+    if (error) return next(error);
+    controllerWrapper(checkEmailController)(req, res, next);
+  });
+};
+
 registerRouter.post(
   '/',
+  registerOrCheckEmail,
   handleAvatarUpload,
   validateBody(registerBodySchema),
   controllerWrapper(registerController),

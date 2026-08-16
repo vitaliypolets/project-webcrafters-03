@@ -8,15 +8,27 @@ export const registerBodySchema = z.object({
     .trim()
     .min(2, "Name must be at least 2 characters")
     .max(32, "Name must be at most 32 characters"),
+
   email: z
     .string({ error: "Email is required" })
     .trim()
+    .toLowerCase()
     .max(64, "Email must be at most 64 characters")
     .email("Invalid email format"),
+
   password: z
     .string({ error: "Password is required" })
     .min(8, "Password must be at least 8 characters")
     .max(64, "Password must be at most 64 characters"),
+});
+
+export const checkEmailBodySchema = z.object({
+  email: z
+    .string({ error: "Email is required" })
+    .trim()
+    .toLowerCase()
+    .max(64, "Email must be at most 64 characters")
+    .email("Invalid email format"),
 });
 
 export const validateBody = (schema) => (req, _res, next) => {
