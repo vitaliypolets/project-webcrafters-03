@@ -9,6 +9,8 @@
   gap: 20px;
   border-radius: 32px;
   padding: 48px 32px;
+
+  overflow: hidden;
   background-color: var(--color-bg-card-soft-green);
 }
 
@@ -22,17 +24,12 @@
 
 @media screen and (min-width: 768px) {
   .page {
-    border: 1px solid var(--color-black);
     max-width: 522px;
-    margin: 100px auto 40px;
-    background-color: var(--color-white);
   }
 }
 
 @media screen and (min-width: 1440px) {
   .page {
-    border: none;
-    margin: 100px auto 40px;
-    background-color: var(--color-bg-card-soft-green);
+    max-width: 392px;
   }
 }
