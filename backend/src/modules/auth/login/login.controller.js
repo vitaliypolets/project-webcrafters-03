@@ -1,18 +1,13 @@
-// backend/src/modules/auth/login/login.controller.js
-
-import { loginSchema } from './login.validation.js';
-import { loginUser } from './login.service.js';
-import { setAuthCookies } from '../shared/authCookies.js';
+import { loginSchema } from "./login.validation.js";
+import { loginUser } from "./login.service.js";
+import { setAuthCookies } from "../shared/authCookies.js";
+import { HttpError } from "../../../utils/HttpError.js";
 
 export async function loginController(req, res) {
   const result = loginSchema.safeParse(req.body);
 
   if (!result.success) {
-    return res.status(400).json({
-      status: 400,
-      message: 'Validation error',
-      details: result.error.flatten(),
-    });
+    throw new HttpError(400, "Validation error", result.error.flatten());
   }
 
   const resultData = await loginUser(result.data);
@@ -24,6 +19,6 @@ export async function loginController(req, res) {
       user: resultData.user,
       accessToken: resultData.accessToken,
     },
-    message: 'Successfully logged in!',
+    message: "Successfully logged in!",
   });
 }
