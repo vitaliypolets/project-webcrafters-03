@@ -7,7 +7,8 @@ import toast from "react-hot-toast";
 import Image from "next/image";
 
 import { Button } from "@/components/ui/Button";
-import Modal from "@/components/ui/Modal/Modal";
+import { Loader } from "@/components/ui/Loader";
+import { Modal } from "@/components/ui/Modal";
 import { useAuthStore } from "@/store/auth.store";
 import { getAvatarSrc } from "@/utils/getAvatarSrc";
 import { getRegisterDraft, clearRegisterDraft } from "@/features/auth/register";
@@ -115,16 +116,21 @@ export default function UploadPhotoForm() {
           type="button"
           className={styles.avatarButton}
           onClick={() => inputRef.current?.click()}
+          disabled={isSubmitting}
           aria-label="Choose avatar"
         >
-          <Image
-            src={previewUrl ?? getAvatarSrc(null)}
-            alt={previewUrl ? "Avatar preview" : "Default avatar"}
-            className={styles.avatarPreview}
-            width={136}
-            height={136}
-            priority
-          />
+          {isSubmitting ? (
+            <Loader />
+          ) : (
+            <Image
+              src={previewUrl ?? getAvatarSrc(null)}
+              alt={previewUrl ? "Avatar preview" : "Default avatar"}
+              className={styles.avatarPreview}
+              width={136}
+              height={136}
+              priority
+            />
+          )}
         </button>
 
         <input
@@ -133,6 +139,7 @@ export default function UploadPhotoForm() {
           accept={ALLOWED_AVATAR_MIME_TYPES.join(",")}
           className={styles.fileInput}
           onChange={handleFileChange}
+          disabled={isSubmitting}
         />
 
         {error && <p className={styles.error}>{error}</p>}

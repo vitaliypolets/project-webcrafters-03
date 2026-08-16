@@ -24,7 +24,7 @@ function fieldStatusClass(
   errors: ReturnType<typeof useFormikContext<RegisterFormValues>>["errors"],
 ): string {
   if (!hasAttemptedSubmit) return "";
-  return errors[name] ? styles.inputError : styles.inputSuccess;
+  return errors[name] ? styles.inputError : "";
 }
 
 function RegisterFormFields() {
