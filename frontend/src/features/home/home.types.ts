@@ -1,4 +1,5 @@
 import type { Article } from '@/types/article';
+import type { PaginatedResponse } from "@/types/api";
 
 export interface Creator {
   id: string;
@@ -7,13 +8,7 @@ export interface Creator {
   articlesAmount: number;
 }
 
-export interface CreatorsResponse {
-  data: Creator[];
-  total: number;
-  page: number;
-  perPage: number;
-  hasNextPage: boolean;
-}
+export type CreatorsResponse = PaginatedResponse<Creator>;
 
 export interface ArticlesResponse {
   articles: Article[];
