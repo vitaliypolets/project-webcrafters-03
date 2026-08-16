@@ -1,12 +1,11 @@
 // TODO (учасник №13): controllers
 
+import { HttpError } from '../../../utils/HttpError.js';
 import { createArticle } from './article-create.service.js';
 
 export const createArticleController = async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({
-      message: 'Article image is required',
-    });
+    throw new HttpError(400, 'Article image is required');
   }
 
   const article = await createArticle({
@@ -16,6 +15,5 @@ export const createArticleController = async (req, res) => {
   });
 
   res.status(201).json(article);
-
 };
 
