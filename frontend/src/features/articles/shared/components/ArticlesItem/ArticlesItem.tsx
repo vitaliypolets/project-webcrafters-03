@@ -7,7 +7,7 @@ import { BookmarkButton } from "../BookmarkButton/BookmarkButton";
 
 import styles from "./ArticlesItem.module.css";
 
-export const ArticlesItem = ({ article }: ArticlesItemProps) => {
+export const ArticlesItem = ({ article, action = "bookmark" }: ArticlesItemProps) => {
   const imageUrl = article.imageUrl.match(/\((.*?)\)/)?.[1] ?? article.imageUrl;
 
   return (
@@ -32,11 +32,17 @@ export const ArticlesItem = ({ article }: ArticlesItemProps) => {
           Learn more
         </Button>
 
-        <BookmarkButton
-          articleId={article.id}
-          isBookmarked={article.isBookmarked ?? false}
-          className={styles.bookmark}
-        />
+        {action === "edit" ? (
+          <Button href={`/articles/${article.id}/edit`} variant="secondary" size="sm">
+            Edit
+          </Button>
+        ) : (
+          <BookmarkButton
+            articleId={article.id}
+            isBookmarked={article.isBookmarked ?? false}
+            className={styles.bookmark}
+          />
+        )}
       </div>
     </article>
   );
