@@ -34,15 +34,31 @@ export default function Header() {
 
   // Забороняємо скрол сторінки при відкритому мобільному меню
   useEffect(() => {
-    if (isOpen) {
-      document.documentElement.style.overflow = "hidden";
-      document.body.style.overflow = "hidden";
-    } else {
-      document.documentElement.style.overflow = "";
-      document.body.style.overflow = "";
-    }
+    const handleResize = () => {
+      if (window.innerWidth > 1439) {
+        setIsOpen(false);
+
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+
+        return;
+      }
+
+      if (isOpen) {
+        document.documentElement.style.overflow = "hidden";
+        document.body.style.overflow = "hidden";
+      } else {
+        document.documentElement.style.overflow = "";
+        document.body.style.overflow = "";
+      }
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
 
     return () => {
+      window.removeEventListener("resize", handleResize);
       document.documentElement.style.overflow = "";
       document.body.style.overflow = "";
     };
