@@ -14,6 +14,9 @@ export const createArticleController = async (req, res) => {
     user: req.user,
   });
 
-  res.status(201).json(article);
+  res.status(201).json({
+    data: article,
+    message: 'Article created successfully',
+});
 };
 
