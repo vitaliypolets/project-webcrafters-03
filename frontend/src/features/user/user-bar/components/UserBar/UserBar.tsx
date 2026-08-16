@@ -43,9 +43,7 @@ export default function UserBar({
         aria-label="Log out"
       >
         <svg
-          className={css.icon}
-          width="24"
-          height="24"
+          className={css.iconLogout}
         >
           <use href="/icons/sprite.svg#icon-log-out" />
         </svg>
