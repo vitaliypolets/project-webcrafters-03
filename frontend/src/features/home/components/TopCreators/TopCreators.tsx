@@ -25,7 +25,9 @@ export const TopCreators = () => {
     );
   }
 
-  if (isError || !data?.data) {
+  const creators = data?.data.items;
+
+  if (isError || !creators?.length) {
     return null;
   }
 
@@ -40,19 +42,18 @@ export const TopCreators = () => {
         </div>
 
         <ul className={styles.list}>
-          {data.data.map((creator) => (
+          {creators.map((creator) => (
             <li key={creator.id} className={styles.item}>
               <div className={styles.avatarWrapper}>
                 <Image
                   src={getAvatarSrc(creator.avatarUrl)}
                   alt={creator.name}
-                  width={64}
-                  height={64}
+                  fill
+                  sizes="(min-width: 1440px) 160px, (min-width: 768px) 160px, 148px"
                   className={styles.avatar}
                 />
               </div>
               <h3 className={styles.name}>{creator.name}</h3>
-              <p className={styles.articlesCount}>{creator.articlesAmount} articles</p>
             </li>
           ))}
         </ul>

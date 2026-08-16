@@ -1,32 +1,31 @@
-import { User } from '../../../models/User.js';
+import { User } from "../../../models/User.js";
 
 export const getUsersListService = async (query) => {
   const page = Number(query.page) || 1;
   const perPage = Number(query.perPage) || 20;
   const skip = (page - 1) * perPage;
 
-  const sort = query.sort || 'createdAt';
-
-  const normalizedSort = sort === 'popular' ? 'articlesAmount' : sort;
+  const sort = query.sort || "createdAt";
+  const normalizedSort = sort === "popular" ? "articlesAmount" : sort;
 
   let sortOption;
 
   switch (normalizedSort) {
-    case 'articlesAmount':
+    case "articlesAmount":
       sortOption = {
         articlesAmount: -1,
         _id: -1,
       };
       break;
 
-    case 'name':
+    case "name":
       sortOption = {
         name: 1,
         _id: 1,
       };
       break;
 
-    case 'createdAt':
+    case "createdAt":
     default:
       sortOption = {
         createdAt: -1,
@@ -35,8 +34,8 @@ export const getUsersListService = async (query) => {
       break;
   }
 
-  const [users, total] = await Promise.all([
-    User.find({}, 'name avatarUrl articlesAmount')
+  const [users, totalItems] = await Promise.all([
+    User.find({}, "name avatarUrl articlesAmount")
       .sort(sortOption)
       .skip(skip)
       .limit(perPage)
@@ -45,9 +44,10 @@ export const getUsersListService = async (query) => {
     User.countDocuments(),
   ]);
 
-  const hasNextPage = skip + users.length < total;
+  const totalPages = Math.ceil(totalItems / perPage);
+  const hasNextPage = page < totalPages;
 
-  const formattedUsers = users.map((user) => ({
+  const items = users.map((user) => ({
     id: user._id.toString(),
     name: user.name,
     avatarUrl: user.avatarUrl ?? null,
@@ -55,10 +55,13 @@ export const getUsersListService = async (query) => {
   }));
 
   return {
-    data: formattedUsers,
-    total,
-    page,
-    perPage,
-    hasNextPage,
+    items,
+    meta: {
+      page,
+      perPage,
+      totalItems,
+      totalPages,
+      hasNextPage,
+    },
   };
 };
