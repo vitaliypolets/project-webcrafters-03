@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from "react-hot-toast";
+import { toast } from "react-hot-toast";
+
 import Modal from "@/components/ui/Modal/Modal";
 import { useAuthStore } from "@/store/auth.store";
 import { logout } from "@/features/auth/session/session.service";
+
 import css from "./LogoutUserModal.module.css";
 
 interface LogoutUserModalClientProps {
@@ -26,15 +28,14 @@ export default function LogoutUserModalClient({ isOpen, onClose }: LogoutUserMod
 
     try {
       await logout();
-
-      toast.success("Logged out successfully");
     } catch (error) {
       console.error("Logout error:", error);
+      toast.error("Failed to log out. Please try again.");
     } finally {
       clearIsAuthenticated();
       onClose();
-      setIsLoading(false);
       router.push("/");
+      setIsLoading(false);
     }
   };
 
