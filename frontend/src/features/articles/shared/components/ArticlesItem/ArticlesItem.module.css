@@ -139,6 +139,18 @@
   padding: 0;
 }
 
+.editButton {
+  background-color: transparent;
+  border: var(--border-width-sm) solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.editButton.editButton:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
 .editIcon {
   display: block;
 
