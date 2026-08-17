@@ -212,7 +212,7 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
             placeholder="Max"
             className={styles.nameInput}
             disabled={isSubmitting}
-            maxLength={50}
+            maxLength={32}
             autoComplete="name"
           />
         </div>
