@@ -1,14 +1,14 @@
 // TODO (учасник №5): request validation
 
-import { z } from 'zod';
-import { HttpError } from '../../../utils/HttpError.js';
+import { z } from "zod";
+import { HttpError } from "../../../utils/HttpError.js";
 
 export const updateMeSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(2, 'Name must be at least 2 characters')
-    .max(32, 'Name must be at most 32 characters')
+    .min(2, "Name must be at least 2 characters")
+    .max(32, "Name must be at most 32 characters")
     .optional(),
 });
 
@@ -17,21 +17,21 @@ export const validateUpdateMe = (req, _res, next) => {
 
   if (!result.success) {
     const details = result.error.issues.map((issue) => ({
-      field: issue.path.join('.'),
+      field: issue.path.join("."),
       message: issue.message,
     }));
 
-    throw new HttpError(400, 'Validation error', details);
+    throw new HttpError(400, "Validation error", details);
   }
 
   const hasName = result.data.name !== undefined;
   const hasAvatar = req.file !== undefined;
 
   if (!hasName && !hasAvatar) {
-    throw new HttpError(400, 'Validation error', [
+    throw new HttpError(400, "Validation error", [
       {
-        field: 'body',
-        message: 'At least name or avatar is required',
+        field: "body",
+        message: "At least name or avatar is required",
       },
     ]);
   }
