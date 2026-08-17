@@ -5,9 +5,16 @@
 .tabs {
   display: flex;
   overflow-x: auto;
+  overflow-y: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   align-items: flex-end;
   gap: var(--spacing-lg);
   border-bottom: var(--border-width-sm) solid var(--color-gray-light);
+}
+
+.tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .tab {
