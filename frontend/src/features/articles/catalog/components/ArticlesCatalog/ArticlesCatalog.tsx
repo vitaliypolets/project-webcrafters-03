@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import type { ArticlesCatalogProps } from '../../articles-catalog.types';
 import { ArticlesList } from '@/features/articles/shared'; 
 
@@ -11,6 +12,28 @@ export const ArticlesCatalog = ({
   hasNextPage,
   onLoadMore,
 }: ArticlesCatalogProps) => {
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const prevCountRef = useRef(articles?.length || 0);
+
+  useEffect(() => {
+    const currentCount = articles?.length || 0;
+    const prevCount = prevCountRef.current;
+
+    if (currentCount > prevCount && prevCount > 0 && containerRef.current) {
+      const cards = containerRef.current.querySelectorAll('li');
+      const firstNewCard = cards[prevCount];
+
+      if (firstNewCard) {
+        firstNewCard.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        });
+      }
+    }
+
+    prevCountRef.current = currentCount;
+  }, [articles]);
+
   if (isLoading) {
     return <div className={css.statusMessage}>Loading articles...</div>;
   }
@@ -28,7 +51,7 @@ export const ArticlesCatalog = ({
   }
 
   return (
-    <div className={css.catalogContainer}>
+    <div ref={containerRef} className={css.catalogContainer}>
       <ArticlesList articles={articles} />
 
       {hasNextPage && (
