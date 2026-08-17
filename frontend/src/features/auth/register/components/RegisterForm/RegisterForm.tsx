@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { Formik, Form, Field, useFormikContext } from "formik";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 import { Button } from "@/components/ui/Button";
 import { registerSchema, PASSWORD_REGEXP } from "../../register.schema";
@@ -334,9 +335,9 @@ function RegisterFormFields() {
 
       <p className={styles.instructions}>
         Already have an account?{" "}
-        <a className={styles.link} href="/login">
+        <Link className={styles.link} href="/login">
           Log in
-        </a>
+        </Link>
       </p>
     </Form>
   );
