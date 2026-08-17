@@ -1,5 +1,5 @@
-import type { Article } from '@/types/article';
-import type { PaginatedResponse } from '@/types/api';
+import type { Article } from "@/types/article";
+import type { PaginatedResponse } from "@/types/api";
 
 export interface Creator {
   id: string;
@@ -9,28 +9,4 @@ export interface Creator {
 }
 
 export type CreatorsResponse = PaginatedResponse<Creator>;
-
-export interface ArticlesResponse {
-  articles: Article[];
-  page: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-}
-
-export interface ArticlesApiResponse {
-  data: {
-    items: Article[];
-    meta: {
-      page: number;
-      perPage: number;
-      totalItems: number;
-      totalPages: number;
-      hasNextPage: boolean;
-      hasPreviousPage: boolean;
-    };
-  };
-  message: string;
-}
+export type ArticlesResponse = PaginatedResponse<Article>;

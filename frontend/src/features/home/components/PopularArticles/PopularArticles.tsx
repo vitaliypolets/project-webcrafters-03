@@ -16,38 +16,37 @@ export const PopularArticles = () => {
     queryFn: () => getPopularArticles(4),
   });
 
+  if (isLoading) {
+    return (
+      <div className={styles.centerContainer}>
+        <Loader />
+      </div>
+    );
+  }
+
+  const articles = data?.data.items;
+
+  if (isError || !articles) {
+    return null;
+  }
+
   return (
     <section className={styles.section} id="popular-articles">
       <Container className={styles.container}>
         <div className={styles.header}>
           <h2 className={styles.title}>Popular Articles</h2>
-
           <Link href="/articles" className={styles.link}>
             Go to all Articles <span className={styles.arrow}>↗</span>
           </Link>
         </div>
 
-        {isLoading && (
-          <div className={styles.centerContainer}>
-            <Loader />
-          </div>
-        )}
-
-        {isError && (
-          <div className={styles.centerContainer}>
-            <p>Failed to load popular articles.</p>
-          </div>
-        )}
-
-        {!isLoading && !isError && data?.articles && (
-          <ul className={styles.list}>
-            {data.articles.map((article) => (
-              <li className={styles.listItem} key={article.id}>
-                <ArticlesItem article={article} />
-              </li>
-            ))}
-          </ul>
-        )}
+        <ul className={styles.list}>
+          {articles.map((article) => (
+            <li className={styles.listItem} key={article.id}>
+              <ArticlesItem article={article} />
+            </li>
+          ))}
+        </ul>
       </Container>
     </section>
   );
