@@ -69,7 +69,7 @@ const ArticleImagePreview = ({
      <input
        ref={inputRef}
        type="file"
-       accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+       accept="image/jpeg,image/png,image/webp"
        className={css.fileInput}
        onChange={handleChange}
      />

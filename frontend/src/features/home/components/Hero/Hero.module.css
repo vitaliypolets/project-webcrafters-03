@@ -66,8 +66,33 @@
   text-align: center;
 }
 
+.buttons .registerButton {
+  font-family: var(--font-family-main);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-main);
+  line-height: var(--line-height-secondary);
+
+  color: var(--color-white);
+  background-color: var(--color-primary);
+  border: none;
+}
+
+.buttons .registerButton:hover {
+  color: var(--color-white);
+  background-color: var(--color-primary-hover);
+  border: none;
+}
+
+.buttons .registerButton:active {
+  text-decoration: underline;
+}
+
 /* Tablet */
 @media (min-width: 768px) {
+  .heroSection {
+    padding-top: 22px;
+  }
+
   .heroContainer {
     flex-direction: row;
   }

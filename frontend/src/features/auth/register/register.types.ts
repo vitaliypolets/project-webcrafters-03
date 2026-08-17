@@ -5,4 +5,4 @@ export type RegisterFormValues = {
   confirmPassword: string;
 };
 
-export type RegisterDraft = RegisterFormValues;
+export type RegisterDraft = Pick<RegisterFormValues, "name" | "email">;

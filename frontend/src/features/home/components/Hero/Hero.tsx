@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import type { MouseEvent } from "react";
 
 import { Button } from "@/components/ui/Button/Button";
 import { Container } from "@/components/ui/Container/Container";
@@ -7,7 +10,15 @@ import heroBgDesktop from "./assets/hero-background.png";
 import heroBgMobile from "./assets/hero-background-mobile.png";
 import styles from "./Hero.module.css";
 
+const ARTICLES_ANCHOR_ID = "popular-articles";
+
 export const Hero = () => {
+  const scrollToArticles = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    document.getElementById(ARTICLES_ANCHOR_ID)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section className={styles.heroSection}>
       <Container className={styles.heroContainer}>
@@ -39,10 +50,16 @@ export const Hero = () => {
           </h1>
 
           <div className={styles.buttons}>
-            <Button href="/articles" variant="primary" size="xl" className={styles.heroButton}>
+            <Button
+              href={`#${ARTICLES_ANCHOR_ID}`}
+              variant="primary"
+              size="xl"
+              className={styles.heroButton}
+              onClick={scrollToArticles}
+            >
               Go to Articles
             </Button>
-            <Button href="/register" variant="secondary" size="xl" className={styles.heroButton}>
+            <Button href="/register" variant="secondary" size="xl" className={`${styles.heroButton} ${styles.registerButton}`}>
               Register
             </Button>
           </div>

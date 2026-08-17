@@ -10,6 +10,7 @@
   flex-direction: column;
   width: calc((100% - 16px) / 2);
   padding: var(--spacing-sm);
+  align-items: center;
 }
 /* Tablet Layout (від 768px) */
 @media screen and (min-width: 768px) {
