@@ -9,4 +9,28 @@ export interface Creator {
 }
 
 export type CreatorsResponse = PaginatedResponse<Creator>;
-export type ArticlesResponse = PaginatedResponse<Article>;
+
+export interface ArticlesResponse {
+  articles: Article[];
+  page: number;
+  perPage: number;
+  totalItems: number;
+  totalPages: number;
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+}
+
+export interface ArticlesApiResponse {
+  data: {
+    items: Article[];
+    meta: {
+      page: number;
+      perPage: number;
+      totalItems: number;
+      totalPages: number;
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+    };
+  };
+  message: string;
+}
