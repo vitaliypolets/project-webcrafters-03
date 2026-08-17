@@ -70,13 +70,12 @@
   flex-direction: column;
   justify-content: space-between;
   transition: background var(--transition-main);
-}
-.recommendArticleLinkItem {
+} 
+
+.recommendArticleLink {
   display: flex;
   justify-content: space-between;
   margin-bottom: var(--spacing-xs);
-}
-.recommendArticleText {
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-secondary);
   text-decoration: underline;
@@ -159,15 +158,15 @@
   }
   .recommendAuthorLink:hover, 
   .authorTextName:hover,
-  .recommendArticleLinkItem:hover .recommendArticleText,
+  .recommendArticleLinkItem:hover .recommendArticleLink,
   .recommendAuthorLink:focus, 
   .authorTextName:focus,
-  .recommendArticleLinkItem:focus .recommendArticleText{
+  .recommendArticleLinkItem:focus .recommendArticleLink{
     opacity: var(--opacity-hover-link);
   }
   .recommendAuthorLink:active, 
   .authorTextName:active,
-  .recommendArticleLinkItem:active .recommendArticleText {
+  .recommendArticleLinkItem:active .recommendArticleLink {
     opacity: 1;
     text-decoration-color: var(--color-text-link);
   }

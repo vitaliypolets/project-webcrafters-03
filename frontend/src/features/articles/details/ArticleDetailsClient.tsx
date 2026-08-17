@@ -33,7 +33,7 @@ const ArticleDetailsClient = ({ articleId }: Props) => {
       }
     },
     enabled: articleId !== "",
-    refetchOnMount: false,
+    staleTime: 0,
     throwOnError: true,
   });
 
