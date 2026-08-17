@@ -3,16 +3,19 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
 
 import Button from "@/components/ui/Button/Button";
 import { fetchArticleById } from "@/features/articles/details/article-details.service";
 
+import ArticleImagePreview from "../../../create/components/ArticleImagePreview/ArticleImagePreview";
+
 import { editArticleSchema } from "../../edit-article.schema";
 import { updateArticle } from "../../edit-article.service";
 import type { EditArticleFormValues } from "../../edit-article.types";
 
-import styles from "./EditArticleForm.module.css";
+import css from "./EditArticleForm.module.css";
 
 type EditArticleFormProps = {
   articleId: string;
@@ -20,6 +23,7 @@ type EditArticleFormProps = {
 
 const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
   const router = useRouter();
+  const [previewUrl, setPreviewUrl] = useState("");
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ["article", articleId],
@@ -30,7 +34,10 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
     mutationFn: (values: EditArticleFormValues) => updateArticle(articleId, values),
 
     onSuccess: () => {
+      setPreviewUrl("");
+
       toast.success("Article updated successfully!");
+
       router.push(`/articles/${articleId}`);
       router.refresh();
     },
@@ -41,11 +48,11 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
   });
 
   if (isLoading) {
-    return <p className={styles.status}>Loading article...</p>;
+    return <p>Loading article...</p>;
   }
 
   if (isError || !data?.article) {
-    return <p className={styles.status}>Failed to load article.</p>;
+    return <p>Failed to load article.</p>;
   }
 
   const initialValues: EditArticleFormValues = {
@@ -53,6 +60,20 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
     article: data.article.article,
     publicationDate: data.article.publicationDate.slice(0, 10),
     image: null,
+  };
+
+  const handleImageChange = (
+    file: File | null,
+    setFieldValue: (field: string, value: unknown) => void,
+  ) => {
+    setFieldValue("image", file);
+
+    if (!file) {
+      setPreviewUrl("");
+      return;
+    }
+
+    setPreviewUrl(URL.createObjectURL(file));
   };
 
   const handleSubmit = async (values: EditArticleFormValues) => {
@@ -67,94 +88,99 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
       enableReinitialize
     >
       {({ isSubmitting, setFieldValue, errors, touched, values }) => (
-        <Form className={styles.form}>
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="title">
-              Article Title
-            </label>
-
-            <Field
-              className={styles.input}
-              id="title"
-              name="title"
-              type="text"
-              placeholder="Enter the title"
+        <Form className={css.form}>
+          <div className={css.imageField}>
+            <ArticleImagePreview
+              previewUrl={previewUrl}
+              onChange={(file) => handleImageChange(file, setFieldValue)}
+              error={touched.image && errors.image ? String(errors.image) : undefined}
             />
-
-            <ErrorMessage name="title" component="p" className={styles.error} />
           </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="article">
-              Article
+          <div className={css.titleField}>
+            <label htmlFor="title" className={css.label}>
+              {values.title ? "Article Title" : "Title"}
             </label>
 
-            <Field
-              as="textarea"
-              className={styles.textarea}
-              id="article"
-              name="article"
-              placeholder="Enter a text"
-            />
+            <div
+              className={`${css.inputWrapper} ${
+                touched.title && errors.title ? css.errorState : values.title ? css.filledState : ""
+              }`}
+            >
+              <svg className={css.inputIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
 
-            <ErrorMessage name="article" component="p" className={styles.error} />
+              <Field
+                id="title"
+                name="title"
+                type="text"
+                placeholder="Enter the title"
+                className={css.input}
+              />
+
+              <svg className={css.inputIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
+            </div>
+
+            <ErrorMessage name="title" component="p" className={css.error} />
           </div>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="publicationDate">
+          <div className={css.descriptionField}>
+            <div
+              className={`${css.textareaWrapper} ${
+                touched.article && errors.article
+                  ? css.errorState
+                  : values.article
+                    ? css.filledState
+                    : ""
+              }`}
+            >
+              <svg className={css.textareaIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
+
+              <Field
+                as="textarea"
+                id="article"
+                name="article"
+                placeholder="Enter a text"
+                className={css.textarea}
+              />
+
+              <svg className={css.textareaIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
+            </div>
+
+            <ErrorMessage name="article" component="p" className={css.error} />
+          </div>
+
+          <div className={css.formGroup}>
+            <label htmlFor="publicationDate" className={css.label}>
               Publication date
             </label>
 
             <Field
-              className={styles.input}
               id="publicationDate"
               name="publicationDate"
               type="text"
+              className={css.input}
               value={values.publicationDate}
               readOnly
               aria-readonly="true"
             />
 
-            <ErrorMessage name="publicationDate" component="p" className={styles.error} />
-          </div>
-
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="image">
-              Image
-            </label>
-
-            <div className={styles.fileUpload}>
-              <label className={styles.fileButton} htmlFor="image">
-                Choose file
-              </label>
-
-              <input
-                className={styles.hiddenFileInput}
-                id="image"
-                name="image"
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                onChange={(event) => {
-                  const file = event.currentTarget.files?.[0] ?? null;
-
-                  setFieldValue("image", file);
-                }}
-              />
-
-              <span className={styles.fileName}>{values.image?.name ?? "No file chosen"}</span>
-            </div>
-
-            {touched.image && errors.image && (
-              <p className={styles.error}>{String(errors.image)}</p>
-            )}
+            <ErrorMessage name="publicationDate" component="p" className={css.error} />
           </div>
 
           <Button
             type="submit"
             variant="primary"
             size="md"
+            className={css.submitButton}
             disabled={isSubmitting || isPending}
-            className={styles.submitButton}
           >
             {isSubmitting || isPending ? "Saving..." : "Save changes"}
           </Button>
