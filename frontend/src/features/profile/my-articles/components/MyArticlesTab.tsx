@@ -5,6 +5,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 
+import { Loader } from '@/components/ui/Loader/Loader';
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -111,9 +112,7 @@ export function MyArticlesTab() {
       (Boolean(userId) &&
         query.isPending &&
         query.fetchStatus === 'fetching') ? (
-        <p className={styles.status}>
-          Loading articles…
-        </p>
+        <Loader />
       ) : null}
 
       {isInitialized && !userId ? (
@@ -157,7 +156,7 @@ export function MyArticlesTab() {
           onClick={handleLoadMore}
         >
           {query.isFetchingNextPage
-            ? 'Loading…'
+            ? 'Loading...'
             : 'Load More'}
         </button>
       ) : null}
