@@ -1,5 +1,6 @@
-"use client";
+'use client';
 
+import ArticlesLoading from './loading';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import {
   ArticlesCatalog,
@@ -35,6 +36,10 @@ export default function ArticlesPage() {
     params.set('filter', newFilter);
     router.push(`${pathname}?${params.toString()}`);
   };
+
+  if (isLoading) {
+    return <ArticlesLoading />;
+  }
 
   return (
     <main className={styles.page}>
