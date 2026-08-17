@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react';
+
+import { ArticlesList } from '@/features/articles/shared';
+
 import type { ArticlesCatalogProps } from '../../articles-catalog.types';
-import { ArticlesList } from '@/features/articles/shared'; 
 
 import css from './ArticlesCatalog.module.css';
 
@@ -19,7 +21,11 @@ export const ArticlesCatalog = ({
     const currentCount = articles?.length || 0;
     const prevCount = prevCountRef.current;
 
-    if (currentCount > prevCount && prevCount > 0 && containerRef.current) {
+    if (
+      currentCount > prevCount &&
+      prevCount > 0 &&
+      containerRef.current
+    ) {
       const cards = containerRef.current.querySelectorAll('li');
       const firstNewCard = cards[prevCount];
 
@@ -35,7 +41,11 @@ export const ArticlesCatalog = ({
   }, [articles]);
 
   if (isLoading) {
-    return <div className={css.statusMessage}>Loading articles...</div>;
+    return (
+      <div className={css.statusMessage}>
+        Loading articles...
+      </div>
+    );
   }
 
   if (isError) {
@@ -47,11 +57,18 @@ export const ArticlesCatalog = ({
   }
 
   if (!articles || articles.length === 0) {
-    return <div className={css.statusMessage}>No articles found.</div>;
+    return (
+      <div className={css.statusMessage}>
+        No articles found.
+      </div>
+    );
   }
 
   return (
-    <div ref={containerRef} className={css.catalogContainer}>
+    <div
+      ref={containerRef}
+      className={css.catalogContainer}
+    >
       <ArticlesList articles={articles} />
 
       {hasNextPage && (
