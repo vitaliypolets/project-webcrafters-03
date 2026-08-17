@@ -8,6 +8,11 @@ import { BookmarkButton } from "../BookmarkButton/BookmarkButton";
 import styles from "./ArticlesItem.module.css";
 
 export const ArticlesItem = ({ article, action = "bookmark", className }: ArticlesItemProps) => {
+  console.log({
+    id: article.id,
+    title: article.title,
+    isBookmarked: article.isBookmarked,
+  });
   const imageUrl = article.imageUrl.match(/\((.*?)\)/)?.[1] ?? article.imageUrl;
 
   return (
