@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import type { MouseEvent } from "react";
 
 import { Button } from "@/components/ui/Button/Button";
 import { Container } from "@/components/ui/Container/Container";
@@ -12,6 +13,27 @@ import styles from "./Hero.module.css";
 const ARTICLES_ANCHOR_ID = "popular-articles";
 
 export const Hero = () => {
+  const scrollToArticles = (event: MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    const section = document.getElementById(ARTICLES_ANCHOR_ID);
+
+    if (!section) {
+      return;
+    }
+
+    section.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+
+    window.history.replaceState(
+      null,
+      "",
+      `#${ARTICLES_ANCHOR_ID}`,
+    );
+  };
+
   return (
     <section className={styles.heroSection}>
       <Container className={styles.heroContainer}>
@@ -41,7 +63,9 @@ export const Hero = () => {
 
         <div className={styles.content}>
           <h1 className={styles.title}>
-            Find your <span className={styles.italic}>harmony</span> in community
+            Find your{" "}
+            <span className={styles.italic}>harmony</span>{" "}
+            in community
           </h1>
 
           <div className={styles.buttons}>
@@ -50,6 +74,7 @@ export const Hero = () => {
               variant="primary"
               size="xl"
               className={styles.heroButton}
+              onClick={scrollToArticles}
             >
               Go to Articles
             </Button>
