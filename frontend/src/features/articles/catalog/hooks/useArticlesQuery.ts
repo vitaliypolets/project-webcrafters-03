@@ -14,7 +14,7 @@ export const useArticlesQuery = (activeFilter: ArticleFilter = 'all') => {
       fetchArticles({ page: pageParam, perPage: PER_PAGE, filter: activeFilter }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
-      lastPage.hasNextPage ? lastPage.page + 1 : undefined,
+      lastPage.data.meta.hasNextPage ? lastPage.data.meta.page + 1 : undefined,
   });
 
   useEffect(() => {
@@ -29,11 +29,12 @@ export const useArticlesQuery = (activeFilter: ArticleFilter = 'all') => {
   }, [query.hasNextPage, query.data, activeFilter, queryClient]);
 
   const articles = useMemo(() => {
-    const rawArticles = query.data?.pages.flatMap((page) => page.articles) ?? [];
+    const rawArticles =
+      query.data?.pages.flatMap((page) => page.data.items) ?? [];
     return Array.from(new Map(rawArticles.map((item) => [item.id, item])).values());
   }, [query.data]);
 
-  const totalItems = query.data?.pages[0]?.totalItems ?? 0;
+  const totalItems = query.data?.pages[0]?.data.meta.totalItems ?? 0;
 
   return {
     ...query,

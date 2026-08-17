@@ -1,5 +1,6 @@
 // TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
 import type { Article } from '@/types/article';
+import type { PaginatedResponse } from '@/types/api';
 
 export type ArticleFilter = 'all' | 'popular';
 
@@ -12,14 +13,7 @@ export type getArticlesParams = {
   limit?: number;
 };
 
-export type getArticlesResponse = {
-  articles: Article[];
-  page: number;
-  perPage: number;
-  totalItems: number;
-  totalPages: number;
-  hasNextPage: boolean;
-};
+export type getArticlesResponse = PaginatedResponse<Article>;
 
 export type ArticlesCounterProps = {
   totalItems: number;
