@@ -10,6 +10,10 @@
   width: 100%;
 }
 
+.articles li {
+  scroll-margin-top: 88px;
+}
+
 .status,
 .error {
   width: 100%;
