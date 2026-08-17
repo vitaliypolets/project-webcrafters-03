@@ -51,3 +51,16 @@ export const registerController = async (req, res) => {
     message: 'Success',
   });
 };
+
+export const checkEmailController = async (req, res) => {
+  const { email } = req.body;
+
+  const existingUser = await findUserByEmail(email);
+
+  res.status(200).json({
+    data: {
+      available: !existingUser,
+    },
+    message: 'Success',
+  });
+};
