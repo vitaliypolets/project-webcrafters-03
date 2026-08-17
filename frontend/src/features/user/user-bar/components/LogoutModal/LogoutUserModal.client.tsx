@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
+
 import Modal from "@/components/ui/Modal/Modal";
 import { useAuthStore } from "@/store/auth.store";
 import { logout } from "@/features/auth/session/session.service";
+
 import css from "./LogoutUserModal.module.css";
 
 interface LogoutUserModalClientProps {
@@ -14,6 +17,7 @@ interface LogoutUserModalClientProps {
 
 export default function LogoutUserModalClient({ isOpen, onClose }: LogoutUserModalClientProps) {
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const clearIsAuthenticated = useAuthStore((state) => state.clearSession);
 
@@ -24,16 +28,13 @@ export default function LogoutUserModalClient({ isOpen, onClose }: LogoutUserMod
 
     try {
       await logout();
-      clearIsAuthenticated();
-
-      toast.success("Logged out successfully");
-
-      onClose();
     } catch (error) {
       console.error("Logout error:", error);
-
       toast.error("Failed to log out. Please try again.");
     } finally {
+      clearIsAuthenticated();
+      onClose();
+      router.push("/");
       setIsLoading(false);
     }
   };
