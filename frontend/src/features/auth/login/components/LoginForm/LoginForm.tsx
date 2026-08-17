@@ -1,18 +1,20 @@
 // frontend\src\features\auth\login\components\LoginForm\LoginForm.tsx
 
-'use client';
+"use client";
 
-import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { loginSchema } from '../../login.schema';
-import type { LoginFormValues } from '../../login.types';
-import styles from './LoginForm.module.css';
-import { useState } from 'react';
-import { login } from '../../login.service';
-import { useAuthStore } from '@/store/auth.store';
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import { loginSchema } from "../../login.schema";
+import type { LoginFormValues } from "../../login.types";
+import styles from "./LoginForm.module.css";
+import { useState } from "react";
+import { login } from "../../login.service";
+import { useAuthStore } from "@/store/auth.store";
+import Link from "next/link";
+import toast from "react-hot-toast";
 
 const initialValues: LoginFormValues = {
-  email: '',
-  password: '',
+  email: "",
+  password: "",
 };
 
 export default function LoginForm() {
@@ -25,6 +27,12 @@ export default function LoginForm() {
       setSession(result.user, result.accessToken);
     } catch (error) {
       console.error(error);
+
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Login failed. Please check your email and password.",
+      );
     }
   };
 
@@ -60,7 +68,7 @@ export default function LoginForm() {
               className={styles.inputLogin}
               id="password"
               name="password"
-              type={showPassword ? 'text' : 'password'}
+              type={showPassword ? "text" : "password"}
               autoComplete="current-password"
               placeholder="*********"
             />
@@ -69,7 +77,7 @@ export default function LoginForm() {
               type="button"
               className={styles.passwordToggle}
               onClick={() => setShowPassword((prev) => !prev)}
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               <svg
                 className={styles.passwordIcon}
@@ -78,7 +86,7 @@ export default function LoginForm() {
                 width="24"
                 height="24"
               >
-                <use href={`/icons/sprite.svg#${showPassword ? 'icon-eye' : 'icon-eye-crossed'}`} />
+                <use href={`/icons/sprite.svg#${showPassword ? "icon-eye" : "icon-eye-crossed"}`} />
               </svg>
             </button>
           </div>
@@ -90,10 +98,10 @@ export default function LoginForm() {
           Login
         </button>
         <p className={styles.instructionsLogin}>
-          Don`t have an account?{' '}
-          <a className={styles.linkLogin} href="/register">
+          Don`t have an account?{" "}
+          <Link className={styles.linkLogin} href="/register">
             Register
-          </a>
+          </Link>
         </p>
       </Form>
     </Formik>
