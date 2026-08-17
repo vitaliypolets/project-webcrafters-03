@@ -21,6 +21,8 @@ import { registerUser } from "../../photo.service";
 import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE } from "../../photo.schema";
 import styles from "./UploadPhotoForm.module.css";
 
+const ERROR_REDIRECT_DELAY_MS = 4000;
+
 export default function UploadPhotoForm() {
   const router = useRouter();
   const setSession = useAuthStore((state) => state.setSession);
@@ -32,6 +34,7 @@ export default function UploadPhotoForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const completedRef = useRef(false);
+  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!getRegisterDraft() || !getRegisterPassword()) {
@@ -44,6 +47,12 @@ export default function UploadPhotoForm() {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) clearTimeout(redirectTimeoutRef.current);
+    };
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
@@ -99,15 +108,15 @@ export default function UploadPhotoForm() {
       toast.success("Welcome to Harmoniq!");
       router.replace("/");
     } catch (err) {
-      completedRef.current = false;
-
       const message = isAxiosError<{ message?: string }>(err)
         ? (err.response?.data?.message ?? "Registration failed. Please try again.")
         : "Registration failed. Please try again.";
 
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
+      toast.error(message, { duration: ERROR_REDIRECT_DELAY_MS });
+
+      redirectTimeoutRef.current = setTimeout(() => {
+        router.replace("/register");
+      }, ERROR_REDIRECT_DELAY_MS);
     }
   };
 
