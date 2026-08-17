@@ -17,8 +17,11 @@ export type RecommendedArticle = {
 };
 
 export type ArticleDetailsResponse = {
-  article: ArticleDetails;
-  author: ArticleAuthor | null;
-  isBookmarked: boolean;
-  recommendations: RecommendedArticle[];
+  data: {
+    article: ArticleDetails;
+    author: ArticleAuthor | null;
+    isBookmarked: boolean;
+    recommendations: RecommendedArticle[];
+  };
+  message: string;
 };

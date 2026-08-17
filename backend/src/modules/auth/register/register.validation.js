@@ -2,21 +2,42 @@ import multer from "multer";
 import { z } from "zod";
 import { HttpError } from "../../../utils/HttpError.js";
 
+const NAME_REGEXP = /^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ'\s-]+$/;
+const PASSWORD_REGEXP = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+
 export const registerBodySchema = z.object({
   name: z
-    .string({ error: "Name is required" })
+    .string({ required_error: "Name is required" })
     .trim()
     .min(2, "Name must be at least 2 characters")
-    .max(32, "Name must be at most 32 characters"),
+    .max(32, "Name must be at most 32 characters")
+    .refine((val) => NAME_REGEXP.test(val), {
+      message: "Invalid name format",
+    }),
+
   email: z
-    .string({ error: "Email is required" })
+    .string({ required_error: "Email is required" })
     .trim()
+    .toLowerCase()
     .max(64, "Email must be at most 64 characters")
     .email("Invalid email format"),
+
   password: z
-    .string({ error: "Password is required" })
+    .string({ required_error: "Password is required" })
     .min(8, "Password must be at least 8 characters")
-    .max(64, "Password must be at most 64 characters"),
+    .max(64, "Password must be at most 64 characters")
+    .refine((val) => PASSWORD_REGEXP.test(val), {
+      message: "Invalid password format",
+    }),
+});
+
+export const checkEmailBodySchema = z.object({
+  email: z
+    .string({ required_error: "Email is required" })
+    .trim()
+    .toLowerCase()
+    .max(64, "Email must be at most 64 characters")
+    .email("Invalid email format"),
 });
 
 export const validateBody = (schema) => (req, _res, next) => {

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 
+import { generateArticleDescription } from "../shared/generateArticleDescription.js";
 import cloudinary from "../../../config/cloudinary.js";
 import { Article } from "../../../models/Article.js";
 import { HttpError } from "../../../utils/HttpError.js";
@@ -38,6 +39,10 @@ const updateArticle = async ({ articleId, data, file, userId }) => {
     }
   }
 
+  if (data.article !== undefined) {
+    article.description = generateArticleDescription(data.article);
+  }
+
   if (file) {
     const oldImagePublicId = article.imagePublicId;
     const image = await saveFileToCloudinary(file);
@@ -52,7 +57,12 @@ const updateArticle = async ({ articleId, data, file, userId }) => {
 
   await article.save();
 
-  return article;
+  const { _id, ...articleData } = article.toObject();
+
+  return {
+    id: _id.toString(),
+    ...articleData,
+  };
 };
 
 const deleteArticle = async ({ articleId, userId }) => {

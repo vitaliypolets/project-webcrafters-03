@@ -54,13 +54,20 @@ export const getArticlesListService = async (query) => {
 
   const totalPages = Math.ceil(totalItems / perPage) || 1;
   const hasNextPage = page < totalPages;
+  const hasPreviousPage = page > 1;
 
   return {
-    articles,
-    page,
-    perPage,
-    totalItems,
-    totalPages,
-    hasNextPage,
+    data: {
+      items: articles,
+      meta: {
+        page,
+        perPage,
+        totalItems,
+        totalPages,
+        hasNextPage,
+        hasPreviousPage,
+      },
+    },
+    message: 'Success',
   };
 };

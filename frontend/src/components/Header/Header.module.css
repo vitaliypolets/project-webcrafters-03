@@ -2,12 +2,20 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding-top: 14px;
+  padding-bottom: 14px;
   background-color: var(--color-bg-card-soft-green);
   color: var(--color-white);
-  position: fixed;
+  position: sticky;
   z-index: 1000;
   top: 0;
+}
+
+.headerFixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   width: 100%;
 }
 
@@ -20,7 +28,7 @@
 }
 
 .logoIcon {
-  width: 165px;
+  width: 149px;
   height: 46px;
   display: block;
   flex-shrink: 0;
@@ -32,10 +40,11 @@
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xs);
   color: var(--color-text-hero);
+  padding: 0px 8px;
 }
 
 .headerLink:hover {
-  color: #15291e;
+  opacity: var(--opacity-hover-link);
 }
 
 .navigation {
@@ -52,6 +61,7 @@
   display: flex;
   align-items: center;
 }
+
 .navigationItemCreate {
   display: flex;
   align-items: center;
@@ -69,6 +79,7 @@
   font-weight: var(--font-weight-bold);
   font-size: var(--font-size-xs);
   color: var(--color-text-hero);
+  line-height: 1.67;
 }
 
 .navigationLink::after {
@@ -100,6 +111,7 @@
   font-size: var(--font-size-body);
   color: var(--color-text-on-primary);
   transition: background-color 0.3s ease;
+  line-height: 1.3;
 }
 
 .navigationLinkJoin:hover {
@@ -117,6 +129,7 @@
   font-size: var(--font-size-body);
   color: var(--color-text-on-primary);
   transition: background-color 0.3s ease;
+  line-height: 1.3;
 }
 
 .navigationLinkJoinDesc:hover {
@@ -143,14 +156,9 @@
   display: flex;
   position: relative;
   padding: 0 var(--spacing-md) 0 0;
+  cursor: pointer;
 }
 
-.userAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
 .avatarLink {
   display: inline-flex;
   align-items: center;
@@ -160,7 +168,16 @@
   border-radius: var(--border-radius-full);
 }
 
-.avatarLink:hover {
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-full);
+  object-fit: cover;
+}
+
+/* Hover срабатывает при наведении на весь userFieldFirst,
+   но анимация остаётся только вокруг аватарки */
+.userFieldFirst:hover .avatarLink {
   animation: avatarBorderPulse 0.8s ease-in-out infinite;
 }
 
@@ -175,9 +192,6 @@
   }
 }
 
-.userAvatar {
-  border-radius: var(--border-radius-full);
-}
 .userName {
   font-family: var(--font-family-main);
   font-weight: var(--font-weight-bold);
@@ -187,7 +201,6 @@
 
 .logoutButton {
   border: none;
-  padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--border-radius-btn);
   background: transparent;
   color: var(--color-text-hero);
@@ -197,6 +210,10 @@
   transition: all 0.3s ease;
 }
 
+.logoutButton > .iconLogout:hover {
+  color: var(--color-error);
+}
+
 .navBarMob {
   z-index: 999;
   visibility: hidden;
@@ -204,7 +221,7 @@
   background-color: var(--color-bg-card-soft-green);
   width: 100%;
   height: 100%;
-  padding: 102px var(--spacing-xl) var(--spacing-md);
+  padding: 96px var(--spacing-xl) var(--spacing-md);
   transition:
     transform 0.5s var(--cubic-bezier),
     visibility 1s var(--cubic-bezier);
@@ -240,18 +257,29 @@
 }
 
 .icon {
-  width: 24px;
-  height: 24px;
+  width: 19px;
+  height: 19px;
   color: var(--color-text-hero);
+}
+
+.iconLogout {
+  width: 19px;
+  height: 19px;
+  color: var(--color-text-hero);
+}
+
+.iconLogout:hover > svg {
+  fill: var(--color-primary-hover);
 }
 
 @media only screen and (min-width: 768px) {
   .navigationDesc {
     display: flex;
   }
+
   .navigationItemCreate {
-  display: none;
-}
+    display: none;
+  }
 
   .navigationLinkJoinDesc {
     display: block;

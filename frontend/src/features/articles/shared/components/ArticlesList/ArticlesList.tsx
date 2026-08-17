@@ -1,17 +1,14 @@
-import type { ArticlesListProps } from '../../article-shared.types';
+import type { ArticlesListProps } from "../../article-shared.types";
 
-import { ArticlesItem } from '../ArticlesItem/ArticlesItem';
-import styles from './ArticlesList.module.css';
+import { ArticlesItem } from "../ArticlesItem/ArticlesItem";
+import styles from "./ArticlesList.module.css";
 
-export const ArticlesList = ({ articles }: ArticlesListProps) => {
+export const ArticlesList = ({ articles, action }: ArticlesListProps) => {
   return (
     <ul className={styles.list}>
       {articles.map((article) => (
-        <li
-          className={styles.listItem}
-          key={article.id}
-        >
-          <ArticlesItem article={article} />
+        <li className={styles.listItem} key={article.id}>
+          <ArticlesItem article={article} action={action} />
         </li>
       ))}
     </ul>

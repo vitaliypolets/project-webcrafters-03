@@ -13,29 +13,28 @@ import ArticleRecommendations from "./components/ArticleRecommendations/ArticleR
 import { BookmarkButton } from "../shared";
 import { Loader } from "@/components/ui/Loader/Loader";
 
+type ArticleDetailsData = Awaited<ReturnType<typeof fetchArticleById>>;
+
 type Props = {
   articleId: string;
+  initialData?: ArticleDetailsData;
 };
 
-const ArticleDetailsClient = ({ articleId }: Props) => {
-  const { data, isLoading } = useQuery({
+const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
+  const { data, isLoading, error } = useQuery<ArticleDetailsData>({
     queryKey: ["article", articleId],
-    queryFn: async () => {
-      try {
-        return await fetchArticleById(articleId);
-      } catch (err: unknown) {
-        const error = err as { status?: number; response?: { status?: number } };
-
-        if (error.status === 404 || error.response?.status === 404) {
-          notFound();
-        }
-        throw err;
-      }
-    },
-    enabled: articleId !== "",
-    refetchOnMount: false,
-    throwOnError: true,
+    queryFn: () => fetchArticleById(articleId),
+    enabled: Boolean(articleId),
+    staleTime: 0,
+    initialData,
+    initialDataUpdatedAt: 0,
   });
+  if (error) {
+    const err = error as { status?: number; response?: { status?: number } };
+    if (err.status === 404 || err.response?.status === 404) {
+      notFound();
+    }
+  }
 
   if (isLoading || !data) {
     return <Loader />;

@@ -1,6 +1,6 @@
-import Image from 'next/image';
-import css from '../../../../../components/Header/Header.module.css';
-import type { User } from '@/types/user';
+import Image from "next/image";
+import css from "../../../../../components/Header/Header.module.css";
+import type { User } from "@/types/user";
 
 type UserBarProps = {
   user: User | null;
@@ -17,19 +17,14 @@ export default function UserBar({
 }: UserBarProps) {
   return (
     <li className={css[userField]}>
-      <div className={css.userFieldFirst}>
-        <button
-          type="button"
-          onClick={() => setIsUserModalOpen(true)}
-          className={css.avatarLink}
-          aria-label="Change avatar"
-        >
+      <div className={css.userFieldFirst} onClick={() => setIsUserModalOpen(true)}>
+        <button type="button" className={css.avatarLink} aria-label="Change avatar">
           <Image
             className={css.userAvatar}
-            src={user?.avatarUrl || '/images/default-avatar.png'}
+            src={user?.avatarUrl || "/images/default-avatar.png"}
             width={40}
             height={40}
-            alt={user?.name || 'User avatar'}
+            alt={user?.name || "User avatar"}
           />
         </button>
 
@@ -42,11 +37,7 @@ export default function UserBar({
         className={css.logoutButton}
         aria-label="Log out"
       >
-        <svg
-          className={css.icon}
-          width="24"
-          height="24"
-        >
+        <svg className={css.iconLogout}>
           <use href="/icons/sprite.svg#icon-log-out" />
         </svg>
       </button>

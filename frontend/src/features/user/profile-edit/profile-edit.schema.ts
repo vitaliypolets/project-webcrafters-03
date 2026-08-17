@@ -1,20 +1,31 @@
-import * as Yup from 'yup';
+import * as Yup from "yup";
 
 export const MAX_AVATAR_SIZE = 1 * 1024 * 1024;
 
-export const ALLOWED_AVATAR_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+export const ALLOWED_AVATAR_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
+export const NAME_REGEXP = /^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ'\s-]+$/;
+
+export const nameSchema = Yup.string()
+  .trim()
+  .required("Name is required")
+  .min(2, "Name must be at least 2 characters")
+  .max(32, "Name must be at most 32 characters")
+  .matches(NAME_REGEXP, "Name must not contain numbers or special characters");
 
 export const profileEditSchema = Yup.object({
+  name: nameSchema,
+
   avatar: Yup.mixed<File>()
-    .required('Avatar is required')
+    .nullable()
     .test(
-      'fileSize',
-      'Avatar must be up to 1 MB',
-      (file) => !file || (file as File).size <= MAX_AVATAR_SIZE,
+      "fileSize",
+      "Avatar must be up to 1 MB",
+      (file) => !file || (file instanceof File && file.size <= MAX_AVATAR_SIZE),
     )
     .test(
-      'fileType',
-      'Only JPEG, PNG and WebP are allowed',
-      (file) => !file || ALLOWED_AVATAR_MIME_TYPES.includes((file as File).type),
+      "fileType",
+      "Only JPEG, PNG and WebP are allowed",
+      (file) => !file || (file instanceof File && ALLOWED_AVATAR_MIME_TYPES.includes(file.type)),
     ),
 });

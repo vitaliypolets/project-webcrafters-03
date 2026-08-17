@@ -26,17 +26,22 @@ export const getUserArticles = async (
   const totalPages = Math.ceil(totalItems / perPage);
 
   return {
-    data: articles.map((article) => ({
-      id: article._id.toString(),
-      title: article.title,
-      description: article.description,
-      imageUrl: article.imageUrl,
-      publicationDate: article.publicationDate,
-    })),
-    page,
-    perPage,
-    totalItems,
-    totalPages,
-    hasNextPage: page < totalPages,
+    data: {
+      items: articles.map((article) => ({
+        id: article._id.toString(),
+        title: article.title,
+        description: article.description,
+        imageUrl: article.imageUrl,
+        publicationDate: article.publicationDate,
+      })),
+      meta: {
+        page,
+        perPage,
+        totalItems,
+        totalPages,
+        hasNextPage: page < totalPages,
+      },
+    },
+    message: 'Success',
   };
 };

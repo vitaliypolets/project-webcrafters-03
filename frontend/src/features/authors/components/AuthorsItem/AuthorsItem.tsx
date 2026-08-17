@@ -13,15 +13,16 @@ export default function AuthorsItem({ author }: AuthorsItemProps) {
   const firstName = author.name.split(' ')[0];
   return (
     <Link href={`/authors/${author.id}`} className={styles.item}>
-      <Image
-        src={getAvatarSrc(author.avatarUrl)}
-        alt={author.name}
-        width={148}
-        height={148}
-        loading="eager"
-        className={styles.avatar}
-      />
-
+      <div className={styles.avatarWrapper}>
+    <Image
+      src={getAvatarSrc(author.avatarUrl)}
+      alt={author.name}
+      fill
+      loading="eager"
+      className={styles.avatar}
+      sizes="(min-width: 768px) 262px, 148px"
+    />
+  </div>
       <p className={styles.name}>{firstName}</p>
     </Link>
   );

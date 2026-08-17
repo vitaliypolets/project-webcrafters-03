@@ -1,6 +1,6 @@
 // TODO (учасник №12): controllers
 
-import { deleteArticle, updateArticle } from './article-manage.service.js';
+import { deleteArticle, updateArticle } from "./article-manage.service.js";
 
 export const updateArticleController = async (req, res) => {
   const { articleId } = req.params;
@@ -12,7 +12,10 @@ export const updateArticleController = async (req, res) => {
     userId: req.user._id,
   });
 
-  res.status(200).json(article);
+  res.status(200).json({
+    data: article,
+    message: "Success",
+  });
 };
 
 export const deleteArticleController = async (req, res) => {
@@ -23,7 +26,5 @@ export const deleteArticleController = async (req, res) => {
     userId: req.user._id,
   });
 
-  res.status(200).json({
-    message: 'Article deleted successfully',
-  });
+  res.status(204).send();
 };

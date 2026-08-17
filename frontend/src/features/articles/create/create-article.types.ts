@@ -1,5 +1,7 @@
 // TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
 
+import type { ApiResponse } from '@/types/api';
+
 export type CreateArticleFormValues = {
   title: string;
   article: string;
@@ -20,7 +22,8 @@ export type CreatedArticle = {
   category: 'popular' | 'general';
 };
 
-export type CreateArticleResponse = CreatedArticle;
+export type CreateArticleResponse =
+  ApiResponse<CreatedArticle>;
 
 export type ArticleDraft = {
   title: string;

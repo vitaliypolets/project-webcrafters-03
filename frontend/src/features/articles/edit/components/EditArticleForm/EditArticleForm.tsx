@@ -1,0 +1,193 @@
+"use client";
+
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { ErrorMessage, Field, Form, Formik } from "formik";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import toast from "react-hot-toast";
+
+import Button from "@/components/ui/Button/Button";
+import { fetchArticleById } from "@/features/articles/details/article-details.service";
+
+import ArticleImagePreview from "../../../create/components/ArticleImagePreview/ArticleImagePreview";
+
+import { editArticleSchema } from "../../edit-article.schema";
+import { updateArticle } from "../../edit-article.service";
+import type { EditArticleFormValues } from "../../edit-article.types";
+
+import css from "./EditArticleForm.module.css";
+
+type EditArticleFormProps = {
+  articleId: string;
+};
+
+const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
+  const router = useRouter();
+  const [previewUrl, setPreviewUrl] = useState("");
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["article", articleId],
+    queryFn: () => fetchArticleById(articleId),
+  });
+
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (values: EditArticleFormValues) => updateArticle(articleId, values),
+
+    onSuccess: () => {
+      setPreviewUrl("");
+
+      toast.success("Article updated successfully!");
+
+      router.push(`/articles/${articleId}`);
+      router.refresh();
+    },
+
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : "Failed to update article");
+    },
+  });
+
+  if (isLoading) {
+    return <p>Loading article...</p>;
+  }
+
+  if (isError || !data?.article) {
+    return <p>Failed to load article.</p>;
+  }
+
+  const initialValues: EditArticleFormValues = {
+    title: data.article.title,
+    article: data.article.article,
+    publicationDate: data.article.publicationDate.slice(0, 10),
+    image: null,
+  };
+
+  const handleImageChange = (
+    file: File | null,
+    setFieldValue: (field: string, value: unknown) => void,
+  ) => {
+    setFieldValue("image", file);
+
+    if (!file) {
+      setPreviewUrl("");
+      return;
+    }
+
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const handleSubmit = async (values: EditArticleFormValues) => {
+    await mutateAsync(values);
+  };
+
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={editArticleSchema}
+      onSubmit={handleSubmit}
+      enableReinitialize
+    >
+      {({ isSubmitting, setFieldValue, errors, touched, values }) => (
+        <Form className={css.form}>
+          <div className={css.imageField}>
+            <ArticleImagePreview
+              previewUrl={previewUrl}
+              onChange={(file) => handleImageChange(file, setFieldValue)}
+              error={touched.image && errors.image ? String(errors.image) : undefined}
+            />
+          </div>
+
+          <div className={css.titleField}>
+            <label htmlFor="title" className={css.label}>
+              {values.title ? "Article Title" : "Title"}
+            </label>
+
+            <div
+              className={`${css.inputWrapper} ${
+                touched.title && errors.title ? css.errorState : values.title ? css.filledState : ""
+              }`}
+            >
+              <svg className={css.inputIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
+
+              <Field
+                id="title"
+                name="title"
+                type="text"
+                placeholder="Enter the title"
+                className={css.input}
+              />
+
+              <svg className={css.inputIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
+            </div>
+
+            <ErrorMessage name="title" component="p" className={css.error} />
+          </div>
+
+          <div className={css.descriptionField}>
+            <div
+              className={`${css.textareaWrapper} ${
+                touched.article && errors.article
+                  ? css.errorState
+                  : values.article
+                    ? css.filledState
+                    : ""
+              }`}
+            >
+              <svg className={css.textareaIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
+
+              <Field
+                as="textarea"
+                id="article"
+                name="article"
+                placeholder="Enter a text"
+                className={css.textarea}
+              />
+
+              <svg className={css.textareaIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-home" />
+              </svg>
+            </div>
+
+            <ErrorMessage name="article" component="p" className={css.error} />
+          </div>
+
+          <div className={css.formGroup}>
+            <label htmlFor="publicationDate" className={css.label}>
+              Publication date
+            </label>
+
+            <Field
+              id="publicationDate"
+              name="publicationDate"
+              type="text"
+              className={css.input}
+              value={values.publicationDate}
+              readOnly
+              aria-readonly="true"
+            />
+
+            <ErrorMessage name="publicationDate" component="p" className={css.error} />
+          </div>
+
+          <Button
+            type="submit"
+            variant="primary"
+            size="md"
+            className={css.submitButton}
+            disabled={isSubmitting || isPending}
+          >
+            {isSubmitting || isPending ? "Saving..." : "Save changes"}
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  );
+};
+
+export default EditArticleForm;

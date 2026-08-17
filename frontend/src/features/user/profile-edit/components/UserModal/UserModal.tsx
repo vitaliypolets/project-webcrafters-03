@@ -10,7 +10,7 @@ import Modal from "@/components/ui/Modal/Modal";
 import { getAvatarSrc } from "@/utils/getAvatarSrc";
 import { useAuthStore } from "@/store/auth.store";
 
-import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE } from "../../profile-edit.schema";
+import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE, nameSchema } from "../../profile-edit.schema";
 
 import { updateMe } from "../../../me/me.service";
 
@@ -24,13 +24,24 @@ type UserModalProps = {
 export default function UserModal({ isOpen, onClose }: UserModalProps) {
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const user = useAuthStore((state) => state.user);
+  const setSession = useAuthStore((state) => state.setSession);
+  const accessToken = useAuthStore((state) => state.accessToken);
+
+  const [name, setName] = useState(user?.name ?? "");
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const setSession = useAuthStore((state) => state.setSession);
-  const accessToken = useAuthStore((state) => state.accessToken);
+  useEffect(() => {
+    if (isOpen) {
+      setName(user?.name ?? "");
+      setAvatarFile(null);
+      setPreviewUrl(null);
+      setError(null);
+    }
+  }, [isOpen, user?.name]);
 
   useEffect(() => {
     return () => {
@@ -45,12 +56,22 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
       URL.revokeObjectURL(previewUrl);
     }
 
+    setName(user?.name ?? "");
     setAvatarFile(null);
     setPreviewUrl(null);
     setError(null);
 
     if (inputRef.current) {
       inputRef.current.value = "";
+    }
+  };
+
+  const validateName = (value: string): string | null => {
+    try {
+      nameSchema.validateSync(value);
+      return null;
+    } catch (err) {
+      return err instanceof Error ? err.message : "Invalid name";
     }
   };
 
@@ -86,7 +107,20 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
   };
 
   const handleSave = async () => {
-    if (isSubmitting || !avatarFile) {
+    const trimmedName = name.trim();
+
+    if (isSubmitting) {
+      return;
+    }
+
+    const nameError = validateName(trimmedName);
+
+    if (nameError) {
+      setError(nameError);
+      return;
+    }
+
+    if (!avatarFile && trimmedName === (user?.name ?? "")) {
       return;
     }
 
@@ -96,7 +130,11 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
     try {
       const formData = new FormData();
 
-      formData.append("avatar", avatarFile);
+      formData.append("name", trimmedName);
+
+      if (avatarFile) {
+        formData.append("avatar", avatarFile);
+      }
 
       const updatedUser = await updateMe(formData);
 
@@ -104,14 +142,14 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
         setSession(updatedUser, accessToken);
       }
 
-      toast.success("Avatar updated successfully");
+      toast.success("Profile updated successfully");
 
       resetForm();
       onClose();
     } catch (err) {
       const message = isAxiosError<{ message?: string }>(err)
-        ? (err.response?.data?.message ?? "Failed to update avatar. Please try again.")
-        : "Failed to update avatar. Please try again.";
+        ? (err.response?.data?.message ?? "Failed to update profile. Please try again.")
+        : "Failed to update profile. Please try again.";
 
       setError(message);
       toast.error(message);
@@ -129,11 +167,18 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
     onClose();
   };
 
+  const trimmedName = name.trim();
+  const nameError = validateName(trimmedName);
+  const isNameValid = !nameError;
+
+  const isNameChanged = trimmedName !== (user?.name ?? "");
+
+  const canSave = isNameValid && (Boolean(avatarFile) || isNameChanged);
+
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
       <div className={styles.userModalContent}>
-        <h1 className={styles.userModalTitle}>Update your photo</h1>
-
+        <h1 className={styles.userModalTitle}>Update your profile</h1>
         <button
           type="button"
           className={styles.avatarPicker}
@@ -142,8 +187,8 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
           disabled={isSubmitting}
         >
           <Image
-            src={previewUrl ?? getAvatarSrc(null)}
-            alt={previewUrl ? "Avatar preview" : "Default avatar"}
+            src={previewUrl ?? getAvatarSrc(user?.avatarUrl ?? null)}
+            alt={previewUrl ? "Avatar preview" : "Current avatar"}
             className={styles.avatarImage}
             width={136}
             height={136}
@@ -160,15 +205,32 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
           onChange={handleFileChange}
           disabled={isSubmitting}
         />
-
+        <div className={styles.fieldGroup}>
+          <label className={styles.nameLabel} htmlFor="user-name">
+            Enter your name
+          </label>
+          <input
+            id="user-name"
+            type="text"
+            value={name}
+            onChange={(event) => {
+              setName(event.target.value);
+              setError(null);
+            }}
+            placeholder="Max"
+            className={styles.nameInput}
+            disabled={isSubmitting}
+            maxLength={32}
+            autoComplete="name"
+          />
+        </div>
         {error && <p className={styles.avatarError}>{error}</p>}
-
         <Button
           className={styles.avatarSaveButton}
           variant="primary"
           size="md"
           type="button"
-          disabled={isSubmitting || !avatarFile}
+          disabled={isSubmitting || !canSave}
           onClick={handleSave}
         >
           {isSubmitting ? "Saving..." : "Save"}
