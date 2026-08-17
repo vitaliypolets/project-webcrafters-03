@@ -1,6 +1,6 @@
 import { useEffect, useMemo } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { fetchArticles } from '../articles-catalog.service';
+import { getArticles } from '../articles-catalog.service';
 import type { ArticleFilter } from '../articles-catalog.types';
 
 const PER_PAGE = 8;
@@ -11,7 +11,7 @@ export const useArticlesQuery = (activeFilter: ArticleFilter = 'all') => {
   const query = useInfiniteQuery({
     queryKey: ['articles', activeFilter],
     queryFn: ({ pageParam = 1 }) =>
-      fetchArticles({ page: pageParam, perPage: PER_PAGE, filter: activeFilter }),
+      getArticles({ page: pageParam, perPage: PER_PAGE, filter: activeFilter }),
     initialPageParam: 1,
     getNextPageParam: (lastPage) =>
       lastPage.data.meta.hasNextPage ? lastPage.data.meta.page + 1 : undefined,
@@ -23,7 +23,7 @@ export const useArticlesQuery = (activeFilter: ArticleFilter = 'all') => {
       queryClient.prefetchQuery({
         queryKey: ['articles', activeFilter, 'page', nextPage],
         queryFn: () =>
-          fetchArticles({ page: nextPage, perPage: PER_PAGE, filter: activeFilter }),
+          getArticles({ page: nextPage, perPage: PER_PAGE, filter: activeFilter }),
       });
     }
   }, [query.hasNextPage, query.data, activeFilter, queryClient]);
