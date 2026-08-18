@@ -40,14 +40,12 @@ const STRENGTH_LABEL: Record<StrengthLevel, string> = {
   strong: "Strong",
 };
 
-function capitalizeWords(value: string): string {
-  return value
-    .split(" ")
-    .map((word) => (word ? word.charAt(0).toUpperCase() + word.slice(1) : word))
-    .join(" ");
+export function capitalizeWords(value: string): string {
+  if (!value) return "";
+  return value.toLowerCase().replace(/(?:^|\s|-)\S/g, (match) => match.toUpperCase());
 }
 
-function RegisterFormFields() {
+export function RegisterFormFields() {
   const {
     values,
     errors,
@@ -123,6 +121,11 @@ function RegisterFormFields() {
     } finally {
       if (requestId === emailCheckId.current) setIsCheckingEmail(false);
     }
+  };
+
+  const handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = capitalizeWords(event.target.value);
+    setFieldValue("name", formatted);
   };
 
   const handleNameBlur = (event: React.FocusEvent<HTMLInputElement>) => {
@@ -202,6 +205,7 @@ function RegisterFormFields() {
           type="text"
           placeholder="Max"
           autoComplete="name"
+          onChange={handleNameChange}
           onBlur={handleNameBlur}
         />
         {submitCount > 0 && errors.name && <p className={styles.error}>{errors.name}</p>}
