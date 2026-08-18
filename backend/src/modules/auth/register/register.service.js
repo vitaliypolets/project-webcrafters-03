@@ -10,8 +10,10 @@ export const findUserByEmail = (email) => User.findOne({ email: normalizeEmail(e
 
 export const hashPassword = (password) => bcrypt.hash(password, SALT_ROUNDS);
 
-export const createUser = ({ name, email, passwordHash }) =>
-  User.create({ name, email, passwordHash });
+export const createUser = ({ _id, name, email, passwordHash, avatarUrl, avatarPublicId }) =>
+  User.create({ _id, name, email, passwordHash, avatarUrl, avatarPublicId });
+
+export const deleteUserById = (id) => User.findByIdAndDelete(id);
 
 export const toPublicUser = (user) => {
   const plain = typeof user.toObject === "function" ? user.toObject() : user;

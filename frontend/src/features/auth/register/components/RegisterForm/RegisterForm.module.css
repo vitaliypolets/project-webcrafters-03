@@ -145,8 +145,13 @@
   white-space: nowrap;
 }
 
+.submitButton {
+  margin-top: 11px;
+  margin-bottom: 4px;
+}
+
 .link {
-  font-weight: 700;
+  font-weight: var(--font-weight-bold);
   text-decoration: underline;
   text-decoration-skip-ink: none;
 }
