@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 
 import { useAuthStore } from "@/store/auth.store";
 
@@ -17,32 +17,12 @@ import styles from "./BookmarkButton.module.css";
 
 type BookmarkAction = "save" | "remove";
 
-type ArticlesQueryData = {
-  pages: Array<{
-    data: {
-      items: Array<{
-        id: string;
-        isBookmarked?: boolean;
-      }>;
-    };
-  }>;
-  pageParams: unknown[];
-};
-
-type ArticleQueryData = {
-  data?: {
-    isBookmarked?: boolean;
-  };
-};
-
 export const BookmarkButton = ({
   articleId,
   isBookmarked,
   className,
   label,
 }: BookmarkButtonProps) => {
-  const queryClient = useQueryClient();
-
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   const [saved, setSaved] = useState(isBookmarked);
@@ -52,48 +32,6 @@ export const BookmarkButton = ({
   useEffect(() => {
     setSaved(isBookmarked);
   }, [isBookmarked]);
-
-  const updateBookmarkCache = (nextSaved: boolean) => {
-    queryClient.setQueriesData<ArticlesQueryData>({ queryKey: ["articles"] }, (oldData) => {
-      if (!oldData?.pages) {
-        return oldData;
-      }
-
-      return {
-        ...oldData,
-        pages: oldData.pages.map((page) => ({
-          ...page,
-          data: {
-            ...page.data,
-            items: page.data.items.map((article) =>
-              article.id === articleId
-                ? {
-                    ...article,
-                    isBookmarked: nextSaved,
-                  }
-                : article,
-            ),
-          },
-        })),
-      };
-    });
-
-    queryClient.setQueryData<ArticleQueryData>(["article", articleId], (oldData) => {
-      if (!oldData) {
-        return oldData;
-      }
-
-      return {
-        ...oldData,
-        data: oldData.data
-          ? {
-              ...oldData.data,
-              isBookmarked: nextSaved,
-            }
-          : oldData.data,
-      };
-    });
-  };
 
   const mutation = useMutation({
     mutationFn: async (action: BookmarkAction) => {
@@ -105,14 +43,7 @@ export const BookmarkButton = ({
     },
 
     onSuccess: (_, action) => {
-      const nextSaved = action === "save";
-
-      setSaved(nextSaved);
-      updateBookmarkCache(nextSaved);
-
-      void queryClient.invalidateQueries({
-        queryKey: ["saved-articles"],
-      });
+      setSaved(action === "save");
     },
 
     onError: (error) => {
@@ -126,7 +57,6 @@ export const BookmarkButton = ({
 
       if (status === 409) {
         setSaved(true);
-        updateBookmarkCache(true);
 
         return;
       }

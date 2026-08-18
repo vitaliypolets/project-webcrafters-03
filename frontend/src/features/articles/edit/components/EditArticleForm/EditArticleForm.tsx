@@ -3,7 +3,7 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import Button from "@/components/ui/Button/Button";
@@ -30,12 +30,16 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
     queryFn: () => fetchArticleById(articleId),
   });
 
+  useEffect(() => {
+    if (data?.article?.imageUrl) {
+      setPreviewUrl(data.article.imageUrl);
+    }
+  }, [data?.article?.imageUrl]);
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (values: EditArticleFormValues) => updateArticle(articleId, values),
 
     onSuccess: () => {
-      setPreviewUrl("");
-
       toast.success("Article updated successfully!");
 
       router.push(`/articles/${articleId}`);
@@ -69,7 +73,7 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
     setFieldValue("image", file);
 
     if (!file) {
-      setPreviewUrl("");
+      setPreviewUrl(data.article.imageUrl ?? "");
       return;
     }
 
