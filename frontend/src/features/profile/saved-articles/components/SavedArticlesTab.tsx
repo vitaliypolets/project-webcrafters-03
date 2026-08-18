@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
+import { Loader } from '@/components/ui/Loader/Loader';
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
 import { EmptyArticlesState } from '../../my-articles/components/EmptyArticlesState';
@@ -12,6 +13,8 @@ import { getSavedArticles } from '../saved-articles.service';
 
 export function SavedArticlesTab() {
   const searchParams = useSearchParams();
+  const listWrapperRef = useRef<HTMLDivElement>(null);
+  const pendingScrollIndexRef = useRef<number | null>(null);
   const accessToken = useAuthStore((state) => state.accessToken);
   const user = useAuthStore((state) => state.user);
   const isInitialized = useAuthStore((state) => state.isInitialized);
@@ -49,10 +52,40 @@ export function SavedArticlesTab() {
     });
   }, [active, errorMessage, hasQueryError]);
 
-  if (!active) return null;
-
   const articles =
     query.data?.pages.flatMap((page) => page.data.items) ?? [];
+
+  useEffect(() => {
+    const firstNewArticleIndex = pendingScrollIndexRef.current;
+
+    if (firstNewArticleIndex === null || query.isFetchingNextPage) return;
+
+    if (query.isFetchNextPageError || articles.length <= firstNewArticleIndex) {
+      pendingScrollIndexRef.current = null;
+      return;
+    }
+
+    const items = listWrapperRef.current?.querySelectorAll('li');
+    const firstNewItem = items?.item(firstNewArticleIndex);
+
+    firstNewItem?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    });
+
+    pendingScrollIndexRef.current = null;
+  }, [articles.length, query.isFetchNextPageError, query.isFetchingNextPage]);
+
+  const handleLoadMore = async () => {
+    if (!query.hasNextPage || query.isFetchingNextPage) return;
+
+    pendingScrollIndexRef.current = articles.length;
+    const result = await query.fetchNextPage();
+
+    if (result.isError) pendingScrollIndexRef.current = null;
+  };
+
+  if (!active) return null;
 
   return (
     <section className={styles.section} aria-label="Saved Articles">
@@ -60,7 +93,7 @@ export function SavedArticlesTab() {
       (Boolean(accessToken && userId) &&
         query.isPending &&
         query.fetchStatus === 'fetching') ? (
-        <p className={styles.status}>Loading saved articles…</p>
+        <Loader />
       ) : null}
 
       {isInitialized && (!accessToken || !userId) ? (
@@ -87,7 +120,7 @@ export function SavedArticlesTab() {
       ) : null}
 
       {articles.length > 0 ? (
-        <div className={styles.articles}>
+        <div ref={listWrapperRef} className={styles.articles}>
           <ArticlesList articles={articles} />
         </div>
       ) : null}
@@ -97,9 +130,9 @@ export function SavedArticlesTab() {
           className={styles.loadMore}
           type="button"
           disabled={query.isFetchingNextPage}
-          onClick={() => query.fetchNextPage()}
+          onClick={handleLoadMore}
         >
-          {query.isFetchingNextPage ? 'Loading…' : 'Load More'}
+          {query.isFetchingNextPage ? 'Loading...' : 'Load More'}
         </button>
       ) : null}
     </section>

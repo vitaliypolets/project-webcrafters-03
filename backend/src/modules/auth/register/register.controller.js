@@ -1,14 +1,18 @@
-import { HttpError } from '../../../utils/HttpError.js';
-import { createAuthSession } from '../shared/authSession.js';
-import { createAccessToken, createRefreshToken } from '../shared/authTokens.js';
-import { setAuthCookies } from '../shared/authCookies.js';
+import mongoose from "mongoose";
+import { HttpError } from "../../../utils/HttpError.js";
+import { createAuthSession } from "../shared/authSession.js";
+import { createAccessToken, createRefreshToken } from "../shared/authTokens.js";
+import { setAuthCookies } from "../shared/authCookies.js";
 import {
   createUser,
+  deleteUserById,
   findUserByEmail,
   hashPassword,
   toPublicUser,
   uploadAvatarToCloudinary,
-} from './register.service.js';
+} from "./register.service.js";
+
+const DUPLICATE_KEY_ERROR_CODE = 11000;
 
 export const registerController = async (req, res) => {
   const { name, email, password } = req.body;
@@ -16,38 +20,71 @@ export const registerController = async (req, res) => {
   const existingUser = await findUserByEmail(email);
 
   if (existingUser) {
-    throw new HttpError(409, 'Email in use');
+    throw new HttpError(409, "Email in use");
   }
 
   const passwordHash = await hashPassword(password);
 
-  const user = await createUser({
-    name,
-    email,
-    passwordHash,
-  });
+  const userId = new mongoose.Types.ObjectId();
+
+  let avatarUrl;
+  let avatarPublicId;
 
   if (req.file) {
-    const uploadResult = await uploadAvatarToCloudinary(req.file.buffer, user._id);
+    const uploadResult = await uploadAvatarToCloudinary(req.file.buffer, userId);
 
-    user.avatarUrl = uploadResult.secure_url;
-    user.avatarPublicId = uploadResult.public_id;
-
-    await user.save();
+    avatarUrl = uploadResult.secure_url;
+    avatarPublicId = uploadResult.public_id;
   }
 
-  const accessToken = createAccessToken(user);
-  const refreshToken = createRefreshToken(user);
+  let user;
 
-  const session = await createAuthSession(user._id, refreshToken);
+  try {
+    user = await createUser({
+      _id: userId,
+      name,
+      email,
+      passwordHash,
+      avatarUrl,
+      avatarPublicId,
+    });
+  } catch (error) {
+    if (error.code === DUPLICATE_KEY_ERROR_CODE) {
+      throw new HttpError(409, "Email in use");
+    }
+    throw error;
+  }
 
-  setAuthCookies(res, refreshToken, session._id.toString());
+  try {
+    const accessToken = createAccessToken(user);
+    const refreshToken = createRefreshToken(user);
 
-  res.status(201).json({
+    const session = await createAuthSession(user._id, refreshToken);
+
+    setAuthCookies(res, refreshToken, session._id.toString());
+
+    res.status(201).json({
+      data: {
+        user: toPublicUser(user),
+        accessToken,
+      },
+      message: "Success",
+    });
+  } catch (error) {
+    await deleteUserById(user._id);
+    throw error;
+  }
+};
+
+export const checkEmailController = async (req, res) => {
+  const { email } = req.body;
+
+  const existingUser = await findUserByEmail(email);
+
+  res.status(200).json({
     data: {
-      user: toPublicUser(user),
-      accessToken,
+      available: !existingUser,
     },
-    message: 'Success',
+    message: "Success",
   });
 };

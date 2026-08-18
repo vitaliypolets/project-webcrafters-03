@@ -4,10 +4,15 @@
 
 .footer {
   width: 100%;
-  background-color: var(--color-bg-card-soft-green);
-  height: 266px;
+  height: auto;
+  min-height: 0;
+
+  padding-block: 32px;
+
   display: flex;
   align-items: center;
+
+  background-color: var(--color-bg-card-soft-green);
 }
 
 .container {
@@ -15,8 +20,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  width: 100%;
+
   text-align: center;
-  gap: var(--spacing-lg); /* 24px */
+  gap: var(--spacing-lg);
 }
 
 /* Логотип */
@@ -24,6 +32,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
   transition: opacity var(--transition-main);
 }
 
@@ -44,21 +53,26 @@
 
 /* Копірайт */
 .copyright {
+  margin: 0;
+
   font-family: var(--font-family-main);
   font-weight: var(--font-weight-regular);
-  font-size: var(--font-size-xs); /* 12px */
-  color: var(--color-dark); /* #070721 */
-  margin: 0;
+  font-size: var(--font-size-xs);
+
+  color: var(--color-dark);
 }
 
-/* Навігаційний список <ul> */
+/* Навігаційний список */
 .navList {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-md); /* 16px */
+
+  gap: var(--spacing-md);
+
   margin: 0;
   padding: 0;
+
   list-style: none;
 }
 
@@ -69,9 +83,11 @@
 /* Посилання */
 .navLink {
   font-family: var(--font-family-main);
-  font-size: var(--font-size-body); /* 16px */
-  font-weight: var(--font-weight-bold); /* 700 */
-  color: var(--color-primary-hover); /* #374f42 */
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-bold);
+
+  color: var(--color-primary-hover);
+
   transition: opacity var(--transition-main);
 }
 
@@ -87,6 +103,7 @@
 @media screen and (min-width: 768px) {
   .footer {
     height: 200px;
+    padding-block: 0;
   }
 
   .container {
@@ -95,7 +112,7 @@
 
   .navList {
     flex-direction: row;
-    gap: var(--spacing-xl); /* 32px */
+    gap: var(--spacing-xl);
   }
 }
 
@@ -106,16 +123,17 @@
 @media screen and (min-width: 1440px) {
   .footer {
     height: 94px;
+    padding-block: 0;
   }
 
   .container {
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+
     gap: 0;
   }
 
-  /* Порядок елементів у рядку */
   .logoLink {
     order: 1;
   }
@@ -124,7 +142,6 @@
     order: 2;
   }
 
-  /* Виправлено: замість nav використано локальний клас .nav */
   .nav {
     order: 3;
   }

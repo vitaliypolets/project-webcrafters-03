@@ -44,7 +44,7 @@
 }
 
 .headerLink:hover {
-  color: #15291e;
+  opacity: var(--opacity-hover-link);
 }
 
 .navigation {
@@ -61,6 +61,7 @@
   display: flex;
   align-items: center;
 }
+
 .navigationItemCreate {
   display: flex;
   align-items: center;
@@ -155,14 +156,9 @@
   display: flex;
   position: relative;
   padding: 0 var(--spacing-md) 0 0;
+  cursor: pointer;
 }
 
-.userAvatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-}
 .avatarLink {
   display: inline-flex;
   align-items: center;
@@ -172,7 +168,16 @@
   border-radius: var(--border-radius-full);
 }
 
-.avatarLink:hover {
+.userAvatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--border-radius-full);
+  object-fit: cover;
+}
+
+/* Hover срабатывает при наведении на весь userFieldFirst,
+   но анимация остаётся только вокруг аватарки */
+.userFieldFirst:hover .avatarLink {
   animation: avatarBorderPulse 0.8s ease-in-out infinite;
 }
 
@@ -187,9 +192,6 @@
   }
 }
 
-.userAvatar {
-  border-radius: var(--border-radius-full);
-}
 .userName {
   font-family: var(--font-family-main);
   font-weight: var(--font-weight-bold);
@@ -206,6 +208,10 @@
   font-size: var(--font-size-xs);
   cursor: pointer;
   transition: all 0.3s ease;
+}
+
+.logoutButton > .iconLogout:hover {
+  color: var(--color-error);
 }
 
 .navBarMob {
@@ -262,13 +268,18 @@
   color: var(--color-text-hero);
 }
 
+.iconLogout:hover > svg {
+  fill: var(--color-primary-hover);
+}
+
 @media only screen and (min-width: 768px) {
   .navigationDesc {
     display: flex;
   }
+
   .navigationItemCreate {
-  display: none;
-}
+    display: none;
+  }
 
   .navigationLinkJoinDesc {
     display: block;

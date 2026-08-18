@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { useAuthStore } from "@/store/auth.store";
@@ -31,6 +31,24 @@ export const BookmarkButton = ({
   const [showErrorModal, setShowErrorModal] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
+  useEffect(() => {
+    setSaved(isBookmarked);
+  }, [isBookmarked]);
+
+  const invalidateBookmarkQueries = () => {
+    void queryClient.invalidateQueries({
+      queryKey: ["articles"],
+    });
+
+    void queryClient.invalidateQueries({
+      queryKey: ["saved-articles"],
+    });
+
+    void queryClient.invalidateQueries({
+      queryKey: ["article", articleId],
+    });
+  };
+
   const mutation = useMutation({
     mutationFn: async (action: BookmarkAction) => {
       if (action === "save") {
@@ -41,24 +59,20 @@ export const BookmarkButton = ({
     },
 
     onSuccess: (_, action) => {
-      const nextSavedState = action === "save";
-
-      setSaved(nextSavedState);
-
-      void queryClient.invalidateQueries({
-        queryKey: ["articles"],
-      });
-
-      void queryClient.invalidateQueries({
-        queryKey: ["saved-articles"],
-      });
-
-      void queryClient.invalidateQueries({
-        queryKey: ["article", articleId],
-      });
+      setSaved(action === "save");
+      invalidateBookmarkQueries();
     },
 
     onError: (error) => {
+      const status = (error as { response?: { status?: number } })?.response?.status;
+
+      if (status === 409) {
+        setSaved(true);
+        invalidateBookmarkQueries();
+
+        return;
+      }
+
       setErrorMessage(
         error instanceof Error ? error.message : "Unable to update bookmark. Please try again.",
       );

@@ -8,13 +8,20 @@ import Image from "next/image";
 
 import { Button } from "@/components/ui/Button";
 import { Loader } from "@/components/ui/Loader";
-import { Modal } from "@/components/ui/Modal";
+import Modal from "@/components/ui/Modal/Modal";
 import { useAuthStore } from "@/store/auth.store";
 import { getAvatarSrc } from "@/utils/getAvatarSrc";
-import { getRegisterDraft, clearRegisterDraft } from "@/features/auth/register";
+import {
+  getRegisterDraft,
+  clearRegisterDraft,
+  getRegisterPassword,
+  clearRegisterPassword,
+} from "@/features/auth/register";
 import { registerUser } from "../../photo.service";
 import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE } from "../../photo.schema";
 import styles from "./UploadPhotoForm.module.css";
+
+const ERROR_REDIRECT_DELAY_MS = 4000;
 
 export default function UploadPhotoForm() {
   const router = useRouter();
@@ -27,9 +34,10 @@ export default function UploadPhotoForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const completedRef = useRef(false);
+  const redirectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
-    if (!getRegisterDraft()) {
+    if (!getRegisterDraft() || !getRegisterPassword()) {
       router.replace("/register");
     }
   }, [router]);
@@ -39,6 +47,12 @@ export default function UploadPhotoForm() {
       if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (redirectTimeoutRef.current) clearTimeout(redirectTimeoutRef.current);
+    };
+  }, []);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
@@ -70,7 +84,9 @@ export default function UploadPhotoForm() {
     if (completedRef.current) return;
 
     const draft = getRegisterDraft();
-    if (!draft) {
+    const password = getRegisterPassword();
+
+    if (!draft || !password) {
       router.replace("/register");
       return;
     }
@@ -82,24 +98,25 @@ export default function UploadPhotoForm() {
       const result = await registerUser({
         name: draft.name,
         email: draft.email,
-        password: draft.password,
+        password,
         avatar: file,
       });
 
       setSession(result.user, result.accessToken);
       clearRegisterDraft();
+      clearRegisterPassword();
       toast.success("Welcome to Harmoniq!");
       router.replace("/");
     } catch (err) {
-      completedRef.current = false;
-
       const message = isAxiosError<{ message?: string }>(err)
         ? (err.response?.data?.message ?? "Registration failed. Please try again.")
         : "Registration failed. Please try again.";
 
-      toast.error(message);
-    } finally {
-      setIsSubmitting(false);
+      toast.error(message, { duration: ERROR_REDIRECT_DELAY_MS });
+
+      redirectTimeoutRef.current = setTimeout(() => {
+        router.replace("/register");
+      }, ERROR_REDIRECT_DELAY_MS);
     }
   };
 
@@ -109,6 +126,8 @@ export default function UploadPhotoForm() {
 
   return (
     <Modal isOpen onClose={handleClose} backdrop="transparent">
+      {isSubmitting && <Loader label="Saving..." />}
+
       <div className={styles.content}>
         <h1 className={styles.title}>Upload your photo</h1>
 
@@ -116,21 +135,16 @@ export default function UploadPhotoForm() {
           type="button"
           className={styles.avatarButton}
           onClick={() => inputRef.current?.click()}
-          disabled={isSubmitting}
           aria-label="Choose avatar"
         >
-          {isSubmitting ? (
-            <Loader />
-          ) : (
-            <Image
-              src={previewUrl ?? getAvatarSrc(null)}
-              alt={previewUrl ? "Avatar preview" : "Default avatar"}
-              className={styles.avatarPreview}
-              width={136}
-              height={136}
-              priority
-            />
-          )}
+          <Image
+            src={previewUrl ?? getAvatarSrc(null)}
+            alt={previewUrl ? "Avatar preview" : "Default avatar"}
+            className={styles.avatarPreview}
+            width={136}
+            height={136}
+            priority
+          />
         </button>
 
         <input
@@ -139,7 +153,6 @@ export default function UploadPhotoForm() {
           accept={ALLOWED_AVATAR_MIME_TYPES.join(",")}
           className={styles.fileInput}
           onChange={handleFileChange}
-          disabled={isSubmitting}
         />
 
         {error && <p className={styles.error}>{error}</p>}
@@ -152,7 +165,7 @@ export default function UploadPhotoForm() {
           disabled={isSubmitting || !avatarFile}
           onClick={() => completeRegistration(avatarFile)}
         >
-          {isSubmitting ? "Saving..." : "Save"}
+          Save
         </Button>
       </div>
     </Modal>

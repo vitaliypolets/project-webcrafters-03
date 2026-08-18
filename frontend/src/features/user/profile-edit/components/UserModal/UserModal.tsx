@@ -10,7 +10,7 @@ import Modal from "@/components/ui/Modal/Modal";
 import { getAvatarSrc } from "@/utils/getAvatarSrc";
 import { useAuthStore } from "@/store/auth.store";
 
-import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE } from "../../profile-edit.schema";
+import { ALLOWED_AVATAR_MIME_TYPES, MAX_AVATAR_SIZE, nameSchema } from "../../profile-edit.schema";
 
 import { updateMe } from "../../../me/me.service";
 
@@ -37,6 +37,9 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
   useEffect(() => {
     if (isOpen) {
       setName(user?.name ?? "");
+      setAvatarFile(null);
+      setPreviewUrl(null);
+      setError(null);
     }
   }, [isOpen, user?.name]);
 
@@ -60,6 +63,15 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
 
     if (inputRef.current) {
       inputRef.current.value = "";
+    }
+  };
+
+  const validateName = (value: string): string | null => {
+    try {
+      nameSchema.validateSync(value);
+      return null;
+    } catch (err) {
+      return err instanceof Error ? err.message : "Invalid name";
     }
   };
 
@@ -101,13 +113,10 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
       return;
     }
 
-    if (!trimmedName) {
-      setError("Name is required");
-      return;
-    }
+    const nameError = validateName(trimmedName);
 
-    if (trimmedName.length < 2) {
-      setError("Name must be at least 2 characters");
+    if (nameError) {
+      setError(nameError);
       return;
     }
 
@@ -158,16 +167,18 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
     onClose();
   };
 
-  const isNameChanged = name.trim() !== (user?.name ?? "");
+  const trimmedName = name.trim();
+  const nameError = validateName(trimmedName);
+  const isNameValid = !nameError;
 
-  const canSave = Boolean(avatarFile) || isNameChanged;
+  const isNameChanged = trimmedName !== (user?.name ?? "");
+
+  const canSave = isNameValid && (Boolean(avatarFile) || isNameChanged);
 
   return (
     <Modal isOpen={isOpen} onClose={handleClose}>
       <div className={styles.userModalContent}>
         <h1 className={styles.userModalTitle}>Update your profile</h1>
-
-        {/* Avatar */}
         <button
           type="button"
           className={styles.avatarPicker}
@@ -194,13 +205,10 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
           onChange={handleFileChange}
           disabled={isSubmitting}
         />
-
-        {/* Name */}
         <div className={styles.fieldGroup}>
           <label className={styles.nameLabel} htmlFor="user-name">
             Enter your name
           </label>
-
           <input
             id="user-name"
             type="text"
@@ -212,15 +220,11 @@ export default function UserModal({ isOpen, onClose }: UserModalProps) {
             placeholder="Max"
             className={styles.nameInput}
             disabled={isSubmitting}
-            maxLength={50}
+            maxLength={32}
             autoComplete="name"
           />
         </div>
-
-        {/* Error */}
         {error && <p className={styles.avatarError}>{error}</p>}
-
-        {/* Save */}
         <Button
           className={styles.avatarSaveButton}
           variant="primary"
