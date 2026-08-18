@@ -2,7 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { fetchArticleById } from "./article-details.service";
 import styles from "./ArticleDetailsClient.module.css";
@@ -22,9 +22,6 @@ type Props = {
 };
 
 const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
-  const [bookmarkedState, setBookmarkedState] = useState<boolean>(
-    initialData?.isBookmarked ?? false,
-  );
   const [recommendations, setRecommendations] = useState(initialData?.recommendations ?? []);
 
   const { data, isLoading, error } = useQuery<ArticleDetailsData>({
@@ -46,20 +43,14 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
     setRecommendations(data.recommendations);
   }
 
-  useEffect(() => {
-    if (data?.isBookmarked !== undefined) {
-      setBookmarkedState(data.isBookmarked);
-    }
-  }, [data?.isBookmarked]);
-
   if (isLoading || !data) {
     return <Loader />;
   }
 
-  const { article, author } = data;
-  const publicationDate = article.publicationDate;
+  const { article, author, isBookmarked } = data;
 
-  const bookmarkLabel = bookmarkedState ? "Unsave" : "Save";
+  const publicationDate = article.publicationDate;
+  const bookmarkLabel = isBookmarked ? "Unsave" : "Save";
 
   return (
     <Container>
@@ -77,7 +68,7 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
             <div className={styles.articleBookmarkWrapper}>
               <BookmarkButton
                 articleId={article.id}
-                isBookmarked={bookmarkedState}
+                isBookmarked={isBookmarked}
                 className={styles.articleBookmarkButton}
                 label={bookmarkLabel}
               />
