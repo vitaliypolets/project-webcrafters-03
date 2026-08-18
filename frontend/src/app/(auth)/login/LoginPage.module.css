@@ -1,14 +1,16 @@
 .page {
   width: min(calc(100% - 32px), 330px);
   margin: 48px auto;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
+
   gap: 20px;
   padding: 48px 32px;
+
   border-radius: 32px;
-  overflow: hidden;
   background-color: var(--color-bg-card-soft-green);
 }
 
@@ -17,6 +19,7 @@
   font-weight: 700;
   font-size: 32px;
   text-align: center;
+  line-height: 1.2;
   color: var(--color-dark);
 }
 
