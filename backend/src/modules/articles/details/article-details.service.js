@@ -2,10 +2,13 @@ import mongoose from 'mongoose';
 import { Article } from '../../../models/Article.js';
 import { User } from '../../../models/User.js';
 
-const getArticleDetails = async (articleId, userId = null) => {
+const getArticleDetails = async (articleId, userId = null, skipView) => {
+  if (!skipView) {
+    await Article.findByIdAndUpdate(articleId, { $inc: { viewsCount: 1 } });
+  }
+  
   const preArticle = await Article.findByIdAndUpdate(
     articleId,
-    { $inc: { viewsCount: 1 } },
     { new: true }
   ).lean();
 
