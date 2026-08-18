@@ -11,6 +11,9 @@ type AuthorsItemProps = {
 
 export default function AuthorsItem({ author }: AuthorsItemProps) {
   const firstName = author.name.split(' ')[0];
+  if (firstName.length > 10) {
+    return firstName.slice(0, 10) + "..."
+  }
   return (
     <Link href={`/authors/${author.id}`} className={styles.item}>
       <div className={styles.avatarWrapper}>
