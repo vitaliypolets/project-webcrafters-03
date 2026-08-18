@@ -17,6 +17,24 @@ import styles from "./BookmarkButton.module.css";
 
 type BookmarkAction = "save" | "remove";
 
+type ArticlesQueryData = {
+  pages: Array<{
+    data: {
+      items: Array<{
+        id: string;
+        isBookmarked?: boolean;
+      }>;
+    };
+  }>;
+  pageParams: unknown[];
+};
+
+type ArticleQueryData = {
+  data?: {
+    isBookmarked?: boolean;
+  };
+};
+
 export const BookmarkButton = ({
   articleId,
   isBookmarked,
@@ -35,17 +53,45 @@ export const BookmarkButton = ({
     setSaved(isBookmarked);
   }, [isBookmarked]);
 
-  const invalidateBookmarkQueries = () => {
-    void queryClient.invalidateQueries({
-      queryKey: ["articles"],
+  const updateBookmarkCache = (nextSaved: boolean) => {
+    queryClient.setQueriesData<ArticlesQueryData>({ queryKey: ["articles"] }, (oldData) => {
+      if (!oldData?.pages) {
+        return oldData;
+      }
+
+      return {
+        ...oldData,
+        pages: oldData.pages.map((page) => ({
+          ...page,
+          data: {
+            ...page.data,
+            items: page.data.items.map((article) =>
+              article.id === articleId
+                ? {
+                    ...article,
+                    isBookmarked: nextSaved,
+                  }
+                : article,
+            ),
+          },
+        })),
+      };
     });
 
-    void queryClient.invalidateQueries({
-      queryKey: ["saved-articles"],
-    });
+    queryClient.setQueryData<ArticleQueryData>(["article", articleId], (oldData) => {
+      if (!oldData) {
+        return oldData;
+      }
 
-    void queryClient.invalidateQueries({
-      queryKey: ["article", articleId],
+      return {
+        ...oldData,
+        data: oldData.data
+          ? {
+              ...oldData.data,
+              isBookmarked: nextSaved,
+            }
+          : oldData.data,
+      };
     });
   };
 
@@ -59,16 +105,28 @@ export const BookmarkButton = ({
     },
 
     onSuccess: (_, action) => {
-      setSaved(action === "save");
-      invalidateBookmarkQueries();
+      const nextSaved = action === "save";
+
+      setSaved(nextSaved);
+      updateBookmarkCache(nextSaved);
+
+      void queryClient.invalidateQueries({
+        queryKey: ["saved-articles"],
+      });
     },
 
     onError: (error) => {
-      const status = (error as { response?: { status?: number } })?.response?.status;
+      const status = (
+        error as {
+          response?: {
+            status?: number;
+          };
+        }
+      )?.response?.status;
 
       if (status === 409) {
         setSaved(true);
-        invalidateBookmarkQueries();
+        updateBookmarkCache(true);
 
         return;
       }

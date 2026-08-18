@@ -2,6 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { fetchArticleById } from "./article-details.service";
 import styles from "./ArticleDetailsClient.module.css";
@@ -21,9 +22,14 @@ type Props = {
 };
 
 const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
+  const [bookmarkedState, setBookmarkedState] = useState<boolean>(
+    initialData?.isBookmarked ?? false,
+  );
+  const [recommendations, setRecommendations] = useState(initialData?.recommendations ?? []);
+
   const { data, isLoading, error } = useQuery<ArticleDetailsData>({
     queryKey: ["article", articleId],
-    queryFn: () => fetchArticleById(articleId),
+    queryFn: () => fetchArticleById(articleId, true),
     enabled: Boolean(articleId),
     staleTime: 0,
     initialData,
@@ -36,12 +42,24 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
     }
   }
 
+  if (recommendations.length === 0 && data?.recommendations?.length) {
+    setRecommendations(data.recommendations);
+  }
+
+  useEffect(() => {
+    if (data?.isBookmarked !== undefined) {
+      setBookmarkedState(data.isBookmarked);
+    }
+  }, [data?.isBookmarked]);
+
   if (isLoading || !data) {
     return <Loader />;
   }
 
-  const { article, author, isBookmarked, recommendations } = data;
+  const { article, author } = data;
   const publicationDate = article.publicationDate;
+
+  const bookmarkLabel = bookmarkedState ? "Unsave" : "Save";
 
   return (
     <Container>
@@ -59,9 +77,9 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
             <div className={styles.articleBookmarkWrapper}>
               <BookmarkButton
                 articleId={article.id}
-                isBookmarked={isBookmarked}
+                isBookmarked={bookmarkedState}
                 className={styles.articleBookmarkButton}
-                label={"Save"}
+                label={bookmarkLabel}
               />
             </div>
           </div>
