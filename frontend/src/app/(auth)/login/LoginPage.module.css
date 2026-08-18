@@ -1,6 +1,6 @@
 .page {
   width: min(100% - 32px, 330px);
-  max-width: 330px;
+  width: 330px;
   margin: 48px auto;
 
   display: flex;
@@ -27,14 +27,14 @@
 
 @media screen and (min-width: 768px) {
   .page {
-    max-width: 522px;
+    width: 522px;
     margin: 64px auto;
   }
 }
 
 @media screen and (min-width: 1440px) {
   .page {
-    max-width: 392px;
+    width: 392px;
     margin: 80px auto;
   }
 }
