@@ -28,7 +28,7 @@ export const createArticleSchema = Yup.object({
       'fileSize',
       'Image size must not exceed 1 MB',
       value => {
-        if (!value) return false;
+        if (!value) return true;
 
         return value.size <= MAX_IMAGE_SIZE;
       },
@@ -37,7 +37,7 @@ export const createArticleSchema = Yup.object({
       'fileType',
       'Only JPEG, PNG and WEBP images are allowed',
       value => {
-        if (!value) return false;
+        if (!value) return true;
 
         return ALLOWED_IMAGE_TYPES.includes(value.type);
       },

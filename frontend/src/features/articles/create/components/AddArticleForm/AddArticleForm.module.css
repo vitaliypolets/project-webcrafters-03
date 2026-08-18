@@ -5,7 +5,6 @@
     'image'
     'titleField'
     'description'
-    'publicationDate'
     'submit';
 
   width: 100%;
@@ -20,8 +19,7 @@ FORM FIELDS
 
 .imageField,
 .titleField,
-.descriptionField,
-.formGroup {
+.descriptionField {
   width: 100%;
   min-width: 0;
 }
@@ -37,11 +35,6 @@ FORM FIELDS
 
 .descriptionField {
   grid-area: description;
-  margin: 0;
-}
-
-.formGroup {
-  grid-area: publicationDate;
   margin: 0;
 }
 
@@ -61,10 +54,8 @@ INPUT / TEXTAREA WRAPPERS
 
 .inputWrapper,
 .textareaWrapper {
-  position: relative;
   width: 100%;
   min-width: 0;
-  color: var(--color-text-secondary);
 }
 
 /* =========================
@@ -90,12 +81,12 @@ INPUT / TEXTAREA
 
 .input {
   height: var(--input-height-lg);
-  padding: 0 44px;
+  padding: 0 var(--spacing-sm);
 }
 
 .textarea {
   min-height: 393px;
-  padding: var(--spacing-sm) 44px;
+  padding: var(--spacing-sm);
   resize: none;
   overflow: hidden;
 }
@@ -107,54 +98,8 @@ INPUT / TEXTAREA
 }
 
 /* =========================
-ICONS
-========================= */
-
-.inputIcon {
-  position: absolute;
-  top: 50%;
-  width: 20px;
-  height: 20px;
-  transform: translateY(-50%);
-  pointer-events: none;
-}
-
-.inputIcon:first-child {
-  left: var(--spacing-sm);
-  fill: currentColor;
-}
-
-.inputIcon:last-child {
-  right: var(--spacing-sm);
-  fill: currentColor;
-}
-
-.textareaIcon {
-  position: absolute;
-  top: var(--spacing-sm);
-  width: 20px;
-  height: 20px;
-  pointer-events: none;
-}
-
-.textareaIcon:first-child {
-  left: var(--spacing-sm);
-  fill: currentColor;
-}
-
-.textareaIcon:last-child {
-  right: var(--spacing-sm);
-  fill: currentColor;
-}
-
-/* =========================
 HOVER
 ========================= */
-
-.inputWrapper:hover,
-.textareaWrapper:hover {
-  color: var(--color-text-main);
-}
 
 .inputWrapper:hover .input,
 .textareaWrapper:hover .textarea {
@@ -164,10 +109,6 @@ HOVER
 /* =========================
 FILLED
 ========================= */
-
-.filledState {
-  color: var(--color-text-main);
-}
 
 .filledState .input,
 .filledState .textarea {
@@ -183,11 +124,6 @@ FILLED
 ACTIVE / FOCUS
 ========================= */
 
-.inputWrapper:focus-within,
-.textareaWrapper:focus-within {
-  color: var(--color-text-main);
-}
-
 .inputWrapper:focus-within .input,
 .textareaWrapper:focus-within .textarea {
   border-color: var(--color-primary);
@@ -195,20 +131,8 @@ ACTIVE / FOCUS
 }
 
 /* =========================
-PUBLICATION DATE
-========================= */
-
-.formGroup .input {
-  cursor: default;
-}
-
-/* =========================
 ERROR
 ========================= */
-
-.errorState {
-  color: var(--color-error);
-}
 
 .errorState .input,
 .errorState .textarea {
@@ -292,7 +216,6 @@ TABLET
     grid-template-areas:
       'image titleField'
       'description description'
-      'publicationDate publicationDate'
       'submit submit';
 
     width: 100%;
@@ -319,7 +242,6 @@ DESKTOP
     grid-template-areas:
       'titleField image'
       'description image'
-      'publicationDate image'
       'submit image';
 
     width: 100%;
