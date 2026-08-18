@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import mongoose from "mongoose";
+
 import { Session } from "../../../models/Session.js";
 import { User } from "../../../models/User.js";
 import { HttpError } from "../../../utils/HttpError.js";
@@ -11,15 +12,11 @@ export const refreshAuthSession = async (refreshToken, sessionId) => {
     throw new HttpError(401, "Refresh token is missing");
   }
 
-  let session = null;
-
-  if (sessionId) {
-    if (!mongoose.isValidObjectId(sessionId)) {
-      throw new HttpError(401, "Session not found or expired");
-    }
-
-    session = await Session.findById(sessionId).select("+refreshTokenHash");
+  if (!sessionId || !mongoose.isValidObjectId(sessionId)) {
+    throw new HttpError(401, "Session not found or expired");
   }
+
+  const session = await Session.findById(sessionId).select("+refreshTokenHash");
 
   if (!session) {
     throw new HttpError(401, "Session not found or expired");
@@ -53,7 +50,9 @@ export const refreshAuthSession = async (refreshToken, sessionId) => {
 };
 
 export const logoutAuthSession = async (sessionId) => {
-  if (sessionId) {
-    await Session.deleteOne({ _id: sessionId });
+  if (!sessionId || !mongoose.isValidObjectId(sessionId)) {
+    return;
   }
+
+  await Session.deleteOne({ _id: sessionId });
 };
