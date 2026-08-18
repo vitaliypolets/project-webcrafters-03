@@ -1,5 +1,5 @@
-import type { Article } from '@/types/article';
-import type { PaginatedResponse } from '@/types/api';
+import type { Article } from "@/types/article";
+import type { PaginatedResponse } from "@/types/api";
 
 export interface Creator {
   id: string;
