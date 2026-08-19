@@ -1,6 +1,11 @@
+"use client";
+
 import Image from "next/image";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/Button";
+import { api } from "@/lib/api/client";
 
 import type { ArticlesItemProps } from "../../article-shared.types";
 import { BookmarkButton } from "../BookmarkButton/BookmarkButton";
@@ -12,8 +17,32 @@ export const ArticlesItem = ({
   action = "bookmark",
   className,
   onBookmarkChange,
+  onArticleDeleted,
 }: ArticlesItemProps) => {
   const imageUrl = article.imageUrl.match(/\((.*?)\)/)?.[1] ?? article.imageUrl;
+
+  const { mutate: deleteArticle, isPending: isDeleting } = useMutation({
+    mutationFn: async () => {
+      await api.delete(`/articles/${article.id}`);
+    },
+
+    onSuccess: () => {
+      toast.success("Article deleted successfully!");
+      onArticleDeleted?.(article.id);
+    },
+
+    onError: (error) => {
+      toast.error(error instanceof Error ? error.message : "Failed to delete article");
+    },
+  });
+
+  const handleDelete = () => {
+    const confirmed = window.confirm("Are you sure you want to delete this article?");
+
+    if (confirmed) {
+      deleteArticle();
+    }
+  };
 
   return (
     <article className={`${styles.article} ${className ?? ""}`}>
@@ -46,17 +75,33 @@ export const ArticlesItem = ({
         </Button>
 
         {action === "edit" ? (
-          <Button
-            href={`/articles/${article.id}/edit`}
-            variant="secondary"
-            size="sm"
-            className={styles.editButton}
-            aria-label="Edit article"
-          >
-            <svg className={styles.editIcon} aria-hidden="true">
-              <use href="/icons/sprite.svg#icon-edit" />
-            </svg>
-          </Button>
+          <>
+            <Button
+              href={`/articles/${article.id}/edit`}
+              variant="secondary"
+              size="sm"
+              className={styles.editButton}
+              aria-label="Edit article"
+            >
+              <svg className={styles.editIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-edit" />
+              </svg>
+            </Button>
+
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              className={styles.deleteButton}
+              aria-label="Delete article"
+              disabled={isDeleting}
+              onClick={handleDelete}
+            >
+              <svg className={styles.deleteIcon} aria-hidden="true">
+                <use href="/icons/sprite.svg#icon-delete" />
+              </svg>
+            </Button>
+          </>
         ) : (
           <BookmarkButton
             articleId={article.id}
