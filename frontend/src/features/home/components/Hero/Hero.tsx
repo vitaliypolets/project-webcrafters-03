@@ -22,9 +22,15 @@ export const Hero = () => {
       return;
     }
 
-    section.scrollIntoView({
+    const header = document.querySelector("header");
+    const headerHeight = header?.getBoundingClientRect().height ?? 0;
+
+    const sectionTop =
+      section.getBoundingClientRect().top + window.scrollY;
+
+    window.scrollTo({
+      top: Math.max(0, sectionTop - headerHeight),
       behavior: "smooth",
-      block: "start",
     });
 
     window.history.replaceState(
