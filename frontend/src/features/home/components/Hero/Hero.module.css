@@ -70,15 +70,15 @@
   font-size: var(--font-size-main);
   line-height: var(--line-height-secondary);
 
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  border: none;
+  color: var(--color-primary-hover);
+  background-color: transparent;
+  border: var(--border-width-sm) solid var(--color-primary-hover);
+
 }
 
 .buttons .registerButton:hover {
-  color: var(--color-white);
-  background-color: var(--color-primary-hover);
-  border: none;
+  background-color: rgba(100, 145, 121, 0.12);
+  border: var(--border-width-sm) solid var(--color-text-main);
 }
 
 .buttons .registerButton:active {
