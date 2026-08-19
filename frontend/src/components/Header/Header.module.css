@@ -19,7 +19,7 @@
   width: 100%;
 }
 
-.headerNotFixed {
+.headerStatic {
   position: static;
 }
 

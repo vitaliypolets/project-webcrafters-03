@@ -12,7 +12,11 @@ import { UserModal } from "@/features/user/profile-edit";
 
 import { Container } from "../ui/Container/Container";
 
-export default function Header() {
+interface HeaderProps {
+  sticky?: boolean;
+}
+
+export default function Header({ sticky = true }: HeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -29,7 +33,7 @@ export default function Header() {
   const handleBurger = () => {
     setIsOpen((prev) => !prev);
   };
-  const isHeaderNotFixed = pathname === "/register" || pathname === "/login";
+
   // Забороняємо скрол сторінки при відкритому мобільному меню
   useEffect(() => {
     const handleResize = () => {
@@ -65,8 +69,8 @@ export default function Header() {
   return (
     <>
       <header
-        className={`${css.header} ${
-          isOpen ? css.headerFixed : isHeaderNotFixed ? css.headerNotFixed : ""
+        className={`${css.header} ${!sticky ? css.headerStatic : ""} ${
+          isOpen ? css.headerFixed : ""
         }`}
       >
         <Container>
