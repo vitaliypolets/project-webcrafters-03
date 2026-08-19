@@ -112,7 +112,7 @@
 
   color: var(--color-text-main);
   background-color: transparent;
-  border: var(--border-width-sm) solid var(--color-text-main);
+  border: var(--border-width-sm) solid var(--color-primary);
 
   text-align: left;
 }
