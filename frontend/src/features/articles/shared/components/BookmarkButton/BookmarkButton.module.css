@@ -51,7 +51,8 @@
 }
 
 .saved {
-  color: var(--color-text-primary);
+  background-color: var(--color-primary);
+  color: var(--color-text-on-primary);
 }
 
 .button:hover:not(:disabled) {
