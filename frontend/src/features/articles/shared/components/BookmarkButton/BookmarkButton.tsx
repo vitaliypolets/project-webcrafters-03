@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
+import { Loader } from "@/components/ui/Loader/Loader";
 import { useAuthStore } from "@/store/auth.store";
 
 import {
@@ -16,6 +18,12 @@ import { ModalErrorSave } from "../ModalErrorSave/ModalErrorSave";
 import styles from "./BookmarkButton.module.css";
 
 type BookmarkAction = "save" | "remove";
+
+type BookmarkError = {
+  response?: {
+    status?: number;
+  };
+};
 
 export const BookmarkButton = ({
   articleId,
@@ -53,13 +61,7 @@ export const BookmarkButton = ({
     },
 
     onError: (error) => {
-      const status = (
-        error as {
-          response?: {
-            status?: number;
-          };
-        }
-      )?.response?.status;
+      const status = (error as BookmarkError)?.response?.status;
 
       if (status === 409) {
         setSaved(true);
@@ -67,11 +69,10 @@ export const BookmarkButton = ({
         return;
       }
 
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unable to update bookmark. Please try again.",
-      );
+      const message =
+        error instanceof Error ? error.message : "Unable to update bookmark. Please try again.";
 
-      setShowErrorModal(true);
+      toast.error(message);
     },
   });
 
@@ -114,6 +115,8 @@ export const BookmarkButton = ({
 
         {label && <span className={styles.label}>{label}</span>}
       </button>
+
+      {mutation.isPending && <Loader label="Saving..." />}
 
       {showErrorModal && (
         <ModalErrorSave
