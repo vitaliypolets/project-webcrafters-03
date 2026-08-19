@@ -110,17 +110,17 @@
   font-size: var(--font-size-main);
   line-height: var(--line-height-secondary);
 
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  border: none;
+  color: var(--color-text-main);
+  background-color: transparent;
+  border: var(--border-width-sm) solid var(--color-text-main);
 
   text-align: left;
 }
 
 .learnMore.learnMore:hover {
-  color: var(--color-white);
-  background-color: var(--color-primary-hover);
-  border: none;
+  color: var(--color-text-main);
+  background-color: rgba(100, 145, 121, 0.12);
+  border-color: var(--color-text-main);
 }
 
 .bookmark,
