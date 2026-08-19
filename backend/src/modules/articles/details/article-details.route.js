@@ -2,6 +2,8 @@ import { Router } from 'express';
 
 import jwt from 'jsonwebtoken';
 
+import mongoose from 'mongoose';
+
 import { getArticleById } from './article-details.controller.js';
 import { validateArticleParams } from './article-details.validation.js';
 import { env } from '../../../config/env.js';
@@ -28,8 +30,10 @@ const optionalAuthenticate = async (req, _res, next) => {
       }
     }
 
-    if (!userId && req.cookies?.sessionId) {
-      const session = await Session.findById(req.cookies.sessionId);
+    const sessionId = req.cookies?.sessionId;
+
+    if (!userId && sessionId && mongoose.isValidObjectId(sessionId)) {
+      const session = await Session.findById(sessionId);
       
       if (session && session.expiresAt > new Date()) {
         userId = session.userId;
