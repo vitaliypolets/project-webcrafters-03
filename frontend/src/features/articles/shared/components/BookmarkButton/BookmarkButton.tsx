@@ -65,6 +65,8 @@ export const BookmarkButton = ({
 
       if (status === 409) {
         setSaved(true);
+        onBookmarkChange?.(articleId, true);
+        onBookmarkToggle?.(true);
 
         return;
       }
@@ -91,7 +93,12 @@ export const BookmarkButton = ({
     mutation.mutate(saved ? "remove" : "save");
   };
 
-  const buttonClassName = [styles.button, label ? styles.withLabel : "", className ?? ""]
+  const buttonClassName = [
+    styles.button,
+    saved ? styles.saved : "",
+    label ? styles.withLabel : "",
+    className ?? "",
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -105,11 +112,7 @@ export const BookmarkButton = ({
         aria-label={saved ? "Remove bookmark" : "Save bookmark"}
         aria-pressed={saved}
       >
-        <svg
-          className={`${styles.icon} ${saved ? styles.saved : ""}`}
-          viewBox="0 0 25 32"
-          aria-hidden="true"
-        >
+        <svg className={styles.icon} viewBox="0 0 25 32" aria-hidden="true">
           <use href="/icons/sprite.svg#icon-security" />
         </svg>
 
