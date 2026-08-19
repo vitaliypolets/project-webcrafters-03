@@ -1,7 +1,11 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { Loader } from '@/components/ui/Loader/Loader';
@@ -10,9 +14,11 @@ import { useAuthStore } from '@/store/auth.store';
 import { EmptyArticlesState } from '../../my-articles/components/EmptyArticlesState';
 import styles from '../../my-articles/components/ArticlesTab.module.css';
 import { getSavedArticles } from '../saved-articles.service';
+import type { SavedArticlesPage } from '../saved-articles.types';
 
 export function SavedArticlesTab() {
   const searchParams = useSearchParams();
+  const queryClient = useQueryClient();
   const listWrapperRef = useRef<HTMLDivElement>(null);
   const pendingScrollIndexRef = useRef<number | null>(null);
   const accessToken = useAuthStore((state) => state.accessToken);
@@ -25,6 +31,7 @@ export function SavedArticlesTab() {
   const query = useInfiniteQuery({
     queryKey,
     enabled: active && Boolean(accessToken && userId),
+    staleTime: 0,
     initialPageParam: 1,
     queryFn: ({ pageParam }) => getSavedArticles(pageParam),
     getNextPageParam: (lastPage) =>
@@ -85,6 +92,50 @@ export function SavedArticlesTab() {
     if (result.isError) pendingScrollIndexRef.current = null;
   };
 
+  const handleBookmarkChange = (articleId: string, isBookmarked: boolean) => {
+    if (isBookmarked) return;
+
+    queryClient.setQueryData<InfiniteData<SavedArticlesPage>>(
+      queryKey,
+      (currentData) => {
+        if (
+          !currentData ||
+          !currentData.pages.some((page) =>
+            page.data.items.some((article) => article.id === articleId),
+          )
+        ) {
+          return currentData;
+        }
+
+        return {
+          ...currentData,
+          pages: currentData.pages.map((page) => {
+            const totalItems = Math.max(0, page.data.meta.totalItems - 1);
+            const totalPages = Math.ceil(totalItems / page.data.meta.perPage);
+
+            return {
+              ...page,
+              data: {
+                ...page.data,
+                items: page.data.items.filter(
+                  (article) => article.id !== articleId,
+                ),
+                meta: {
+                  ...page.data.meta,
+                  totalItems,
+                  totalPages,
+                  hasNextPage: page.data.meta.page < totalPages,
+                },
+              },
+            };
+          }),
+        };
+      },
+    );
+
+    void queryClient.invalidateQueries({ queryKey });
+  };
+
   if (!active) return null;
 
   return (
@@ -121,7 +172,10 @@ export function SavedArticlesTab() {
 
       {articles.length > 0 ? (
         <div ref={listWrapperRef} className={styles.articles}>
-          <ArticlesList articles={articles} />
+          <ArticlesList
+            articles={articles}
+            onBookmarkChange={handleBookmarkChange}
+          />
         </div>
       ) : null}
 
