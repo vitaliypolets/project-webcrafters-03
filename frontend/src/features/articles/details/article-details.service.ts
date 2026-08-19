@@ -8,12 +8,16 @@ const getBaseUrl = () => {
   return process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 };
 
-export const fetchArticleById = async (articleId: string, skipView = false): Promise<ArticleDetailsData> => {
+export const fetchArticleById = async (articleId: string, skipView = false, cookieHeader?: string): Promise<ArticleDetailsData> => {
   const headers: Record<string, string> = skipView
     ? { 'x-skip-view': 'true' }
     : {};
   
   if (typeof window === 'undefined') {
+    if (cookieHeader) {
+      headers['cookie'] = cookieHeader;
+    }
+
     const baseUrl = getBaseUrl();
     const res = await fetch(`${baseUrl}/api/articles/${articleId}`, {
       headers,

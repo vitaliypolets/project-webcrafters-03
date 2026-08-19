@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
 
+import { Loader } from "@/components/ui/Loader/Loader";
 import { useAuthStore } from "@/store/auth.store";
 
 import {
@@ -17,11 +19,19 @@ import styles from "./BookmarkButton.module.css";
 
 type BookmarkAction = "save" | "remove";
 
+type BookmarkError = {
+  response?: {
+    status?: number;
+  };
+};
+
 export const BookmarkButton = ({
   articleId,
   isBookmarked,
   className,
   label,
+  onBookmarkChange,
+  onBookmarkToggle,
 }: BookmarkButtonProps) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
@@ -43,29 +53,28 @@ export const BookmarkButton = ({
     },
 
     onSuccess: (_, action) => {
-      setSaved(action === "save");
+      const nextSaved = action === "save";
+
+      setSaved(nextSaved);
+      onBookmarkChange?.(articleId, nextSaved);
+      onBookmarkToggle?.(nextSaved);
     },
 
     onError: (error) => {
-      const status = (
-        error as {
-          response?: {
-            status?: number;
-          };
-        }
-      )?.response?.status;
+      const status = (error as BookmarkError)?.response?.status;
 
       if (status === 409) {
         setSaved(true);
+        onBookmarkChange?.(articleId, true);
+        onBookmarkToggle?.(true);
 
         return;
       }
 
-      setErrorMessage(
-        error instanceof Error ? error.message : "Unable to update bookmark. Please try again.",
-      );
+      const message =
+        error instanceof Error ? error.message : "Unable to update bookmark. Please try again.";
 
-      setShowErrorModal(true);
+      toast.error(message);
     },
   });
 
@@ -84,7 +93,12 @@ export const BookmarkButton = ({
     mutation.mutate(saved ? "remove" : "save");
   };
 
-  const buttonClassName = [styles.button, label ? styles.withLabel : "", className ?? ""]
+  const buttonClassName = [
+    styles.button,
+    saved ? styles.saved : "",
+    label ? styles.withLabel : "",
+    className ?? "",
+  ]
     .filter(Boolean)
     .join(" ");
 
@@ -98,16 +112,14 @@ export const BookmarkButton = ({
         aria-label={saved ? "Remove bookmark" : "Save bookmark"}
         aria-pressed={saved}
       >
-        <svg
-          className={`${styles.icon} ${saved ? styles.saved : ""}`}
-          viewBox="0 0 25 32"
-          aria-hidden="true"
-        >
+        <svg className={styles.icon} viewBox="0 0 25 32" aria-hidden="true">
           <use href="/icons/sprite.svg#icon-security" />
         </svg>
 
         {label && <span className={styles.label}>{label}</span>}
       </button>
+
+      {mutation.isPending && <Loader label="Saving..." />}
 
       {showErrorModal && (
         <ModalErrorSave

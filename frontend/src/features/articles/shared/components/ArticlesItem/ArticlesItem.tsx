@@ -11,9 +11,9 @@ export const ArticlesItem = ({
   article,
   action = "bookmark",
   className,
+  onBookmarkChange,
 }: ArticlesItemProps) => {
-  const imageUrl =
-    article.imageUrl.match(/\((.*?)\)/)?.[1] ?? article.imageUrl;
+  const imageUrl = article.imageUrl.match(/\((.*?)\)/)?.[1] ?? article.imageUrl;
 
   return (
     <article className={`${styles.article} ${className ?? ""}`}>
@@ -62,6 +62,7 @@ export const ArticlesItem = ({
             articleId={article.id}
             isBookmarked={article.isBookmarked ?? false}
             className={styles.bookmark}
+            onBookmarkChange={onBookmarkChange}
           />
         )}
       </div>

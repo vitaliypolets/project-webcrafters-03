@@ -1,6 +1,6 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 
@@ -22,6 +22,8 @@ type Props = {
 };
 
 const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
+  const queryClient = useQueryClient();
+
   const [recommendations, setRecommendations] = useState(initialData?.recommendations ?? []);
 
   const { data, isLoading, error } = useQuery<ArticleDetailsData>({
@@ -50,6 +52,16 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
   const { article, author, isBookmarked } = data;
 
   const publicationDate = article.publicationDate;
+
+  const handleBookmarkToggle = (isBookmarked: boolean) => {
+    queryClient.setQueryData<ArticleDetailsData>(["article", articleId], (oldData) => {
+      if (!oldData) return oldData;
+      return {
+        ...oldData,
+        isBookmarked,
+      };
+    });
+  };
   const bookmarkLabel = isBookmarked ? "Unsave" : "Save";
 
   return (
@@ -71,6 +83,7 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
                 isBookmarked={isBookmarked}
                 className={styles.articleBookmarkButton}
                 label={bookmarkLabel}
+                onBookmarkToggle={handleBookmarkToggle}
               />
             </div>
           </div>
