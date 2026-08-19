@@ -4,21 +4,26 @@
   justify-content: center;
   flex-grow: 1;
   width: 100%;
-  padding-bottom: 85px;
-  padding-top: 85px;
+  min-width: 0;
+
+  padding: 85px 16px;
 }
 
 .pageWrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
+
   gap: 20px;
-  border-radius: var(--border-radius-card);
-  margin: auto;
-  padding: 48px 32px;
-  max-width: 360px;
+
   width: 100%;
+  max-width: 360px;
+
+  padding: 48px 24px;
+  border-radius: var(--border-radius-card);
+
   flex-grow: 0;
+
   background-color: var(--color-bg-card-soft-green);
   color: var(--color-dark);
 }
@@ -32,21 +37,24 @@
   text-align: center;
 }
 
+.instructions {
+  white-space: nowrap;
+}
+
 @media screen and (min-width: 768px) {
   .page {
-    padding-bottom: 120px;
-    padding-top: 120px;
+    padding: 120px 16px;
   }
 
   .pageWrapper {
     max-width: 522px;
+    padding: 48px 32px;
   }
 }
 
 @media screen and (min-width: 1440px) {
   .page {
-    padding-bottom: 50px;
-    padding-top: 50px;
+    padding: 50px 16px;
   }
 
   .pageWrapper {
