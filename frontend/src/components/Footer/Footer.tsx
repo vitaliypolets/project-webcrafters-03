@@ -1,12 +1,15 @@
-import Link from 'next/link';
+'use client';
 
-import { Container } from '@/components/ui/Container/Container';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+
+import { Container } from '@/components/ui/Container';
 import styles from './Footer.module.css';
 
 const NAV_LINKS = [
   {
     label: 'Articles',
-    href: '/articles#articles-top',
+    href: '/articles',
   },
   {
     label: 'Account',
@@ -17,7 +20,7 @@ const NAV_LINKS = [
 const AUTH_NAV_LINKS = [
   {
     label: 'Articles',
-    href: '/articles#articles-top',
+    href: '/articles',
   },
 ];
 
@@ -26,7 +29,40 @@ interface FooterProps {
 }
 
 export function Footer({ isAuthPage = false }: FooterProps) {
+  const pathname = usePathname();
+
   const navLinks = isAuthPage ? AUTH_NAV_LINKS : NAV_LINKS;
+
+  const handleNavClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+  ) => {
+    if (pathname !== href) {
+      return;
+    }
+
+    event.preventDefault();
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleLogoClick = (
+    event: React.MouseEvent<HTMLAnchorElement>,
+  ) => {
+    if (pathname !== '/') {
+      return;
+    }
+
+    event.preventDefault();
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <footer className={styles.footer}>
@@ -35,6 +71,7 @@ export function Footer({ isAuthPage = false }: FooterProps) {
           href="/"
           className={styles.logoLink}
           aria-label="Harmoniq Home"
+          onClick={handleLogoClick}
         >
           <svg
             className={styles.logoIcon}
@@ -62,6 +99,10 @@ export function Footer({ isAuthPage = false }: FooterProps) {
                 <Link
                   href={link.href}
                   className={styles.navLink}
+                  scroll
+                  onClick={(event) =>
+                    handleNavClick(event, link.href)
+                  }
                 >
                   {link.label}
                 </Link>
