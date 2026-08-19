@@ -18,6 +18,7 @@ export default function ArticlesPage() {
   const searchParams = useSearchParams();
 
   const currentFilterParam = searchParams.get('filter');
+
   const activeFilter: ArticleFilter =
     currentFilterParam === 'popular' ? 'popular' : 'all';
 
@@ -33,36 +34,44 @@ export default function ArticlesPage() {
 
   const handleFilterChange = (newFilter: ArticleFilter) => {
     const params = new URLSearchParams(searchParams.toString());
+
     params.set('filter', newFilter);
+
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  if (isLoading) {
-    return <ArticlesLoading />;
-  }
-
   return (
-    <main className={styles.page}>
-      <h1 className={styles.title}>Articles</h1>
+    <div
+      id="articles-top"
+      className={styles.anchorWrapper}
+    >
+      {isLoading ? (
+        <ArticlesLoading />
+      ) : (
+        <main className={styles.page}>
+          <h1 className={styles.title}>Articles</h1>
 
-      <div className={styles.controlsWrapper}>
-        <ArticlesCounter totalItems={totalItems} />
-        <ArticlesFilters
-          activeFilter={activeFilter}
-          onFilterChange={handleFilterChange}
-        />
-      </div>
+          <div className={styles.controlsWrapper}>
+            <ArticlesCounter totalItems={totalItems} />
 
-      <ArticlesCatalog
-        articles={articles}
-        totalItems={totalItems}
-        activeFilter={activeFilter}
-        isLoading={isLoading}
-        isError={isError}
-        isLoadingMore={isFetchingNextPage}
-        hasNextPage={hasNextPage}
-        onLoadMore={() => fetchNextPage()}
-      />
-    </main>
+            <ArticlesFilters
+              activeFilter={activeFilter}
+              onFilterChange={handleFilterChange}
+            />
+          </div>
+
+          <ArticlesCatalog
+            articles={articles}
+            totalItems={totalItems}
+            activeFilter={activeFilter}
+            isLoading={isLoading}
+            isError={isError}
+            isLoadingMore={isFetchingNextPage}
+            hasNextPage={hasNextPage}
+            onLoadMore={() => fetchNextPage()}
+          />
+        </main>
+      )}
+    </div>
   );
 }
