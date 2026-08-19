@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 
 import { Container } from '@/components/ui/Container/Container';
@@ -26,15 +27,16 @@ export const PopularArticles = () => {
             Popular Articles
           </h2>
 
-          <a
+          <Link
             href="/articles"
             className={styles.link}
+            scroll
           >
             Go to all Articles{' '}
             <span className={styles.arrow}>
               ↗
             </span>
-          </a>
+          </Link>
         </div>
 
         {isLoading && (
