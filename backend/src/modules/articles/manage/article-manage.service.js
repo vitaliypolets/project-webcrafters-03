@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { generateArticleDescription } from "../shared/generateArticleDescription.js";
 import cloudinary from "../../../config/cloudinary.js";
 import { Article } from "../../../models/Article.js";
+import { User } from "../../../models/User.js";
 import { HttpError } from "../../../utils/HttpError.js";
 import { saveFileToCloudinary } from "../../../utils/saveFileToCloudinary.js";
 
@@ -71,6 +72,10 @@ const deleteArticle = async ({ articleId, userId }) => {
   checkArticleOwner(article, userId);
 
   await article.deleteOne();
+
+  await User.findByIdAndUpdate(article.authorId, {
+    $inc: { articlesAmount: -1 },
+  });
 };
 
 export { updateArticle, deleteArticle };

@@ -93,6 +93,8 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
     >
       {({ isSubmitting, setFieldValue, errors, touched, values }) => (
         <Form className={css.form}>
+          {/* IMAGE */}
+
           <div className={css.imageField}>
             <ArticleImagePreview
               previewUrl={previewUrl}
@@ -100,6 +102,8 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
               error={touched.image && errors.image ? String(errors.image) : undefined}
             />
           </div>
+
+          {/* TITLE */}
 
           <div className={css.titleField}>
             <label htmlFor="title" className={css.label}>
@@ -111,10 +115,6 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
                 touched.title && errors.title ? css.errorState : values.title ? css.filledState : ""
               }`}
             >
-              <svg className={css.inputIcon} aria-hidden="true">
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
-
               <Field
                 id="title"
                 name="title"
@@ -122,14 +122,12 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
                 placeholder="Enter the title"
                 className={css.input}
               />
-
-              <svg className={css.inputIcon} aria-hidden="true">
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
             </div>
 
             <ErrorMessage name="title" component="p" className={css.error} />
           </div>
+
+          {/* ARTICLE */}
 
           <div className={css.descriptionField}>
             <div
@@ -141,10 +139,6 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
                     : ""
               }`}
             >
-              <svg className={css.textareaIcon} aria-hidden="true">
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
-
               <Field
                 as="textarea"
                 id="article"
@@ -152,32 +146,12 @@ const EditArticleForm = ({ articleId }: EditArticleFormProps) => {
                 placeholder="Enter a text"
                 className={css.textarea}
               />
-
-              <svg className={css.textareaIcon} aria-hidden="true">
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
             </div>
 
             <ErrorMessage name="article" component="p" className={css.error} />
           </div>
 
-          <div className={css.formGroup}>
-            <label htmlFor="publicationDate" className={css.label}>
-              Publication date
-            </label>
-
-            <Field
-              id="publicationDate"
-              name="publicationDate"
-              type="text"
-              className={css.input}
-              value={values.publicationDate}
-              readOnly
-              aria-readonly="true"
-            />
-
-            <ErrorMessage name="publicationDate" component="p" className={css.error} />
-          </div>
+          {/* SUBMIT */}
 
           <Button
             type="submit"
