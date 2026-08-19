@@ -38,7 +38,9 @@ export default function ArticlesPage() {
 
     params.set('filter', newFilter);
 
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   };
 
   if (isLoading) {
