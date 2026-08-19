@@ -1,4 +1,3 @@
-// TODO (учасник №11): controllers
 import createHttpError from 'http-errors';
 import mongoose from 'mongoose';
 import { getArticlesListService } from './articles-list.service.js';
@@ -27,8 +26,9 @@ export const getArticlesListController = async (req, res) => {
     throw createHttpError(400, 'Invalid excludeId format');
   }
 
+  const userId = req.user?.userId || null;
   const parsedQuery = parseGetArticlesQuery(req.query);
-  const result = await getArticlesListService(parsedQuery);
+  const result = await getArticlesListService(parsedQuery, userId);
 
   res.status(200).json(result);
 };
