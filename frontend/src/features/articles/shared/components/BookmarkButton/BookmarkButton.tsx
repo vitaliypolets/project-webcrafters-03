@@ -22,6 +22,8 @@ export const BookmarkButton = ({
   isBookmarked,
   className,
   label,
+  onBookmarkChange,
+  onBookmarkToggle,
 }: BookmarkButtonProps) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
@@ -43,7 +45,11 @@ export const BookmarkButton = ({
     },
 
     onSuccess: (_, action) => {
-      setSaved(action === "save");
+      const nextSaved = action === "save";
+
+      setSaved(nextSaved);
+      onBookmarkChange?.(articleId, nextSaved);
+      onBookmarkToggle?.(nextSaved);
     },
 
     onError: (error) => {
