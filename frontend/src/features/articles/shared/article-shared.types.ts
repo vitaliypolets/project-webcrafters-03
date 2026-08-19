@@ -6,17 +6,21 @@ export type BookmarkChangeHandler = (articleId: string, isBookmarked: boolean) =
 
 export type BookmarkToggleHandler = (isBookmarked: boolean) => void;
 
+export type ArticleDeletedHandler = (articleId: string) => void;
+
 export type ArticlesItemProps = {
   article: Article;
   action?: ArticlesItemAction;
   className?: string;
   onBookmarkChange?: BookmarkChangeHandler;
+  onArticleDeleted?: ArticleDeletedHandler;
 };
 
 export type ArticlesListProps = {
   articles: Article[];
   action?: ArticlesItemAction;
   onBookmarkChange?: BookmarkChangeHandler;
+  onArticleDeleted?: ArticleDeletedHandler;
 };
 
 export type BookmarkButtonProps = {
