@@ -52,8 +52,8 @@ export const ArticlesItem = ({
         alt={article.title}
         width={368}
         height={233}
-        sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1439px) calc(50vw - 48px), 368px"
-        quality={75}
+        sizes="(max-width: 767px) calc(100vw - 40px), (max-width: 1439px) calc(50vw - 48px), 356px"
+        quality={70}
       />
 
       <div className={styles.content}>
