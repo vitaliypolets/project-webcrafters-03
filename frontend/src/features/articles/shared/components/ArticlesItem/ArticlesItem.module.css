@@ -101,7 +101,7 @@
   padding-top: var(--spacing-md);
 }
 
-.learnMore {
+.learnMore.learnMore {
   flex: 1;
   min-width: 0;
 
@@ -110,7 +110,7 @@
   font-size: var(--font-size-main);
   line-height: var(--line-height-secondary);
 
-  color: var(--color-text-main);
+  color: var(--color-text-hero);
   background-color: transparent;
   border: var(--border-width-sm) solid var(--color-primary);
 
@@ -118,7 +118,6 @@
 }
 
 .learnMore.learnMore:hover {
-  color: var(--color-text-main);
   background-color: rgba(100, 145, 121, 0.12);
   border-color: var(--color-text-main);
 }
