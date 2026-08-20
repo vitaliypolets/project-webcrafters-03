@@ -44,9 +44,7 @@ export const getArticlesListService = async (query, userId) => {
     return {
       ...rest,
       id: _id.toString(),
-
       isBookmarked: savedArticlesSet.has(_id.toString()),
-
       author:
         typeof authorId === "object" && authorId !== null
           ? {
