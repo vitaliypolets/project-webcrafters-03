@@ -14,6 +14,7 @@ interface ModalProps {
   className?: string;
   showCloseButton?: boolean;
   backdrop?: ModalBackdrop;
+  title?: string;
 }
 
 export const Modal = ({
@@ -23,6 +24,7 @@ export const Modal = ({
   className = "",
   showCloseButton = true,
   backdrop = "dark",
+  title, // 1. Отримуємо title
 }: ModalProps) => {
   const [mounted, setMounted] = useState(false);
 
@@ -93,6 +95,9 @@ export const Modal = ({
             </svg>
           </button>
         )}
+
+        {/* 2. Рендеримо заголовок, якщо він переданий */}
+        {title && <h2 className={styles.title}>{title}</h2>}
 
         {children}
       </div>
