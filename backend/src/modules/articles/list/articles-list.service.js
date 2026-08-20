@@ -2,7 +2,7 @@
 
 import { Article } from "../../../models/Article.js";
 
-export const getArticlesListService = async (query) => {
+export const getArticlesListService = async (query, userId) => {
   const page = Math.max(1, Number(query.page) || 1);
   const perPage = Math.max(1, Number(query.limit || query.perPage) || 8);
   const skip = (page - 1) * perPage;
@@ -20,7 +20,7 @@ export const getArticlesListService = async (query) => {
   const sort =
     query.filter === "popular" ? { viewsCount: -1, publicationDate: -1 } : { publicationDate: -1 };
 
-  const [totalItems, rawArticles] = await Promise.all([
+  const [totalItems, rawArticles, user] = await Promise.all([
     Article.countDocuments(filter),
     Article.find(filter)
       .populate("authorId", "_id name avatarUrl")
@@ -28,7 +28,14 @@ export const getArticlesListService = async (query) => {
       .skip(skip)
       .limit(perPage)
       .lean(),
+    userId
+      ? User.findById(userId).select('savedArticles').lean()
+      : Promise.resolve(null),
   ]);
+
+  const savedArticlesSet = new Set(
+    user?.savedArticles ? user.savedArticles.map((id) => id.toString()) : []
+  );
 
   const articles = rawArticles.map((article) => {
     const { _id, authorId, ...rest } = article;
@@ -36,6 +43,7 @@ export const getArticlesListService = async (query) => {
     return {
       ...rest,
       id: _id.toString(),
+      isBookmarked: savedArticlesSet.has(_id.toString()),
       author:
         typeof authorId === "object" && authorId !== null
           ? {

@@ -59,6 +59,7 @@ const updateArticle = async ({ articleId, data, file, userId }) => {
   await article.save();
 
   const { _id, ...articleData } = article.toObject();
+  delete articleData.imagePublicId;
 
   return {
     id: _id.toString(),
@@ -71,7 +72,13 @@ const deleteArticle = async ({ articleId, userId }) => {
 
   checkArticleOwner(article, userId);
 
+  if (article.imagePublicId) {
+    await cloudinary.uploader.destroy(article.imagePublicId);
+  }
+
   await article.deleteOne();
+
+  await User.updateMany({ savedArticles: article._id }, { $pull: { savedArticles: article._id } });
 
   await User.findByIdAndUpdate(article.authorId, {
     $inc: { articlesAmount: -1 },
