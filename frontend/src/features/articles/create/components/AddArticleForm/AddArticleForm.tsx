@@ -1,16 +1,24 @@
 'use client';
 
-import { useMutation } from '@tanstack/react-query';
+ import {
+  useMutation,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+
+import { useAuthStore } from '@/store/auth.store';
+import { useArticleDraftStore } from '@/store/articleDraftStore';
+
 import { createArticleSchema } from '../../create-article.schema';
 import { createArticle } from '../../create-article.service';
 import type { CreateArticleFormValues } from '../../create-article.types';
+
 import Button from '@/components/ui/Button/Button';
-import { useArticleDraftStore } from '@/store/articleDraftStore';
 import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
+
 import css from './AddArticleForm.module.css';
 
 const getCurrentDate = (): string => {
@@ -25,6 +33,10 @@ const getCurrentDate = (): string => {
 
 const AddArticleForm = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
+  const userId = useAuthStore((state) => state.user?.id);
+
   const { draft, setDraft, clearDraft } =
     useArticleDraftStore();
 
@@ -34,6 +46,12 @@ const AddArticleForm = () => {
     mutationFn: createArticle,
 
     onSuccess: article => {
+      if (userId) {
+        queryClient.invalidateQueries({
+          queryKey: ['profile', 'my-articles', userId],
+        });
+      }
+
       clearDraft();
       setPreviewUrl('');
       toast.success('Article created successfully!');
