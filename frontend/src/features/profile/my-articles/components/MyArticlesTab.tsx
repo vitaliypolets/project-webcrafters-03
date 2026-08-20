@@ -10,6 +10,7 @@ import { useSearchParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 
 import { Loader } from '@/components/ui/Loader/Loader';
+import { AddArticleForm } from '@/features/articles/create';
 import { ArticlesList } from '@/features/articles/shared';
 import { useAuthStore } from '@/store/auth.store';
 
@@ -200,9 +201,9 @@ export function MyArticlesTab() {
       {query.isSuccess && !hasQueryError && articles.length === 0 ? (
         <EmptyArticlesState
           description="Write your first article"
-          actionLabel="Create an article"
-          href="/articles/create"
-        />
+        >
+          <AddArticleForm />
+        </EmptyArticlesState>
       ) : null}
 
       {articles.length > 0 ? (

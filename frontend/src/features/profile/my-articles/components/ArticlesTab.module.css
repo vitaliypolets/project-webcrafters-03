@@ -77,6 +77,16 @@
   background-color: var(--color-bg-card-soft-green);
 }
 
+.emptyStateWithContent {
+  width: 100%;
+  min-height: 0;
+}
+
+.emptyContent {
+  width: 100%;
+  margin-top: var(--spacing-lg);
+}
+
 .alertIcon {
   display: grid;
   width: 64px;
