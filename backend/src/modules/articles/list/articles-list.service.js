@@ -1,6 +1,7 @@
 // backend/src/modules/articles/list/articles-list.service.js
 
 import { Article } from "../../../models/Article.js";
+import { User } from "../../../models/User.js";
 
 export const getArticlesListService = async (query, userId) => {
   const page = Math.max(1, Number(query.page) || 1);
@@ -28,13 +29,11 @@ export const getArticlesListService = async (query, userId) => {
       .skip(skip)
       .limit(perPage)
       .lean(),
-    userId
-      ? User.findById(userId).select('savedArticles').lean()
-      : Promise.resolve(null),
+    userId ? User.findById(userId).select("savedArticles").lean() : Promise.resolve(null),
   ]);
 
   const savedArticlesSet = new Set(
-    user?.savedArticles ? user.savedArticles.map((id) => id.toString()) : []
+    user?.savedArticles ? user.savedArticles.map((id) => id.toString()) : [],
   );
 
   const articles = rawArticles.map((article) => {
