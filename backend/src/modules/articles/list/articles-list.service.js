@@ -1,5 +1,6 @@
-// TODO (учасник №11): business logic and database access
-import { Article } from '../../../models/Article.js';
+// backend/src/modules/articles/list/articles-list.service.js
+
+import { Article } from "../../../models/Article.js";
 
 export const getArticlesListService = async (query) => {
   const page = Math.max(1, Number(query.page) || 1);
@@ -17,14 +18,12 @@ export const getArticlesListService = async (query) => {
   }
 
   const sort =
-    query.filter === 'popular'
-      ? { viewsCount: -1, publicationDate: -1 }
-      : { publicationDate: -1 };
+    query.filter === "popular" ? { viewsCount: -1, publicationDate: -1 } : { publicationDate: -1 };
 
   const [totalItems, rawArticles] = await Promise.all([
     Article.countDocuments(filter),
     Article.find(filter)
-      .populate('authorId', '_id name avatar')
+      .populate("authorId", "_id name avatarUrl")
       .sort(sort)
       .skip(skip)
       .limit(perPage)
@@ -38,16 +37,16 @@ export const getArticlesListService = async (query) => {
       ...rest,
       id: _id.toString(),
       author:
-        typeof authorId === 'object' && authorId !== null
+        typeof authorId === "object" && authorId !== null
           ? {
               id: authorId._id.toString(),
-              name: authorId.name || 'Unknown Author',
-              avatar: authorId.avatar || null,
+              name: authorId.name || "Unknown Author",
+              avatarUrl: authorId.avatarUrl || null,
             }
           : {
-              id: authorId ? String(authorId) : '',
-              name: 'Unknown Author',
-              avatar: null,
+              id: authorId ? String(authorId) : "",
+              name: "Unknown Author",
+              avatarUrl: null,
             },
     };
   });
@@ -68,6 +67,6 @@ export const getArticlesListService = async (query) => {
         hasPreviousPage,
       },
     },
-    message: 'Success',
+    message: "Success",
   };
 };
