@@ -59,6 +59,7 @@ const updateArticle = async ({ articleId, data, file, userId }) => {
   await article.save();
 
   const { _id, ...articleData } = article.toObject();
+  delete articleData.imagePublicId;
 
   return {
     id: _id.toString(),
