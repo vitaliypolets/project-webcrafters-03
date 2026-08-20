@@ -23,12 +23,14 @@ export const getArticlesListService = async (query, userId) => {
 
   const [totalItems, rawArticles, user] = await Promise.all([
     Article.countDocuments(filter),
+
     Article.find(filter)
       .populate("authorId", "_id name avatarUrl")
       .sort(sort)
       .skip(skip)
       .limit(perPage)
       .lean(),
+
     userId ? User.findById(userId).select("savedArticles").lean() : Promise.resolve(null),
   ]);
 
@@ -42,7 +44,9 @@ export const getArticlesListService = async (query, userId) => {
     return {
       ...rest,
       id: _id.toString(),
+
       isBookmarked: savedArticlesSet.has(_id.toString()),
+
       author:
         typeof authorId === "object" && authorId !== null
           ? {
