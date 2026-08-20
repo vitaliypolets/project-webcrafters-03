@@ -1,5 +1,7 @@
-import { Article } from '../../../models/Article.js';
-import { User } from '../../../models/User.js';
+// backend/src/modules/articles/list/articles-list.service.js
+
+import { Article } from "../../../models/Article.js";
+import { User } from "../../../models/User.js";
 
 export const getArticlesListService = async (query, userId) => {
   const page = Math.max(1, Number(query.page) || 1);
@@ -17,25 +19,21 @@ export const getArticlesListService = async (query, userId) => {
   }
 
   const sort =
-    query.filter === 'popular'
-      ? { viewsCount: -1, publicationDate: -1 }
-      : { publicationDate: -1 };
+    query.filter === "popular" ? { viewsCount: -1, publicationDate: -1 } : { publicationDate: -1 };
 
   const [totalItems, rawArticles, user] = await Promise.all([
     Article.countDocuments(filter),
     Article.find(filter)
-      .populate('authorId', '_id name avatar')
+      .populate("authorId", "_id name avatarUrl")
       .sort(sort)
       .skip(skip)
       .limit(perPage)
       .lean(),
-    userId
-      ? User.findById(userId).select('savedArticles').lean()
-      : Promise.resolve(null),
+    userId ? User.findById(userId).select("savedArticles").lean() : Promise.resolve(null),
   ]);
 
   const savedArticlesSet = new Set(
-    user?.savedArticles ? user.savedArticles.map((id) => id.toString()) : []
+    user?.savedArticles ? user.savedArticles.map((id) => id.toString()) : [],
   );
 
   const articles = rawArticles.map((article) => {
@@ -46,16 +44,16 @@ export const getArticlesListService = async (query, userId) => {
       id: _id.toString(),
       isBookmarked: savedArticlesSet.has(_id.toString()),
       author:
-        typeof authorId === 'object' && authorId !== null
+        typeof authorId === "object" && authorId !== null
           ? {
               id: authorId._id.toString(),
-              name: authorId.name || 'Unknown Author',
-              avatar: authorId.avatar || null,
+              name: authorId.name || "Unknown Author",
+              avatarUrl: authorId.avatarUrl || null,
             }
           : {
-              id: authorId ? String(authorId) : '',
-              name: 'Unknown Author',
-              avatar: null,
+              id: authorId ? String(authorId) : "",
+              name: "Unknown Author",
+              avatarUrl: null,
             },
     };
   });
@@ -76,6 +74,6 @@ export const getArticlesListService = async (query, userId) => {
         hasPreviousPage,
       },
     },
-    message: 'Success',
+    message: "Success",
   };
 };
