@@ -2,8 +2,8 @@ import multer from "multer";
 import { z } from "zod";
 import { HttpError } from "../../../utils/HttpError.js";
 
-const NAME_REGEXP = /^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ'\s-]+$/;
-const PASSWORD_REGEXP = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
+export const NAME_REGEXP = /^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ'\s-]+$/;
+export const PASSWORD_REGEXP = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/;
 
 export const registerBodySchema = z.object({
   name: z

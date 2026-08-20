@@ -101,7 +101,7 @@
   padding-top: var(--spacing-md);
 }
 
-.learnMore {
+.learnMore.learnMore {
   flex: 1;
   min-width: 0;
 
@@ -110,17 +110,16 @@
   font-size: var(--font-size-main);
   line-height: var(--line-height-secondary);
 
-  color: var(--color-white);
-  background-color: var(--color-primary);
-  border: none;
+  color: var(--color-text-hero);
+  background-color: transparent;
+  border: var(--border-width-sm) solid var(--color-primary);
 
   text-align: left;
 }
 
 .learnMore.learnMore:hover {
-  color: var(--color-white);
-  background-color: var(--color-primary-hover);
-  border: none;
+  background-color: rgba(100, 145, 121, 0.12);
+  border-color: var(--color-text-main);
 }
 
 .bookmark,
@@ -152,6 +151,41 @@
 }
 
 .editIcon {
+  display: block;
+
+  width: 24px;
+  height: 24px;
+
+  fill: none;
+  stroke: currentColor;
+}
+
+.deleteButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: var(--btn-height-md);
+  min-width: var(--btn-height-md);
+  height: var(--btn-height-md);
+  min-height: var(--btn-height-md);
+
+  padding: 0;
+
+  background-color: transparent;
+  border: var(--border-width-sm) solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+.deleteButton:hover:not(:disabled) {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: var(--color-text-on-primary);
+}
+
+.deleteIcon {
   display: block;
 
   width: 24px;

@@ -24,3 +24,7 @@ export const updateArticle = async (
 
   return response.data.data;
 };
+
+export const deleteArticle = async (articleId: string): Promise<void> => {
+  await api.delete(`/articles/${articleId}`);
+};

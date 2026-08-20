@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import { generateArticleDescription } from "../shared/generateArticleDescription.js";
 import cloudinary from "../../../config/cloudinary.js";
 import { Article } from "../../../models/Article.js";
+import { User } from "../../../models/User.js";
 import { HttpError } from "../../../utils/HttpError.js";
 import { saveFileToCloudinary } from "../../../utils/saveFileToCloudinary.js";
 
@@ -58,6 +59,7 @@ const updateArticle = async ({ articleId, data, file, userId }) => {
   await article.save();
 
   const { _id, ...articleData } = article.toObject();
+  delete articleData.imagePublicId;
 
   return {
     id: _id.toString(),
@@ -70,7 +72,17 @@ const deleteArticle = async ({ articleId, userId }) => {
 
   checkArticleOwner(article, userId);
 
+  if (article.imagePublicId) {
+    await cloudinary.uploader.destroy(article.imagePublicId);
+  }
+
   await article.deleteOne();
+
+  await User.updateMany({ savedArticles: article._id }, { $pull: { savedArticles: article._id } });
+
+  await User.findByIdAndUpdate(article.authorId, {
+    $inc: { articlesAmount: -1 },
+  });
 };
 
 export { updateArticle, deleteArticle };

@@ -1,7 +1,8 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { notFound } from "next/navigation";
+import { useState } from "react";
 
 import { fetchArticleById } from "./article-details.service";
 import styles from "./ArticleDetailsClient.module.css";
@@ -21,9 +22,13 @@ type Props = {
 };
 
 const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
+  const queryClient = useQueryClient();
+
+  const [recommendations, setRecommendations] = useState(initialData?.recommendations ?? []);
+
   const { data, isLoading, error } = useQuery<ArticleDetailsData>({
     queryKey: ["article", articleId],
-    queryFn: () => fetchArticleById(articleId),
+    queryFn: () => fetchArticleById(articleId, true),
     enabled: Boolean(articleId),
     staleTime: 0,
     initialData,
@@ -36,12 +41,28 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
     }
   }
 
+  if (recommendations.length === 0 && data?.recommendations?.length) {
+    setRecommendations(data.recommendations);
+  }
+
   if (isLoading || !data) {
     return <Loader />;
   }
 
-  const { article, author, isBookmarked, recommendations } = data;
+  const { article, author, isBookmarked } = data;
+
   const publicationDate = article.publicationDate;
+
+  const handleBookmarkToggle = (isBookmarked: boolean) => {
+    queryClient.setQueryData<ArticleDetailsData>(["article", articleId], (oldData) => {
+      if (!oldData) return oldData;
+      return {
+        ...oldData,
+        isBookmarked,
+      };
+    });
+  };
+  const bookmarkLabel = isBookmarked ? "Unsave" : "Save";
 
   return (
     <Container>
@@ -61,7 +82,8 @@ const ArticleDetailsClient = ({ articleId, initialData }: Props) => {
                 articleId={article.id}
                 isBookmarked={isBookmarked}
                 className={styles.articleBookmarkButton}
-                label={"Save"}
+                label={bookmarkLabel}
+                onBookmarkToggle={handleBookmarkToggle}
               />
             </div>
           </div>

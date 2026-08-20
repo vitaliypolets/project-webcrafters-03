@@ -82,18 +82,36 @@
 
 /* Посилання */
 .navLink {
+  position: relative;
+
   font-family: var(--font-family-main);
   font-size: var(--font-size-body);
   font-weight: var(--font-weight-bold);
 
   color: var(--color-primary-hover);
+  text-decoration: none;
 
-  transition: opacity var(--transition-main);
+  transition: color var(--transition-main);
 }
 
-.navLink:hover,
-.navLink:focus-visible {
-  opacity: var(--opacity-hover-link);
+.navLink::after {
+  content: '';
+  position: absolute;
+
+  left: 0;
+  bottom: -4px;
+
+  width: 0;
+  height: 1px;
+
+  background-color: currentColor;
+
+  transition: width var(--transition-main);
+}
+
+.navLink:hover::after,
+.navLink:focus-visible::after {
+  width: 100%;
 }
 
 /* ==========================================================================

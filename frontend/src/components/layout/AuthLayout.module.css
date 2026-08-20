@@ -7,8 +7,10 @@
 }
 
 .main {
-  flex-grow: 1;
-  display: flex;
+  flex: 1;
+  display: grid;
+  place-items: center;
+
   width: 100%;
   min-width: 0;
 }

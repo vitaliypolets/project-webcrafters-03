@@ -3,12 +3,15 @@
 import { z } from "zod";
 import { HttpError } from "../../../utils/HttpError.js";
 
+import { NAME_REGEXP } from '../../auth/register/register.validation.js'
+
 export const updateMeSchema = z.object({
   name: z
     .string()
     .trim()
     .min(2, "Name must be at least 2 characters")
     .max(32, "Name must be at most 32 characters")
+    .regex(NAME_REGEXP, "Name must not contain numbers or special characters")
     .optional(),
 });
 

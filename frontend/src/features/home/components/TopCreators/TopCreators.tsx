@@ -53,7 +53,7 @@ export const TopCreators = () => {
                   className={styles.avatar}
                 />
               </div>
-              <h3 className={styles.name}> {creator.name.trim().split(/\s+/)[0]}</h3>
+              <h3 className={styles.name}> {creator.name.trim().split(/\s+/)[0].slice(0, 10)}</h3>
             </li>
           ))}
         </ul>

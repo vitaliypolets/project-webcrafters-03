@@ -199,6 +199,12 @@ select {
 
 html {
   scroll-behavior: smooth;
+  scrollbar-width: none;
+  scroll-padding-top: 80px;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 /* ==========================================================================
    Shared Utility Classes

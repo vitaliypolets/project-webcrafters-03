@@ -4,7 +4,7 @@ export const MAX_AVATAR_SIZE = 1 * 1024 * 1024;
 
 export const ALLOWED_AVATAR_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"];
 
-export const NAME_REGEXP = /^[A-Za-zА-Яа-яЁёІіЇїЄєҐґ'\s-]+$/;
+import { NAME_REGEXP } from '../../auth/register/register.schema'
 
 export const nameSchema = Yup.string()
   .trim()

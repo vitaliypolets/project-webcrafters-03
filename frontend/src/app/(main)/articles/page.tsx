@@ -2,6 +2,7 @@
 
 import ArticlesLoading from './loading';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+
 import {
   ArticlesCatalog,
   ArticlesCounter,
@@ -18,6 +19,7 @@ export default function ArticlesPage() {
   const searchParams = useSearchParams();
 
   const currentFilterParam = searchParams.get('filter');
+
   const activeFilter: ArticleFilter =
     currentFilterParam === 'popular' ? 'popular' : 'all';
 
@@ -33,8 +35,12 @@ export default function ArticlesPage() {
 
   const handleFilterChange = (newFilter: ArticleFilter) => {
     const params = new URLSearchParams(searchParams.toString());
+
     params.set('filter', newFilter);
-    router.push(`${pathname}?${params.toString()}`);
+
+    router.push(`${pathname}?${params.toString()}`, {
+      scroll: false,
+    });
   };
 
   if (isLoading) {
@@ -47,6 +53,7 @@ export default function ArticlesPage() {
 
       <div className={styles.controlsWrapper}>
         <ArticlesCounter totalItems={totalItems} />
+
         <ArticlesFilters
           activeFilter={activeFilter}
           onFilterChange={handleFilterChange}

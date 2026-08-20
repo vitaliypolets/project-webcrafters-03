@@ -5,16 +5,12 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-
 import { createArticleSchema } from '../../create-article.schema';
 import { createArticle } from '../../create-article.service';
 import type { CreateArticleFormValues } from '../../create-article.types';
-
 import Button from '@/components/ui/Button/Button';
 import { useArticleDraftStore } from '@/store/articleDraftStore';
-
 import ArticleImagePreview from '../ArticleImagePreview/ArticleImagePreview';
-
 import css from './AddArticleForm.module.css';
 
 const getCurrentDate = (): string => {
@@ -29,7 +25,6 @@ const getCurrentDate = (): string => {
 
 const AddArticleForm = () => {
   const router = useRouter();
-
   const { draft, setDraft, clearDraft } =
     useArticleDraftStore();
 
@@ -41,9 +36,7 @@ const AddArticleForm = () => {
     onSuccess: article => {
       clearDraft();
       setPreviewUrl('');
-
       toast.success('Article created successfully!');
-
       router.push(`/articles/${article.id}`);
     },
 
@@ -55,16 +48,6 @@ const AddArticleForm = () => {
       );
     },
   });
-
-  const initialValues: CreateArticleFormValues = {
-    title: draft.title,
-    article: draft.article,
-    image: null,
-
-    // Publication date is always the current date.
-    // It is not taken from the draft.
-    publicationDate: getCurrentDate(),
-  };
 
   const handleImageChange = (
     file: File | null,
@@ -91,10 +74,14 @@ const AddArticleForm = () => {
 
   return (
     <Formik
-      initialValues={initialValues}
+      initialValues={{
+        title: draft.title,
+        article: draft.article,
+        image: null,
+        publicationDate: getCurrentDate(),
+      }}
       validationSchema={createArticleSchema}
       onSubmit={handleSubmit}
-      enableReinitialize
     >
       {({
         isSubmitting,
@@ -139,13 +126,6 @@ const AddArticleForm = () => {
                     : ''
               }`}
             >
-              <svg
-                className={css.inputIcon}
-                aria-hidden="true"
-              >
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
-
               <Field
                 id="title"
                 name="title"
@@ -165,13 +145,6 @@ const AddArticleForm = () => {
                   });
                 }}
               />
-
-              <svg
-                className={css.inputIcon}
-                aria-hidden="true"
-              >
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
             </div>
 
             <ErrorMessage
@@ -193,13 +166,6 @@ const AddArticleForm = () => {
                     : ''
               }`}
             >
-              <svg
-                className={css.textareaIcon}
-                aria-hidden="true"
-              >
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
-
               <Field
                 as="textarea"
                 id="article"
@@ -219,48 +185,13 @@ const AddArticleForm = () => {
                   });
 
                   event.target.style.height = 'auto';
-
                   event.target.style.height = `${event.target.scrollHeight}px`;
                 }}
               />
-
-              <svg
-                className={css.textareaIcon}
-                aria-hidden="true"
-              >
-                <use href="/icons/sprite.svg#icon-home" />
-              </svg>
             </div>
 
             <ErrorMessage
               name="article"
-              component="p"
-              className={css.error}
-            />
-          </div>
-
-          {/* PUBLICATION DATE */}
-
-          <div className={css.formGroup}>
-            <label
-              htmlFor="publicationDate"
-              className={css.label}
-            >
-              Publication date
-            </label>
-
-            <Field
-              id="publicationDate"
-              name="publicationDate"
-              type="text"
-              className={css.input}
-              value={values.publicationDate}
-              readOnly
-              aria-readonly="true"
-            />
-
-            <ErrorMessage
-              name="publicationDate"
               component="p"
               className={css.error}
             />
@@ -273,9 +204,7 @@ const AddArticleForm = () => {
             variant="primary"
             size="md"
             className={css.submitButton}
-            disabled={
-              isSubmitting || isPending
-            }
+            disabled={isSubmitting || isPending}
           >
             {isSubmitting || isPending
               ? 'Publishing...'
