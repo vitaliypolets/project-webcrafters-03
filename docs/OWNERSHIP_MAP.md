@@ -1,8 +1,5 @@
 # project-webcrafters-03 — OWNERSHIP MAP (Карта відповідальності)
 
-> **Зафіксований стек:** Frontend — TypeScript (`.ts`, `.tsx`); окремий Express Backend — JavaScript ES6+ (`.js`).
-> На Backend не створюємо `*.types.ts`; перевірку вхідних даних виконуємо через `*.validation.js`.
-
 ## 1. Архітектура репозиторію
 
 Проєкт ведеться в одному monorepo:
@@ -16,7 +13,6 @@ project-webcrafters-03/
 ```
 
 Frontend і Backend не розділяються на окремі репозиторії.
-
 
 ---
 
@@ -33,9 +29,13 @@ project-webcrafters-03/
 │
 ├── docs/
 │   ├── API_CONTRACT.md
-│   ├── DEFINITION_OF_DONE.md
+│   ├── API_CONVENTIONS.md
+│   ├── DATABASE_ARTICLE_CONTRACT.md
+│   ├── FRONTEND_LAYOUT_GUIDE.md
+│   ├── GIT_WORKFLOW.md
 │   ├── OWNERSHIP_MAP.md
-│   └── TEAM_RULES.md
+│   ├── TEAM_RULES.md
+│   ├── TL_MASTER_LIST.md
 │
 ├── frontend/
 │   ├── public/
@@ -282,7 +282,7 @@ Frontend component
 
 ---
 
-# 4. Учасник №1 (ПОЛЕЦЬ Віталій) —   (Team Lead)
+# 4. Учасник №1 (ПОЛЕЦЬ Віталій) — (Team Lead)
 
 ## Гілка
 
@@ -336,8 +336,6 @@ docs/
 
 ```text
 GET /api/health
-GET /api/categories
-GET /api-docs
 ```
 
 ## Обов’язки
@@ -411,7 +409,8 @@ backend/src/modules/auth/register/
 ├── register.controller.js
 ├── register.service.js
 ├── register.validation.js
-└── index.js
+├── register.types.js
+└── index.ts
 ```
 
 ## Не змінювати без погодження
@@ -492,7 +491,8 @@ backend/src/modules/auth/login/
 ├── login.controller.js
 ├── login.service.js
 ├── login.validation.js
-└── index.js
+├── login.types.js
+└── index.ts
 ```
 
 ---
@@ -561,7 +561,8 @@ backend/src/modules/auth/session/
 ├── session.controller.js
 ├── session.service.js
 ├── session.validation.js
-└── index.js
+├── session.types.js
+└── index.ts
 ```
 
 ---
@@ -629,7 +630,8 @@ backend/src/modules/users/me/
 ├── me.controller.js
 ├── me.service.js
 ├── me.validation.js
-└── index.js
+├── me.types.js
+└── index.ts
 ```
 
 ---
@@ -660,8 +662,8 @@ frontend/src/features/home/
 │   ├── About/
 │   ├── PopularArticles/
 │   └── TopCreators/
-├── home.service.ts
-├── home.types.ts
+├── home.service.js
+├── home.types.js
 └── index.ts
 ```
 
@@ -675,9 +677,8 @@ frontend/src/app/api/users/route.ts
 
 ```text
 ?page=1
-&perPage=20
-&sort=popular
-&limit=6
+&perPage=6
+&sort=articlesAmount
 ```
 
 ## Backend-маршрут
@@ -694,7 +695,8 @@ backend/src/modules/users/list/
 ├── users-list.controller.js
 ├── users-list.service.js
 ├── users-list.validation.js
-└── index.js
+├── users-list.types.js
+└── index.ts
 ```
 
 ---
@@ -726,8 +728,8 @@ frontend/src/app/(main)/authors/[userId]/AuthorPage.module.css
 frontend/src/features/authors/components/AuthorsList/
 frontend/src/features/authors/components/AuthorsItem/
 frontend/src/features/authors/components/AuthorInfo/
-frontend/src/features/authors/authors.service.ts
-frontend/src/features/authors/authors.types.ts
+frontend/src/features/authors/authors.service.js
+frontend/src/features/authors/authors.types.js
 ```
 
 Учасник №7 відповідає тільки за загальні дані автора.
@@ -754,7 +756,8 @@ backend/src/modules/users/details/
 ├── user-details.controller.js
 ├── user-details.service.js
 ├── user-details.validation.js
-└── index.js
+├── user-details.types.js
+└── index.ts
 ```
 
 ---
@@ -779,8 +782,8 @@ feat/author-profile
 ```text
 frontend/src/features/authors/author-articles/
 ├── components/AuthorArticles/
-├── author-articles.service.ts
-├── author-articles.types.ts
+├── author-articles.service.js
+├── author-articles.types.js
 └── index.ts
 ```
 
@@ -795,8 +798,8 @@ frontend/src/app/(main)/profile/ProfilePage.module.css
 
 frontend/src/features/profile/components/ProfileInfo/
 frontend/src/features/profile/components/ProfileTabs/
-frontend/src/features/profile/profile.service.ts
-frontend/src/features/profile/profile.types.ts
+frontend/src/features/profile/profile.service.js
+frontend/src/features/profile/profile.types.js
 ```
 
 Учасник №8:
@@ -828,7 +831,8 @@ backend/src/modules/users/articles/
 ├── user-articles.controller.js
 ├── user-articles.service.js
 ├── user-articles.validation.js
-└── index.js
+├── user-articles.types.js
+└── index.ts
 ```
 
 ---
@@ -936,7 +940,8 @@ backend/src/modules/users/bookmarks/
 ├── bookmarks.controller.js
 ├── bookmarks.service.js
 ├── bookmarks.validation.js
-└── index.js
+├── bookmarks.types.js
+└── index.ts
 ```
 
 ---
@@ -969,8 +974,8 @@ frontend/src/features/articles/details/
 │   ├── ArticleDetails/
 │   ├── ArticleAuthor/
 │   └── ArticleRecommendations/
-├── article-details.service.ts
-├── article-details.types.ts
+├── article-details.service.js
+├── article-details.types.js
 └── index.ts
 ```
 
@@ -1009,7 +1014,8 @@ backend/src/modules/articles/details/
 ├── article-details.controller.js
 ├── article-details.service.js
 ├── article-details.validation.js
-└── index.js
+├── article-details.types.js
+└── index.ts
 ```
 
 ---
@@ -1048,8 +1054,8 @@ frontend/src/features/articles/catalog/
 │   ├── ArticlesFilters/
 │   └── ArticlesCounter/
 ├── hooks/useArticlesQuery.ts
-├── articles-catalog.service.ts
-├── articles-catalog.types.ts
+├── articles-catalog.service.js
+├── articles-catalog.types.js
 └── index.ts
 ```
 
@@ -1091,7 +1097,8 @@ backend/src/modules/articles/list/
 ├── articles-list.controller.js
 ├── articles-list.service.js
 ├── articles-list.validation.js
-└── index.js
+├── articles-list.types.js
+└── index.ts
 ```
 
 ---
@@ -1113,7 +1120,7 @@ frontend/src/features/articles/shared/
 │   ├── ArticlesList/
 │   ├── BookmarkButton/
 │   └── ModalErrorSave/
-├── article-shared.types.ts
+├── article-shared.types.js
 └── index.ts
 ```
 
@@ -1166,7 +1173,8 @@ backend/src/modules/articles/manage/
 ├── article-manage.controller.js
 ├── article-manage.service.js
 ├── article-manage.validation.js
-└── index.js
+├── article-manage.types.js
+└── index.ts
 ```
 
 ---
@@ -1197,8 +1205,8 @@ frontend/src/features/articles/create/
 │   ├── AddArticleForm/
 │   └── ArticleImagePreview/
 ├── create-article.schema.ts
-├── create-article.service.ts
-├── create-article.types.ts
+├── create-article.service.js
+├── create-article.types.js
 └── index.ts
 ```
 
@@ -1237,7 +1245,8 @@ backend/src/modules/articles/create/
 ├── article-create.controller.js
 ├── article-create.service.js
 ├── article-create.validation.js
-└── index.js
+├── article-create.types.js
+└── index.ts
 ```
 
 ---
@@ -1333,8 +1342,6 @@ PATCH  /api/articles/:articleId            — №12
 DELETE /api/articles/:articleId            — №12
 POST   /api/articles                       — №13
 
-GET    /api/categories                     — Team Lead, додатково
-GET    /api-docs                           — Team Lead, додатково
 ```
 
 ---
@@ -1438,3 +1445,44 @@ DELETE /api/users/me/bookmarks/:articleId
 ```
 
 - Центральне підключення Express router виконує Team Lead.
+
+---
+
+# 23. Останнє канонічне погодження (19–21.08.2026)
+
+Цей розділ має пріоритет у разі конфлікту зі старішими прикладами вище.
+
+- Backend використовує `.js`, а не `.ts`, для modules, models, middleware, config та routes.
+- `/api/categories` та `/api-docs` не входять до поточної канонічної implemented route map, оскільки їх немає в актуальному `backend/src/routes/index.js`.
+- `GET /api/users`: canonical pagination — `page` + `perPage`; `limit` не є частиною контракту `/users`.
+- Top Creators: `GET /api/users?page=1&perPage=6&sort=articlesAmount`.
+- `GET /api/articles`: `limit` поки залишається підтримуваним, доки окремо не погоджено його видалення.
+- Bookmarks DELETE: `DELETE /api/users/me/bookmarks/:articleId`; `articleId` передається через URL params, не через body.
+- Canonical public ID — `id`; `_id` залишається внутрішнім Mongo/Mongoose полем.
+- User responses використовують `avatarUrl`, а не `avatar`.
+- Canonical article list response має бути єдиним для списків статей.
+- Article full text: `article` — 100..4000 символів.
+- `description` — server-derived і не є client-editable полем.
+- `category` не входить до Create/PATCH body.
+- Create article author визначається з authenticated user, не з request body.
+- Image upload: один файл, JPEG/PNG/WEBP, max 1 MB.
+- Invalid explicit query/params values повертають `400`, а не мовчки нормалізуються.
+- Upload/Multer validation errors нормалізуються в контрольований `4xx`, не `500`.
+- Frontend Yup validation повинна дзеркалити Backend validation.
+- Shared backend infrastructure (`routes/index.js`, middlewares, models, config, utils, `auth/shared`, `articles/shared`) змінюється тільки з координацією Team Lead.
+
+## Актуальна shared backend infrastructure
+
+```text
+backend/src/routes/index.js
+backend/src/middlewares/authenticate.js
+backend/src/middlewares/controllerWrapper.js
+backend/src/middlewares/errorHandler.js
+backend/src/middlewares/upload.js
+backend/src/middlewares/articleUpload.js
+backend/src/models/
+backend/src/config/
+backend/src/utils/
+backend/src/modules/auth/shared/
+backend/src/modules/articles/shared/
+```

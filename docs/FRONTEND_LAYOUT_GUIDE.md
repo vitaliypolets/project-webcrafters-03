@@ -1,5 +1,6 @@
 # Harmoniq — Frontend Layout Guide
 
+> **Назви документації:** у всіх посиланнях використовуються канонічні імена файлів без локальних суфіксів копій на кшталт `(1)`, `(2)`, `(3)` або timestamp у назві.
 ## 1. Призначення документа
 
 Цей документ визначає спільні правила frontend-верстки проєкту **Harmoniq**.
@@ -456,6 +457,21 @@ Desktop
 
 Не вважаємо feature готовою, якщо вона працює тільки на desktop.
 
+Додатково перевіряємо проміжні ширини, щоб не виникали:
+
+```text
+horizontal scroll
+перекриття Header/content
+розтягування форм
+накладання navigation/burger
+вихід елементів за container
+```
+
+Для auth-сторінок враховуємо погоджену поведінку Header: на `/login` та `/register` він не повинен перекривати контент під час scroll.
+
+Для mobile menu при відкритті overlay background page не повинна прокручуватися.
+
+
 ---
 
 # 17. Не створюємо власну дизайн-систему у feature
@@ -564,6 +580,11 @@ frontend/public/icons/sprite.svg
 frontend/public/images/
 
 frontend/src/utils/
+
+frontend/src/store/auth.store.ts
+frontend/src/providers/
+frontend/src/app/api/
+AuthLayout / shared layout infrastructure
 ```
 
 Зміни у таких місцях бажано узгоджувати з Team Lead.
@@ -661,22 +682,145 @@ Mocks допускаються лише як тимчасовий етап ро�
 
 ---
 
-# 25. Article Contract
+# 25. API integration conventions
 
-Frontend повинен використовувати актуальний canonical Article contract:
+Перед реалізацією або зміною API integration frontend owner звіряє:
 
 ```text
-_id
+API_CONTRACT.md
+API_CONVENTIONS.md
+OWNERSHIP_MAP.md
+```
+
+Frontend не повинен самостійно вигадувати:
+
+```text
+endpoint
+query parameter
+body/FormData field
+response field
+status code
+validation rule
+```
+
+Private requests використовують shared API/auth infrastructure та:
+
+```http
+Authorization: Bearer <accessToken>
+```
+
+Next.js Route Handler працює як proxy/BFF і не дублює domain/business logic Express Backend.
+
+Validation/upload `4xx` від Backend не повинні перетворюватися Route Handler або frontend service на штучний `500`.
+
+## Users / Top Creators
+
+Канонічний request:
+
+```http
+GET /api/users?page=1&perPage=6&sort=articlesAmount
+```
+
+Для `/users` використовуємо:
+
+```text
+page
+perPage
+sort
+```
+
+`limit` не є частиною canonical `/users` contract.
+
+## Bookmarks
+
+Канонічне видалення:
+
+```http
+DELETE /api/users/me/bookmarks/:articleId
+```
+
+`articleId` не передається у DELETE body.
+
+## Create Article
+
+Canonical FormData:
+
+```text
+title             required, 3..48
+article           required, 100..4000
+publicationDate   required, YYYY-MM-DD
+image             required, JPEG/PNG/WEBP, max 1 MB
+```
+
+Frontend не передає:
+
+```text
+authorId
+description
+category
+viewsCount
+imageUrl
+imagePublicId
+```
+
+## PATCH Article
+
+Client-editable:
+
+```text
+title
+article
+publicationDate
+image
+```
+
+Поля optional, але потрібно передати щонайменше одне поле або image.
+
+Якщо поле передано, frontend validation використовує ті самі constraints, що Create.
+
+
+---
+
+# 26. Article Contract
+
+Frontend працює з **API representation Article**, а не напряму з MongoDB document.
+
+Канонічний public identifier на frontend:
+
+```text
+id
+```
+
+MongoDB `_id` є внутрішнім полем Backend/Mongoose і не повинен змішуватися з `id` у frontend API types.
+
+Article API може містити:
+
+```text
+id
 title
 description
 article
 imageUrl
-imagePublicId
 publicationDate
-authorId
+author
 viewsCount
 category
+isBookmarked
 ```
+
+Залежно від конкретного endpoint response можуть бути додаткові погоджені поля.
+
+Для populated author використовуємо:
+
+```text
+author.id
+author.name
+author.avatarUrl
+```
+
+Не використовуємо `author.avatar`.
+
+Frontend **не повинен вважати** `imagePublicId` client-facing полем: це службове Cloudinary/Backend поле.
 
 Не використовуємо legacy-поля:
 
@@ -690,7 +834,7 @@ date
 
 ---
 
-# 26. Перед створенням нового компонента
+# 27. Перед створенням нового компонента
 
 Перед тим як створити компонент, перевірити:
 
@@ -712,7 +856,7 @@ date
 
 ---
 
-# 27. Перед PR
+# 28. Перед PR
 
 Перед створенням Pull Request перевірити свою feature у браузері.
 
@@ -731,16 +875,19 @@ Tablet               ✅
 Mobile               ✅
 Figma                ✅
 API integration      ✅
-Loading state        ✅
-Error state          ✅
-Console errors       ✅
+API Contract          ✅
+Validation Contract   ✅
+Loading state         ✅
+Empty state           ✅
+Error state           ✅
+Console errors        ✅
 ```
 
 Якщо feature залежить від останніх змін `develop`, перед фінальною перевіркою синхронізувати свою гілку:
 
 ```bash
 git fetch origin
-git merge origin/develop
+git rebase origin/develop
 ```
 
 Після merge повторно:
@@ -752,7 +899,7 @@ npm run build
 
 ---
 
-# 28. Критерій готовності frontend feature
+# 29. Критерій готовності frontend feature
 
 Feature не вважається готовою тільки тому, що JSX/CSS написані.
 
@@ -765,7 +912,10 @@ Tablet працює                        ✅
 Mobile працює                        ✅
 Shared components використані        ✅
 API підключений                       ✅
+API Contract звірений       ✅
 Реальні дані відображаються           ✅
+`id`/`_id` не змішуються              ✅
+`avatarUrl` використовується          ✅
 Loading/error/empty оброблені          ✅
 Навігація працює                      ✅
 Console без критичних помилок         ✅
@@ -776,7 +926,7 @@ PR створений                          ✅
 
 ---
 
-# 29. Головне правило команди
+# 30. Головне правило команди
 
 ```text
 Feature-specific
@@ -802,6 +952,11 @@ frontend/public/images/
 Shared helpers
       ↓
 frontend/src/utils/
+
+frontend/src/store/auth.store.ts
+frontend/src/providers/
+frontend/src/app/api/
+AuthLayout / shared layout infrastructure
 ```
 
 Не дублюємо те, що вже існує.
