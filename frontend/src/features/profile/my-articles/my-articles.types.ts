@@ -1,2 +1,4 @@
-// TODO: реалізувати відповідно до docs/OWNERSHIP_MAP.md
-export {};
+import type { PaginatedResponse } from '@/types/api';
+import type { Article } from '@/types/article';
+
+export type ArticlesPage = PaginatedResponse<Article>;

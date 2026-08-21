@@ -9,3 +9,13 @@ export type Article = {
   author: PublicUser;
   isBookmarked?: boolean;
 };
+
+export type ArticleDetails = {
+  id: string;
+  title: string;
+  description: string;
+  article: string;
+  imageUrl: string | null;
+  publicationDate: string;
+  viewsCount: number;
+};
