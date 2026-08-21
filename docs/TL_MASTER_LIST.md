@@ -292,7 +292,7 @@ cookies + JSON response
 {
   "data": {
     "user": {
-      "_id": "USER_ID",
+      "id": "USER_ID",
       "name": "User Name",
       "email": "user@example.com",
       "avatarUrl": null,
@@ -354,7 +354,7 @@ Session ──┘
 
 ``` bash
 git fetch origin
-git merge origin/develop
+git rebase origin/develop
 ```
 
 Якщо є незакомічені зміни --- спочатку WIP commit або `git stash`.
@@ -362,7 +362,7 @@ git merge origin/develop
 ## 35. Git workflow
 
 ``` text
-feature branch → PR → Review → develop
+feature/fix/chore branch → PR → Review → develop
 ```
 
 TL shared changes:
@@ -374,23 +374,40 @@ chore/project-setup → PR → develop
 ## 36. Роль main
 
 `develop` є integration branch під час активної розробки. `main`
-використовується для стабільної/релізної версії.
+використовується для стабільної production/релізної версії.
+
+Фінальний release flow:
+
+```text
+feature/fix/chore → develop → PR develop → main → production deployment → smoke-test
+```
+
+Прямий feature → `main` merge не використовується.
 
 ## 37. TL документація
 
-``` text
-docs/FILE_TREE.txt
-docs/OWNERSHIP_MAP.md
-docs/Harmoniq_TEAM_LEAD_GUIDE.md
-docs/TEAM_LEAD_PLAN.md
-docs/TECHNOLOGY_STACK.md
+Канонічні назви документації:
+
+```text
+README.md
+TEAM_RULES.md
+GIT_WORKFLOW.md
+OWNERSHIP_MAP.md
+API_CONTRACT.md
+API_CONVENTIONS.md
+DATABASE_ARTICLE_CONTRACT.md
+FRONTEND_LAYOUT_GUIDE.md
+TL_MASTER_LIST.md
 ```
+
+У документації використовуються тільки наведені вище канонічні назви без додаткових префіксів, timestamp або локальних суфіксів копій.
 
 ## 38. Ownership
 
 Кожен учасник працює у своїй feature-зоні, а shared/core infrastructure
 контролюється TL. До shared/core належать Axios, Providers, Toaster,
-authTokens, authSession, global layout, shared UI.
+authTokens, authSession, global layout, shared UI, `auth.store.ts`,
+providers, shared Route Handler/API infrastructure та canonical API contracts.
 
 ## 39. Review / PR workflow
 
@@ -419,93 +436,256 @@ Merge у develop
 ✓ imports/exports коректні
 ✓ немає дублювання shared logic
 ✓ немає невирішених конфліктів
+✓ API_CONTRACT / VALIDATION_CONTRACT звірені
+✓ id / _id не змішуються у frontend API types
+✓ User API використовує avatarUrl
+✓ validation/Multer 4xx не перетворюються на 500
 ✓ lint PASS
 ✓ build PASS
 ```
 
-## 41. Блокери #8.2 ProfilePage
+## 41. Session / Current User — актуальний стан
 
-Для завершення потрібні Session restore, protected route mechanism,
-`GET /api/users/me` та current-user response contract.
+Блокери раннього етапу щодо Session restore, `GET /api/users/me` та Profile integration більше не повинні описуватися як майбутня архітектура.
 
-## 42. Прямий блокер --- Session
+Канонічний auth flow:
 
-Потрібно завершити `#4.4 Express Backend — Session`, що дасть
-backend-частину відновлення access token.
-
-## 43. Прямий блокер --- /users/me
-
-Потрібно реалізувати `GET /api/users/me`: `meRouter`, controller,
-service, auth, response contract та прибрати `501`.
-
-## 44. Protected route --- shared/TL задача
-
-Потрібен один canonical mechanism для private routes, зокрема
-`/profile`. ProfilePage не повинна створювати власну незалежну
-auth-перевірку.
-
-## 45. Current-user flow
-
-Цільова схема:
-
-``` text
-App start
+```text
+Login/Register
 ↓
-session restore
+accessToken → auth.store
+refreshToken + sessionId → httpOnly cookies
 ↓
-accessToken
+Session restore
+↓
+new accessToken
 ↓
 GET /api/users/me
 ↓
-User
+current User
 ↓
-auth.store
-↓
-private UI
+private UI / profile
 ```
 
-## 46. Що вже готове
+Private API requests використовують:
 
-``` text
-✅ project structure
-✅ frontend/backend separation
-✅ backend JS migration
-✅ Express bootstrap
-✅ Mongo/Mongoose base
-✅ shared middleware base
-✅ Axios base
-✅ React Query Provider
-✅ global AppProviders
-✅ global Toaster
-✅ shared UI/layout base
-✅ auth.store base
-✅ User model
-✅ Session model
-✅ JWT contract
-✅ authTokens.js
-✅ authSession.js
-✅ Session refresh service integration with shared auth
-✅ Login contract
-✅ Session contract
-✅ auth cookie contract
-✅ ownership rules
-✅ Git/PR workflow
+```http
+Authorization: Bearer <accessToken>
 ```
 
-## 47. Що ще не готове / у роботі
+---
 
-``` text
-⏳ #3 Login — feature реалізація/Review
-⏳ #4 Session — feature завершення/Review
-⏳ Register integration з shared auth — перевірити
-⏳ GET /api/users/me
-⏳ meRouter integration
-⏳ current-user response contract
-⏳ frontend session restore
-⏳ canonical protected-route mechanism
-⏳ ProfilePage real current-user integration
-⏳ #8.2 повне завершення
+## 42. Current User contract
+
+Основні endpoint:
+
+```http
+GET   /api/users/me
+PATCH /api/users/me
 ```
+
+Канонічне User API поле аватара:
+
+```text
+avatarUrl
+```
+
+Public API identifier:
+
+```text
+id
+```
+
+MongoDB `_id` залишається внутрішнім Backend/Mongoose полем.
+
+---
+
+## 43. Users / Top Creators contract
+
+Канонічний Top Creators request:
+
+```http
+GET /api/users?page=1&perPage=6&sort=articlesAmount
+```
+
+Для `/users` використовуються:
+
+```text
+page
+perPage
+sort
+```
+
+`limit` не є частиною canonical `/users` contract.
+
+---
+
+## 44. Bookmarks contract
+
+```http
+GET    /api/users/me/bookmarks
+POST   /api/users/me/bookmarks
+DELETE /api/users/me/bookmarks/:articleId
+```
+
+Для DELETE `articleId` передається в URL param, не в body.
+
+---
+
+## 45. Article contract — Create/PATCH
+
+Create:
+
+```http
+POST /api/articles
+```
+
+Canonical `multipart/form-data`:
+
+```text
+title             required, trim, 3..48
+article           required, trim, 100..4000
+publicationDate   required, YYYY-MM-DD
+image             required, JPEG/PNG/WEBP, max 1 MB
+```
+
+Client не передає:
+
+```text
+authorId
+description
+category
+viewsCount
+imageUrl
+imagePublicId
+```
+
+Backend визначає автора з authenticated user та генерує `description` із `article`.
+
+PATCH:
+
+```http
+PATCH /api/articles/:articleId
+```
+
+Client-editable:
+
+```text
+title
+article
+publicationDate
+image
+```
+
+Поля optional, але потрібно передати щонайменше одне поле або image. Якщо змінено `article`, Backend повторно формує `description`.
+
+Upload/Multer validation errors → контрольований `4xx`, а не `500`.
+
+---
+
+## 46. Database — актуальний очищений стан
+
+Після backup, очищення та повторного завантаження canonical seed data:
+
+```text
+Users: 81
+Articles: 200
+Sessions: 0
+Broken Article → User references: 0
+```
+
+Legacy authors залишаються авторами seed-статей. Для презентації/auth flow створюються окремі нормальні користувачі через актуальний Register contract.
+
+Критичний зв'язок:
+
+```text
+Article.authorId → User._id
+```
+
+Backup БД, dumps, `.env`, credentials та локальні PR JSON exports не комітяться у Git.
+
+---
+
+## 47. Що централізовано готове / зафіксоване
+
+```text
+✅ monorepo frontend/backend
+✅ backend JavaScript ES Modules
+✅ Express bootstrap та central API router
+✅ MongoDB/Mongoose infrastructure
+✅ User / Session / Article contracts
+✅ shared error middleware
+✅ Axios/shared API infrastructure
+✅ React Query / AppProviders / Toaster
+✅ auth.store
+✅ shared authTokens.js / authSession.js
+✅ Login/Register/Session architecture
+✅ Current User contract
+✅ Users / Top Creators canonical query
+✅ Bookmarks canonical endpoints
+✅ Articles list/details/create/update/delete contracts
+✅ canonical id / avatarUrl naming
+✅ Multer/upload error normalization rule
+✅ API_CONTRACT
+✅ API_CONVENTIONS
+✅ VALIDATION_CONTRACT
+✅ OWNERSHIP_MAP
+✅ DATABASE_ARTICLE_CONTRACT
+✅ FRONTEND_LAYOUT_GUIDE
+✅ GIT_WORKFLOW
+✅ database backup/clean/seed completed
+```
+
+---
+
+## 48. Поточний TL фокус перед production
+
+```text
+1. Не розширювати scope без необхідності.
+2. Закрити regression/retest.
+3. Перевірити develop після всіх PR.
+4. Frontend: npm run lint + npm run build.
+5. Backend: npm run lint (+ build, якщо script існує).
+6. Перевірити canonical API Contract.
+7. Створити фінальний PR develop → main.
+8. Перевірити production deployment.
+9. Виконати production smoke-test.
+```
+
+Production smoke-test охоплює щонайменше:
+
+```text
+GET /api/health
+Register
+Login
+Logout
+Session restore
+Users / Authors
+Articles list
+Article details
+Create Article
+Edit/Delete Article
+Bookmarks
+Profile
+My Articles
+Saved Articles
+```
+
+## 49. Правило зміни canonical contract
+
+Endpoint, query parameter, body/FormData field, response field, validation rule або HTTP status code не змінюється одноосібно.
+
+Перед зміною:
+
+1. Перевірити `API_CONTRACT.md`.
+2. Перевірити `API_CONVENTIONS.md`.
+4. Звірити фактичний `develop`.
+5. Розбіжність погодити з Team Lead.
+6. Після рішення синхронно оновити Backend, Frontend, shared types, QA cases та документацію.
+
+> **One entity — one contract.**
+
+---
 
 ## Підсумкова архітектура
 
@@ -538,24 +718,24 @@ private UI
                 authTokens.js  authSession.js
 ```
 
-## Наступний централізований блок
+## Фінальний централізований блок
 
-``` text
-Session
+```text
+DEVELOP STABILIZATION
 ↓
-SESSION RESTORE
+lint / build
 ↓
-auth.store
+QA regression + retest
 ↓
-GET /users/me
+API Contract verification
 ↓
-CURRENT USER
+PR develop → main
 ↓
-PROTECTED ROUTES
+PRODUCTION DEPLOYMENT
 ↓
-/profile
+PRODUCTION SMOKE-TEST
 ↓
-#8.2 ProfilePage UNBLOCKED
+DEMO / DEFENSE READY
 ```
 
 **Призначення документа:** актуальний TL master-list --- що вже

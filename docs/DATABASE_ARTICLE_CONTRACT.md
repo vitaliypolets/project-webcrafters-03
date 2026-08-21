@@ -1,5 +1,6 @@
 # Структура БД та Article Contract
 
+> **Назви документації:** у всіх посиланнях використовуються канонічні імена файлів без локальних суфіксів копій на кшталт `(1)`, `(2)`, `(3)` або timestamp у назві.
 ## 1. Загальна інформація
 
 У проєкті централізовано зафіксовано актуальну структуру бази даних для `User` та `Article`.
@@ -98,7 +99,7 @@ User.savedArticles[] → Article._id
 
 # 5. Актуальний Article Contract
 
-Усі frontend та backend feature повинні використовувати такі поля:
+На рівні MongoDB/Mongoose документ Article використовує:
 
 ```text
 _id
@@ -121,6 +122,14 @@ updatedAt
 ```
 
 можуть бути присутні для документів, створених через актуальну модель.
+
+На API-рівні канонічний public identifier:
+
+```text
+id
+```
+
+MongoDB `_id` залишається внутрішнім полем БД/Mongoose. Frontend API types не повинні змішувати `id` та `_id`.
 
 ---
 
@@ -245,6 +254,12 @@ article.publicationDate;
 
 Не об'єднувати `description` та `article` в одне поле.
 
+Для Create/PATCH Article `description` **не є client-editable field**.
+
+При створенні нової статті Backend формує `description` із `article`. Якщо PATCH змінює `article`, Backend повторно формує `description`.
+
+Legacy/test Articles зберігають мігрований `description`, отриманий зі старого поля `desc`.
+
 ---
 
 # 10. Робота із зображеннями
@@ -299,23 +314,26 @@ savedArticles
 articlesAmount
 ```
 
-Тестові користувачі з файлів ТЗ не мали `email` та `passwordHash`.
+Legacy/test users з вихідних даних використовуються насамперед як автори seed-статей.
 
-Під час централізованого seed для них створюються технічні дані.
+Для presentation/auth flow створюються окремі нормальні користувачі через актуальний Register contract.
 
-Технічний email має формат:
-
-```text
-<userId>@seed.harmoniq.local
-```
-
-Наприклад:
+Legacy authors не потрібно використовувати для звичайної авторизації лише заради того, щоб їхні статті залишалися в БД. Критично зберегти:
 
 ```text
-6881563901add19ee16fcff2@seed.harmoniq.local
+User._id
+name
+avatarUrl
+articlesAmount
 ```
 
-Seed-users не призначені для звичайної авторизації користувача.
+та зв'язок:
+
+```text
+Article.authorId → User._id
+```
+
+Якщо конкретна актуальна User schema вимагає технічні auth-поля для legacy author documents, вони формуються централізовано seed/migration процесом, а не вручну учасниками.
 
 ---
 
@@ -383,6 +401,7 @@ Seed виконує:
 ```text
 Users: 81
 Articles: 200
+Sessions: 0
 Broken author references: 0
 Articles with legacy fields: 0
 ```
@@ -391,8 +410,9 @@ Articles with legacy fields: 0
 
 ```text
 Users                     81   ✅
-Articles                 200   ✅
-Article → User links           ✅
+Articles                  200   ✅
+Sessions                    0   ✅
+Article → User links             ✅
 Broken author references   0   ✅
 Legacy Article documents   0   ✅
 ```
@@ -453,7 +473,7 @@ dropDatabase();
 
 ```bash
 git fetch origin
-git merge origin/develop
+git rebase origin/develop
 ```
 
 Після цього перевірити:
@@ -484,7 +504,126 @@ Profile / My Articles
 
 ---
 
-# 18. Ownership
+# 18. API / Validation правила для Article
+
+Database contract і API request contract — не одне й те саме.
+
+Повний Article document може містити:
+
+```text
+_id
+title
+description
+article
+imageUrl
+imagePublicId
+publicationDate
+authorId
+viewsCount
+category
+createdAt
+updatedAt
+```
+
+Але клієнт не має права передавати всі ці поля під час Create/PATCH.
+
+## Create Article
+
+```http
+POST /api/articles
+```
+
+Canonical `multipart/form-data`:
+
+```text
+title             required, trim, 3..48
+article           required, trim, 100..4000
+publicationDate   required, YYYY-MM-DD
+image             required, JPEG/PNG/WEBP, max 1 MB, one file
+```
+
+Client **не передає**:
+
+```text
+id
+_id
+authorId
+description
+category
+viewsCount
+imageUrl
+imagePublicId
+```
+
+Backend:
+
+- визначає `authorId` з authenticated user;
+- формує `description` із `article`;
+- зберігає `imageUrl`/`imagePublicId` після upload;
+- не приймає `category` та `viewsCount` як client-editable Create fields.
+
+Upload/Multer validation error має бути контрольованим `4xx`, а не `500`.
+
+## PATCH Article
+
+```http
+PATCH /api/articles/:articleId
+```
+
+Client-editable:
+
+```text
+title
+article
+publicationDate
+image
+```
+
+Усі поля optional, але потрібно передати щонайменше одне поле або image.
+
+Якщо поле передано, воно використовує ті самі constraints, що Create.
+
+Не приймати від client:
+
+```text
+description
+category
+authorId
+viewsCount
+```
+
+Якщо змінюється `article`, Backend повторно генерує `description`.
+
+Змінювати або видаляти статтю може лише її owner; інакше `403`.
+
+## Article API response
+
+Канонічний public ID:
+
+```text
+id
+```
+
+Для populated author використовуються:
+
+```text
+id
+name
+avatarUrl
+```
+
+Приклад Mongoose populate:
+
+```js
+.populate('authorId', '_id name avatarUrl')
+```
+
+Після mapping API response не повинен повертати `avatar` замість `avatarUrl`.
+
+
+---
+
+# 19. Ownership
 
 Структура БД, Mongoose models та canonical Article contract є частиною:
 
@@ -508,9 +647,9 @@ TL / shared core
 
 ---
 
-# 19. Головне правило
+# 20. Головне правило
 
-Для всього проєкту існує один canonical Article contract:
+Для всього проєкту існує один canonical **database Article contract**:
 
 ```text
 _id
@@ -525,6 +664,7 @@ viewsCount
 category
 ```
 
-Усі frontend та backend feature повинні працювати саме з цим контрактом.
+Backend/Mongoose працює з цим database contract.
 
-Не створюємо окремі версії Article contract для різних feature.
+
+Не створюємо окремі несумісні версії Article contract для різних feature.

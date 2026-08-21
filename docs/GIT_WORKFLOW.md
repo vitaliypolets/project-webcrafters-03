@@ -1,5 +1,6 @@
 # GIT_WORKFLOW.md
 
+> **Назви документації:** у всіх посиланнях використовуються канонічні імена файлів без локальних суфіксів копій на кшталт `(1)`, `(2)`, `(3)` або timestamp у назві.
 # Робота з Git
 
 Цей документ визначає єдиний порядок роботи з Git для всіх учасників команди.
@@ -10,10 +11,18 @@
 
 У проєкті використовуються дві основні гілки:
 
-- `main` — стабільна версія проєкту;
+- `main` — стабільна production-версія проєкту;
 - `develop` — основна інтеграційна гілка командної розробки.
 
 Працювати безпосередньо в `main` або `develop` заборонено.
+
+Production flow:
+
+```text
+feature/fix/chore → develop → main
+```
+
+`main` оновлюється тільки через окремий погоджений Pull Request з `develop` після фінальної інтеграційної перевірки.
 
 ---
 
@@ -146,14 +155,31 @@ develop
 
 Pull Request створюється лише після самоперевірки feature.
 
-Перед PR необхідно виконати:
+Перед PR необхідно виконати перевірки у відповідній частині monorepo.
+
+Backend:
 
 ```bash
+cd backend
+npm run lint
+```
+
+Якщо backend має build script — також:
+
+```bash
+npm run build
+```
+
+Frontend:
+
+```bash
+cd frontend
 npm run lint
 npm run build
 ```
 
-Детальний список перевірок знаходиться у `PULL_REQUEST_CHECKLIST.md`.
+Перед production PR `develop → main` перевірки виконуються повторно вже на актуальному інтегрованому `develop`.
+
 
 ---
 
@@ -205,6 +231,14 @@ Next.js Route Handlers знаходяться у frontend-частині про�
 
 Якщо зміна Route Handler впливає на кілька feature або API-контракт, її потрібно погодити до реалізації.
 
+Перед зміною endpoint, query/body/FormData field, response field, validation rule або HTTP status code потрібно звірити:
+
+- `API_CONTRACT.md`;
+- `API_CONVENTIONS.md`;
+- актуальний `develop`.
+
+Після погодженої зміни синхронно оновлюються Backend, Frontend, shared types, QA cases та документація.
+
 ---
 
 ## Code Review
@@ -225,9 +259,107 @@ Merge виконується лише після:
 - успішного Code Review;
 - усунення всіх зауважень;
 - успішного `lint` і `build`;
+- перевірки API Contract для змін, які зачіпають інтеграцію;
 - погодження Pull Request відповідно до процесу команди.
 
 Самостійно виконувати Merge в `main` або `develop` без погодженого Pull Request не дозволяється.
+
+Для production merge:
+
+```text
+develop → main
+```
+
+додатково необхідні:
+
+- актуальний `develop`;
+- відсутність невирішених merge conflicts;
+- зелені CI/checks;
+- успішний frontend build;
+- backend lint/build відповідно до scripts;
+- production smoke-test після deployment.
+
+---
+
+## Синхронізація гілки та non-fast-forward
+
+Якщо `git push` відхилено з повідомленням:
+
+```text
+fetch first
+non-fast-forward
+```
+
+не використовуйте `--force` для командної feature/shared гілки.
+
+Спочатку:
+
+```bash
+git status
+```
+
+Якщо tracked working tree чистий:
+
+```bash
+git pull --rebase origin <branch-name>
+```
+
+Після успішного rebase:
+
+```bash
+git push origin <branch-name>
+```
+
+Якщо під час rebase виник conflict:
+
+1. Визначити ownership конфліктних файлів.
+2. Виправити лише ті конфлікти, рішення по яких зрозуміле та погоджене.
+3. Додати виправлений файл:
+
+```bash
+git add <file>
+```
+
+4. Продовжити:
+
+```bash
+git rebase --continue
+```
+
+Для повного скасування незавершеного rebase:
+
+```bash
+git rebase --abort
+```
+
+`git push --force` або `git push --force-with-lease` не використовуються без окремого погодження Team Lead.
+
+---
+
+## Локальні та службові файли
+
+Перед `git add .` обов'язково:
+
+```bash
+git status
+```
+
+У репозиторій не повинні випадково потрапляти:
+
+```text
+.env
+.env.*
+MongoDB backups
+database dumps
+локальні export JSON
+тимчасові debug/log файли
+секрети та credentials
+```
+
+Такі файли потрібно зберігати локально та, коли це доречно, додавати у `.gitignore`.
+
+Backup production/staging database не комітиться у Git.
+
 
 ---
 
@@ -275,7 +407,11 @@ Merge виконується лише після:
 - створювати зайві sub-feature гілки без погодження;
 - використовувати одну гілку для кількох незалежних feature;
 - виконувати Merge без Pull Request;
+- виконувати прямий production merge feature → `main`;
+- використовувати `git push --force` без погодження Team Lead;
+- комітити `.env`, credentials, database backup/dump або локальні службові exports;
 - змінювати чужу ownership-зону без погодження;
+- змінювати canonical API Contract одноосібно;
 - ігнорувати зауваження Code Review.
 
 ---
@@ -286,13 +422,16 @@ Merge виконується лише після:
 Оновити develop
         │
         ▼
-Перейти / створити призначену feat/... гілку
+Перейти / створити призначену feature/fix/chore гілку
         │
         ▼
-Реалізувати feature
+Реалізувати зміни у своїй ownership-зоні
         │
         ▼
-Самоперевірка
+Перевірити API Contract, якщо зміна інтеграційна
+        │
+        ▼
+lint / build / самоперевірка
         │
         ▼
 Commit
@@ -304,11 +443,71 @@ Push
 Pull Request → develop
         │
         ▼
-Code Review
-        │
-        ▼
-Виправлення зауважень
+Code Review + CI
         │
         ▼
 Merge у develop
+        │
+        ▼
+Фінальна інтеграційна перевірка develop
+        │
+        ▼
+Pull Request develop → main
+        │
+        ▼
+Production deployment
+        │
+        ▼
+Production smoke-test
 ```
+
+
+---
+
+## Production deployment workflow
+
+Фінальний production release виконується тільки з `main`.
+
+Перед release:
+
+```bash
+git checkout develop
+git pull origin develop
+```
+
+Після локальних/CI перевірок створюється:
+
+```text
+Pull Request: develop → main
+```
+
+Після merge:
+
+```bash
+git checkout main
+git pull origin main
+```
+
+Production hosting повинен бути налаштований на deployment з `main`.
+
+Після deployment перевіряються щонайменше:
+
+```text
+Backend health
+Home
+Register
+Login
+Logout
+Session restore
+Users / Authors
+Articles list
+Article details
+Create Article
+Edit/Delete Article
+Bookmarks
+Profile
+My Articles
+Saved Articles
+```
+
+Якщо production smoke-test виявив regression, нове виправлення виконується через окрему `fix/...` гілку та Pull Request, а не прямим редагуванням `main`.
